@@ -1,12 +1,9 @@
 package com.bizease.api.app.model.commerce.useCases;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bizease.api.app.exceptions.CommerceFoundException;
-import com.bizease.api.app.exceptions.NotFoundException;
 import com.bizease.api.app.model.commerce.entities.Commerce;
 import com.bizease.api.app.model.commerce.repository.CommerceRepository;
 
