@@ -26,10 +26,11 @@ public class Commerce {
 
   @UuidGenerator()
   @Column(unique = true)
-  private UUID uuid;
+  private String uuid;
 
   private String cnpj;
   private String name;
+  private String phoneNumber;
 
   private String postalCode;
   private String address;
