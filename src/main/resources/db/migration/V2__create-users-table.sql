@@ -1,0 +1,11 @@
+CREATE TABLE users (
+  id BIGSERIAL PRIMARY KEY,
+  uuid UUID NOT NULL,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(254) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP NOT NULL,
+  updated_at TIMESTAMP NOT NULL,
+  com_id BIGSERIAL,
+  FOREIGN KEY (com_id) REFERENCES commerces(id)
+);
