@@ -19,6 +19,8 @@ public class CreateCommerceUseCase {
         throw new CommerceFoundException("CNPJ já cadastrado");
       });
 
+      commerceEntity.setActive(true);
+      
       return this.commerceRepository.save(commerceEntity);
   }
   
