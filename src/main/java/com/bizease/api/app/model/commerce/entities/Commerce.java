@@ -37,6 +37,7 @@ public class Commerce {
   private String neighborhood;
   private String city;
   private String uf;
+  private boolean isActive;
 
   @CreationTimestamp
   private LocalDateTime createdAt;
