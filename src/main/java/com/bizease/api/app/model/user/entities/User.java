@@ -12,8 +12,7 @@ import org.hibernate.annotations.UuidGenerator;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity
-@Table(name = "users")
+@Entity(name = "users")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -28,20 +27,13 @@ public class User {
     @Column(unique = true)
     private UUID uuid;
 
-    @Column(nullable = false)
     private String name;
-
-    @Column(nullable = false)
     private String email;
-
-    @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
-
-    @Column(nullable = false)
+    
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 }
