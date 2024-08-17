@@ -18,7 +18,7 @@ public class Categories extends BaseModel {
   private String name;
   private String description;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "com_id", referencedColumnName = "id")
   private Commerce commerce;
 

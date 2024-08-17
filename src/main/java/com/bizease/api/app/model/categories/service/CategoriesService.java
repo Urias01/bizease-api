@@ -6,5 +6,6 @@ import com.bizease.api.app.model.categories.response.CategoriesResponse;
 public interface CategoriesService {
 
    public CategoriesResponse create(CategoriesRequest categoriesRequest);
-  
+   
+   public CategoriesResponse update(CategoriesRequest categoriesRequest, String uuid);
 } 

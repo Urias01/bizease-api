@@ -10,7 +10,9 @@ import com.bizease.api.app.model.categories.response.CategoriesResponse;
 import com.bizease.api.app.model.categories.service.CategoriesService;
 import com.bizease.api.app.responses.ApiResponse;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
@@ -20,9 +22,16 @@ public class CategoriesController {
   @Autowired
   private CategoriesService categoriesService;
 
-  @PostMapping("/")
+  @PostMapping
   public ResponseEntity<ApiResponse<CategoriesResponse>> create(@RequestBody CategoriesRequest categoriesRequest) {
     CategoriesResponse response = this.categoriesService.create(categoriesRequest);
+    ApiResponse<CategoriesResponse> apiResponse = new ApiResponse<>(true, 1, response);
+    return ResponseEntity.status(201).body(apiResponse);
+  }
+
+  @PutMapping("/{uuid}")
+  public ResponseEntity<ApiResponse<CategoriesResponse>> update(@RequestBody CategoriesRequest categoriesRequest, @PathVariable String uuid) {
+    CategoriesResponse response = this.categoriesService.update(categoriesRequest, uuid);
     ApiResponse<CategoriesResponse> apiResponse = new ApiResponse<>(true, 1, response);
     return ResponseEntity.status(201).body(apiResponse);
   }

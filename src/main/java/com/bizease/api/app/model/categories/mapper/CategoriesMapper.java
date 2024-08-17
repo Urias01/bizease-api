@@ -16,8 +16,17 @@ public class CategoriesMapper {
   }
 
   public CategoriesResponse toResponse(Categories categories) {
-    return new CategoriesResponse(
-        categories.getName(), categories.getDescription(), categories.getCommerce());
+    CategoriesResponse response = new CategoriesResponse();
+
+    response.setId(categories.getId());
+    response.setUuid(categories.getUuid());
+    response.setName(categories.getName());
+    response.setDescription(categories.getDescription());
+    response.setCommerce(categories.getCommerce());
+    response.setCreatedAt(categories.getDateModel().getCreatedAt());
+    response.setUpdatedAt(categories.getDateModel().getUpdatedAt());
+
+    return response;
   }
 
 }

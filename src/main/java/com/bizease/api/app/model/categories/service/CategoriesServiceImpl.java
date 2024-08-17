@@ -46,11 +46,37 @@ public class CategoriesServiceImpl implements CategoriesService {
       throw new AlreadyExistsException("Categoria");
     });
 
-    Categories categories = new Categories(model);
+    model = this.categoriesRepository.save(model);
 
-    this.categoriesRepository.save(categories);
+    CategoriesResponse response = this.categoriesMapper.toResponse(model);
 
-    CategoriesResponse response = this.categoriesMapper.toResponse(categories);
+    return response;
+  }
+
+  @Override
+  public CategoriesResponse update(CategoriesRequest categoriesRequest, String uuid) {
+    Optional<Categories> categoriesExits = this.categoriesRepository.findByUuid(uuid);
+
+    if (!categoriesExits.isPresent()) {
+      throw new NotFoundException("Categoria");
+    }
+
+    Categories model = categoriesExits.get();
+
+    model.setName(categoriesRequest.getName());
+    model.setDescription(categoriesRequest.getDescription());
+
+    this.categoriesRepository.findByNameAndCommerceId(
+      model.getName(),
+      model.getCommerce().getId()
+    ).ifPresent((category) -> {
+      System.out.println(category);
+      throw new AlreadyExistsException("Categoria");
+    });
+    
+    model = this.categoriesRepository.save(model);
+
+    CategoriesResponse response = this.categoriesMapper.toResponse(model);
 
     return response;
   }
