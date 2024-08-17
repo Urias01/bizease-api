@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bizease.api.app.exceptions.AlreadyExistsException;
 import com.bizease.api.app.model.categories.request.CategoriesRequest;
 import com.bizease.api.app.model.categories.response.CategoriesResponse;
 import com.bizease.api.app.model.categories.service.CategoriesService;
@@ -23,10 +24,18 @@ public class CategoriesController {
   private CategoriesService categoriesService;
 
   @PostMapping
-  public ResponseEntity<ApiResponse<CategoriesResponse>> create(@RequestBody CategoriesRequest categoriesRequest) {
-    CategoriesResponse response = this.categoriesService.create(categoriesRequest);
-    ApiResponse<CategoriesResponse> apiResponse = new ApiResponse<>(true, 1, response);
-    return ResponseEntity.status(201).body(apiResponse);
+  public ResponseEntity<Object> create(@RequestBody CategoriesRequest categoriesRequest) {
+    try {
+      CategoriesResponse response = this.categoriesService.create(categoriesRequest);
+      ApiResponse<CategoriesResponse> apiResponse = new ApiResponse<>(true, 1, response);
+      return ResponseEntity.status(201).body(apiResponse);
+    } catch (AlreadyExistsException e) {
+      ApiResponse<String> apiResponse = new ApiResponse<>(false, 0, e.getMessage());
+      return ResponseEntity.status(422).body(apiResponse);
+    } catch (Exception e) {
+      ApiResponse<String> apiResponse = new ApiResponse<>(false, 0, e.getMessage());
+      return ResponseEntity.status(500).body(apiResponse);
+    }
   }
 
   @PutMapping("/{uuid}")
