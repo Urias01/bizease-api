@@ -1,0 +1,36 @@
+package com.bizease.api.app.model.suppliers.controllers;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.bizease.api.app.exceptions.NotFoundException;
+import com.bizease.api.app.model.suppliers.dto.SuppliersDTO;
+import com.bizease.api.app.model.suppliers.entities.Suppliers;
+import com.bizease.api.app.model.suppliers.services.SuppliersService;
+
+@RestController
+@RequestMapping("/suppliers")
+
+public class SuppliersController {
+    
+    @Autowired
+    private SuppliersService suppliersService;
+
+    @PostMapping
+    public ResponseEntity<Object> create(@RequestBody SuppliersDTO suppliersDTO) {
+        try {
+            Suppliers suppliers = this.suppliersService.create(suppliersDTO);
+            return ResponseEntity.status(201).body(suppliers);
+        } catch (NotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        catch(Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+}
