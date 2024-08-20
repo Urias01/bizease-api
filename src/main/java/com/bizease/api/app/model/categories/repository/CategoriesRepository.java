@@ -10,4 +10,5 @@ public interface CategoriesRepository extends JpaRepository<Categories, Long> {
   
   Optional<Categories> findByUuid(String uuid);
   Optional<Categories> findByNameAndCommerceId(String name, Long commerceId);
+
 }

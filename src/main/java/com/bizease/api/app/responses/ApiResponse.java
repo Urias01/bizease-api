@@ -14,5 +14,5 @@ public class ApiResponse<T> {
   private boolean success;
   private int total;
   private T data;
-
+  
 }

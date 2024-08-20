@@ -10,9 +10,11 @@ import com.bizease.api.app.exceptions.NotFoundException;
 import com.bizease.api.app.model.categories.dto.CategoriesDTO;
 import com.bizease.api.app.model.categories.entities.Categories;
 import com.bizease.api.app.model.categories.useCases.CreateCategoriesUseCase;
+import com.bizease.api.app.model.categories.useCases.DeleteCategoriesUseCase;
 import com.bizease.api.app.model.categories.useCases.UpdateCategoriesUseCase;
 import com.bizease.api.app.responses.ApiResponse;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -26,6 +28,8 @@ public class CategoriesController {
   private CreateCategoriesUseCase createCategoriesUseCase;
   @Autowired
   private UpdateCategoriesUseCase updateCategoriesUseCase;
+  @Autowired
+  private DeleteCategoriesUseCase deleteCategoriesUseCase;
 
   @PostMapping
   public ResponseEntity<Object> create(@RequestBody CategoriesDTO categoriesDTO) {
@@ -51,6 +55,21 @@ public class CategoriesController {
     } catch (AlreadyExistsException e) {
       ApiResponse<String> apiResponse = new ApiResponse<>(false, 0, e.getMessage());
       return ResponseEntity.status(422).body(apiResponse);
+    } catch (NotFoundException e) {
+      ApiResponse<String> apiResponse = new ApiResponse<>(false, 0, e.getMessage());
+      return ResponseEntity.status(422).body(apiResponse);
+    } catch (Exception e) {
+      ApiResponse<String> apiResponse = new ApiResponse<>(false, 0, e.getMessage());
+      return ResponseEntity.status(500).body(apiResponse);
+    }
+  }
+
+  @DeleteMapping("/{uuid}")
+  public ResponseEntity<Object> delete(@PathVariable String uuid) {
+    try {
+      this.deleteCategoriesUseCase.execute(uuid);
+      ApiResponse<String> apiResponse = new ApiResponse<>(true, 1, "Categoria deletada com sucesso");
+      return ResponseEntity.status(200).body(apiResponse);
     } catch (NotFoundException e) {
       ApiResponse<String> apiResponse = new ApiResponse<>(false, 0, e.getMessage());
       return ResponseEntity.status(422).body(apiResponse);
