@@ -41,7 +41,7 @@ public class User {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "com_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "com_id")
     private Commerce commerce;
 }

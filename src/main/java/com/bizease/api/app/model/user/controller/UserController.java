@@ -1,5 +1,8 @@
 package com.bizease.api.app.model.user.controller;
 
+import com.bizease.api.app.exceptions.NotFoundException;
+import com.bizease.api.app.model.commerce.entities.Commerce;
+import com.bizease.api.app.model.commerce.repository.CommerceRepository;
 import com.bizease.api.app.model.user.dto.UpdateUserRequestDTO;
 import com.bizease.api.app.model.user.dto.UserRequestDTO;
 import com.bizease.api.app.model.user.dto.UserResponseDTO;
@@ -19,6 +22,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CommerceRepository commerceRepository;
 
     @Autowired
     private CreateUserUseCase createUserUseCase;
@@ -50,10 +56,14 @@ public class UserController {
     @PostMapping
     public ResponseEntity<Object> createUser(@RequestBody UserRequestDTO userRequestDTO) {
         try {
+            Commerce commerce = commerceRepository.findById(userRequestDTO.getCommerceId())
+                    .orElseThrow(() -> new NotFoundException("Comércio"));
+
             User user = new User();
             user.setName(userRequestDTO.getName());
             user.setEmail(userRequestDTO.getEmail());
             user.setPassword(userRequestDTO.getPassword());
+            user.setCommerce(commerce);
 
             var result = this.createUserUseCase.createUser(user);
             return ResponseEntity.status(201).body(result);
