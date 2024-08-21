@@ -15,4 +15,5 @@ public class UserRequestDTO {
     private String email;
     private String password;
     private Long commerceId;
+    private String roleName;
 }

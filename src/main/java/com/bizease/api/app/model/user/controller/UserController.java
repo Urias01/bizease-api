@@ -3,6 +3,8 @@ package com.bizease.api.app.model.user.controller;
 import com.bizease.api.app.exceptions.NotFoundException;
 import com.bizease.api.app.model.commerce.entities.Commerce;
 import com.bizease.api.app.model.commerce.repository.CommerceRepository;
+import com.bizease.api.app.model.role.entities.Role;
+import com.bizease.api.app.model.role.repository.RoleRepository;
 import com.bizease.api.app.model.user.dto.UpdateUserRequestDTO;
 import com.bizease.api.app.model.user.dto.UserRequestDTO;
 import com.bizease.api.app.model.user.dto.UserResponseDTO;
@@ -25,6 +27,9 @@ public class UserController {
 
     @Autowired
     private CommerceRepository commerceRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Autowired
     private CreateUserUseCase createUserUseCase;
@@ -59,11 +64,15 @@ public class UserController {
             Commerce commerce = commerceRepository.findById(userRequestDTO.getCommerceId())
                     .orElseThrow(() -> new NotFoundException("Comércio"));
 
+            Role role = roleRepository.findByName(userRequestDTO.getRoleName())
+                    .orElseThrow(() -> new NotFoundException("Cargo"));
+
             User user = new User();
             user.setName(userRequestDTO.getName());
             user.setEmail(userRequestDTO.getEmail());
             user.setPassword(userRequestDTO.getPassword());
             user.setCommerce(commerce);
+            user.getRoles().add(role);
 
             var result = this.createUserUseCase.createUser(user);
             return ResponseEntity.status(201).body(result);

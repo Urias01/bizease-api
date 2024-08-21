@@ -1,6 +1,6 @@
 package com.bizease.api.app.model.user.useCases;
 
-import com.bizease.api.app.exceptions.UserAlreadyExists;
+import com.bizease.api.app.exceptions.UserAlreadyExistsException;
 import com.bizease.api.app.model.user.entities.User;
 import com.bizease.api.app.model.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class CreateUserUseCase {
         Optional<User> verifyUser = this.userRepository.findByEmail(user.getEmail());
 
         if(verifyUser.isPresent()) {
-            throw new UserAlreadyExists("Usuário já existente com este email!");
+            throw new UserAlreadyExistsException("Usuário já existente com este email!");
         } else {
             return this.userRepository.save(user);
         }
