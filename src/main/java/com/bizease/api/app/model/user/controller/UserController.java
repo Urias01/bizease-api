@@ -61,21 +61,8 @@ public class UserController {
     @PostMapping
     public ResponseEntity<Object> createUser(@RequestBody UserRequestDTO userRequestDTO) {
         try {
-            Commerce commerce = commerceRepository.findById(userRequestDTO.getCommerceId())
-                    .orElseThrow(() -> new NotFoundException("Comércio"));
-
-            Role role = roleRepository.findByName(userRequestDTO.getRoleName())
-                    .orElseThrow(() -> new NotFoundException("Cargo"));
-
-            User user = new User();
-            user.setName(userRequestDTO.getName());
-            user.setEmail(userRequestDTO.getEmail());
-            user.setPassword(userRequestDTO.getPassword());
-            user.setCommerce(commerce);
-            user.getRoles().add(role);
-
-            var result = this.createUserUseCase.createUser(user);
-            return ResponseEntity.status(201).body(result);
+            User newUser = createUserUseCase.createUser(userRequestDTO);
+            return ResponseEntity.status(201).body(newUser);
         } catch (Exception error) {
             return ResponseEntity.badRequest().body(error.getMessage());
         }
