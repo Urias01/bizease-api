@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PageReturn<T> {
-    
+
     private T data;
     private Long total;
 
