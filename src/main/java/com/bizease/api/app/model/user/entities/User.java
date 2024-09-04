@@ -1,8 +1,7 @@
 package com.bizease.api.app.model.user.entities;
 
 import com.bizease.api.app.model.commerce.entities.Commerce;
-import com.bizease.api.app.model.role.entities.Role;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.bizease.api.app.model.user.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,8 +12,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity(name = "users")
@@ -49,12 +46,5 @@ public class User {
     @JoinColumn(name = "com_id")
     private Commerce commerce;
 
-    @ManyToMany
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    @JsonManagedReference
-    private Set<Role> roles = new HashSet<>();
+    private RoleEnum role;
 }

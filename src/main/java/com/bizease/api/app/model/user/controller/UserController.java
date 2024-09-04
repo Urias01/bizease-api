@@ -1,15 +1,10 @@
 package com.bizease.api.app.model.user.controller;
 
-import com.bizease.api.app.exceptions.NotFoundException;
-import com.bizease.api.app.model.commerce.entities.Commerce;
-import com.bizease.api.app.model.commerce.repository.CommerceRepository;
-import com.bizease.api.app.model.role.entities.Role;
-import com.bizease.api.app.model.role.repository.RoleRepository;
+import com.bizease.api.app.model.user.dto.FirstUserAccessDTO;
 import com.bizease.api.app.model.user.dto.UpdateUserRequestDTO;
 import com.bizease.api.app.model.user.dto.UserRequestDTO;
 import com.bizease.api.app.model.user.dto.UserResponseDTO;
 import com.bizease.api.app.model.user.entities.User;
-import com.bizease.api.app.model.user.repository.UserRepository;
 import com.bizease.api.app.model.user.useCases.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +18,7 @@ import java.util.Optional;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private CommerceRepository commerceRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
+    private CreateFirstUserAccessUseCase createFirstUserAccessUseCase;
 
     @Autowired
     private CreateUserUseCase createUserUseCase;
@@ -52,6 +41,16 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    @PostMapping("/first-access")
+    public ResponseEntity<Object> createFirstAccess(@RequestBody FirstUserAccessDTO firstUserAccessDTO) {
+        try {
+            var result = this.createFirstUserAccessUseCase.execute(firstUserAccessDTO);
+            return ResponseEntity.status(201).body(result);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @GetMapping("/{uuid}")
     public ResponseEntity<UserResponseDTO> getUserByUuid(@PathVariable String uuid) {
         UserResponseDTO userResponseDTO = getUserByUuidUseCase.getUserByUuid(uuid);
@@ -69,7 +68,8 @@ public class UserController {
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<Object> updateUser(@PathVariable String uuid, @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
+    public ResponseEntity<Object> updateUser(@PathVariable String uuid,
+            @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
         try {
             Optional<User> updatedUser = this.updateUserUseCase.updateUser(uuid, updateUserRequestDTO);
             return ResponseEntity.status(201).body(updatedUser);

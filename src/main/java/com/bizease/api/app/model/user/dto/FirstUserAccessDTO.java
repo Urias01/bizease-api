@@ -9,12 +9,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRequestDTO {
-
-    private String name;
-    private String email;
-    private String password;
-    private Long commerceId;
-    private String role;
-    
+public class FirstUserAccessDTO {
+ 
+  private String name;
+  private String email;
+  private String password;
+  private String commerceName;
+  private String cnpj;
+  
 }
