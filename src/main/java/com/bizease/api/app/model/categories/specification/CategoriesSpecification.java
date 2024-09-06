@@ -7,7 +7,7 @@ import com.bizease.api.app.model.categories.entities.Categories;
 public class CategoriesSpecification {
 
   public static Specification<Categories> commerceUuidEquals(String uuid) {
-    if (uuid.isEmpty()) {
+    if (uuid == null) {
       return null;
     }
 
@@ -15,7 +15,7 @@ public class CategoriesSpecification {
   }
 
   public static Specification<Categories> nameLike(String name) {
-    if (name.isEmpty()) {
+    if (name == null) {
       return null;
     }
 
