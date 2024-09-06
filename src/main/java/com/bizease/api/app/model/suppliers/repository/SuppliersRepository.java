@@ -10,4 +10,7 @@ import com.bizease.api.app.model.suppliers.entities.Suppliers;
 public interface SuppliersRepository extends JpaRepository<Suppliers, Long>, JpaSpecificationExecutor<Suppliers> {
     
     Optional<Suppliers> findByCnpj(String cnpj);
+
+    Optional<Suppliers> findByUuid(String uuid);
+
 }
