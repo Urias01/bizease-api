@@ -24,10 +24,8 @@ public class CreateUserUseCase {
     @Autowired
     private CommerceRepository commerceRepository;
 
-
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     public User createUser(UserRequestDTO userRequestDTO) {
         Optional<User> verifyUser = this.userRepository.findByEmail(userRequestDTO.getEmail());
@@ -43,7 +41,7 @@ public class CreateUserUseCase {
             User newUser = new User();
             newUser.setName(userRequestDTO.getName());
             newUser.setEmail(userRequestDTO.getEmail());
-            newUser.setPassword(passwordEncoder().encode(userRequestDTO.getPassword()));
+            newUser.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
             newUser.setCommerce(commerce);
             newUser.setRole(role);
 

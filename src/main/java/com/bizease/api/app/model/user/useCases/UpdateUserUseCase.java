@@ -18,9 +18,8 @@ public class UpdateUserUseCase {
     @Autowired
     private UserRepository userRepository;
 
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public Optional<User> updateUser(String uuid, UpdateUserRequestDTO updateUserRequestDTO) {
         Optional<User> verifyUser = this.userRepository.findByUuid(UUID.fromString(uuid));
@@ -29,7 +28,7 @@ public class UpdateUserUseCase {
             User user = verifyUser.get();
             user.setName(updateUserRequestDTO.name());
             user.setEmail(updateUserRequestDTO.email());
-            user.setPassword(passwordEncoder().encode(updateUserRequestDTO.password()));
+            user.setPassword(passwordEncoder.encode(updateUserRequestDTO.password()));
 
             this.userRepository.save(user);
             return Optional.of(user);
