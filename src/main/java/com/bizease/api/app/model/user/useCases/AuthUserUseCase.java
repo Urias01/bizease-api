@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.bizease.api.app.exceptions.NotFoundException;
 import com.bizease.api.app.model.user.dto.AuthUserRequestDTO;
+import com.bizease.api.app.model.user.dto.AuthUserResponseDTO;
 import com.bizease.api.app.model.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +29,7 @@ public class AuthUserUseCase {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public String authenticate(AuthUserRequestDTO authUserRequestDTO) throws AuthenticationException {
+    public AuthUserResponseDTO authenticate(AuthUserRequestDTO authUserRequestDTO) throws AuthenticationException {
         var user = this.userRepository.findByEmail(authUserRequestDTO.getEmail()).orElseThrow(() -> {
             throw new UsernameNotFoundException("Email/senha incorretos");
         });
@@ -44,11 +45,16 @@ public class AuthUserUseCase {
         var role = user.getRole() != null ? user.getRole().getRole() : "";
 
         var token = JWT.create().withIssuer("bizease-api")
-                .withExpiresAt(expiresIn)
                 .withSubject(user.getUuid().toString())
                 .withClaim("roles", Arrays.asList(role))
+                .withExpiresAt(expiresIn)
                 .sign(algorithm);
 
-        return token;
+        var authUserResponse = AuthUserResponseDTO.builder()
+                .acess_token(token)
+                .expires_in(expiresIn.toEpochMilli())
+                .build();
+
+        return authUserResponse;
     }
 }
