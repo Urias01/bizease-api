@@ -1,12 +1,14 @@
-package com.bizease.api.app.model.categories.specification;
+package com.bizease.api.app.model.suppliers.specification;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import com.bizease.api.app.model.categories.entities.Categories;
+import com.bizease.api.app.model.suppliers.entities.Suppliers;
 
-public class CategoriesSpecification {
 
-  public static Specification<Categories> commerceUuidEquals(String uuid) {
+public class SuppliersSpecification {
+ 
+    
+  public static Specification<Suppliers> commerceUuidEquals(String uuid) {
     if (uuid == null) {
       return null;
     }
@@ -14,12 +16,13 @@ public class CategoriesSpecification {
     return (root, query, cb) -> cb.equal(root.get("commerce").get("uuid"), uuid);
   }
 
-  public static Specification<Categories> nameLike(String name) {
+  public static Specification<Suppliers> nameLike(String name) {
     if (name == null) {
       return null;
     }
 
     return (root, query, cb) -> cb.like(root.get("name"), "%" + name + "%");
   }
+
 
 }
