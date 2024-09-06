@@ -8,6 +8,7 @@ import com.bizease.api.app.model.user.entities.User;
 import com.bizease.api.app.model.user.useCases.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class UserController {
     private GetUserByUuidUseCase getUserByUuidUseCase;
 
     @GetMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
         List<UserResponseDTO> users = getAllUsersUseCase.getAllUsers();
         return ResponseEntity.ok(users);
@@ -52,6 +54,7 @@ public class UserController {
     }
 
     @GetMapping("/{uuid}")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
     public ResponseEntity<UserResponseDTO> getUserByUuid(@PathVariable String uuid) {
         UserResponseDTO userResponseDTO = getUserByUuidUseCase.getUserByUuid(uuid);
         return ResponseEntity.ok(userResponseDTO);
@@ -68,6 +71,7 @@ public class UserController {
     }
 
     @PutMapping("/{uuid}")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
     public ResponseEntity<Object> updateUser(@PathVariable String uuid,
             @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
         try {
@@ -79,6 +83,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{uuid}")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
     public ResponseEntity<Object> deleteUser(@PathVariable String uuid) {
         try {
             deleteUserUseCase.deleteUser(uuid);
