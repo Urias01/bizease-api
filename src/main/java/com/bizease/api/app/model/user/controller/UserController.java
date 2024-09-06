@@ -2,7 +2,7 @@ package com.bizease.api.app.model.user.controller;
 
 import com.bizease.api.app.model.user.dto.FirstUserAccessDTO;
 import com.bizease.api.app.model.user.dto.UpdateUserRequestDTO;
-import com.bizease.api.app.model.user.dto.UserRequestDTO;
+import com.bizease.api.app.model.user.dto.CreateUserRequestDTO;
 import com.bizease.api.app.model.user.dto.UserResponseDTO;
 import com.bizease.api.app.model.user.entities.User;
 import com.bizease.api.app.model.user.useCases.*;
@@ -58,9 +58,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> createUser(@RequestBody UserRequestDTO userRequestDTO) {
+    public ResponseEntity<Object> createUser(@RequestBody CreateUserRequestDTO createUserRequestDTO) {
         try {
-            User newUser = createUserUseCase.createUser(userRequestDTO);
+            User newUser = createUserUseCase.createUser(createUserRequestDTO);
             return ResponseEntity.status(201).body(newUser);
         } catch (Exception error) {
             return ResponseEntity.badRequest().body(error.getMessage());
