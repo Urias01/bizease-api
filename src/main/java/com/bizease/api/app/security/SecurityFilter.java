@@ -23,14 +23,12 @@ public class SecurityFilter extends OncePerRequestFilter {
   private JWTProvider jwtProvider;
 
   @Override
-  protected void doFilterInternal(
-    HttpServletRequest request,
-    HttpServletResponse response,
-    FilterChain filterChain
-    )
-    throws ServletException, IOException {
-      SecurityContextHolder.getContext().setAuthentication(null);
-      String header = request.getHeader("Authorization");
+  protected void doFilterInternal(HttpServletRequest request,
+  HttpServletResponse response,
+  FilterChain filterChain)
+          throws ServletException, IOException {
+
+    String header = request.getHeader("Authorization");
 
       if (header != null) {
         var subjectToken = this.jwtProvider.validateToken(header);
@@ -39,18 +37,12 @@ public class SecurityFilter extends OncePerRequestFilter {
           return;
         }
 
-        request.setAttribute("user_id", subjectToken);
-        UsernamePasswordAuthenticationToken auth =
-        new UsernamePasswordAuthenticationToken(
-          subjectToken,
-          null,
-          Collections.emptyList()
-        );
+        request.setAttribute("user_uuid", subjectToken);
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(subjectToken, null, Collections.emptyList());
 
         SecurityContextHolder.getContext().setAuthentication(auth);
       }
 
       filterChain.doFilter(request, response);
   }
-  
 }

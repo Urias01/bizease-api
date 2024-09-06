@@ -12,6 +12,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.naming.AuthenticationException;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Arrays;
 
 @Service
 public class AuthUserUseCase {
@@ -36,12 +39,14 @@ public class AuthUserUseCase {
             throw new AuthenticationException();
         }
 
-        var role = user.getRole();
-
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
+        var expiresIn = Instant.now().plus(Duration.ofHours(2));
+        var role = user.getRole() != null ? user.getRole().getRole() : "";
 
         var token = JWT.create().withIssuer("bizease-api")
+                .withExpiresAt(expiresIn)
                 .withSubject(user.getUuid().toString())
+                .withClaim("roles", Arrays.asList(role))
                 .sign(algorithm);
 
         return token;

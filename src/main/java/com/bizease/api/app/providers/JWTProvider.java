@@ -13,20 +13,19 @@ public class JWTProvider {
   @Value("${security.token.secret}")
   private String secretKey;
 
-  
   public String validateToken(String token) {
     token = token.replace("Bearer ", "");
     
     Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
     try {
-      String subject = JWT.require(algorithm)
+      var subject = JWT.require(algorithm)
         .build()
         .verify(token)
         .getSubject();
       return subject;
-    } catch (JWTVerificationException e) {
-      e.printStackTrace();
+    } catch (JWTVerificationException error) {
+      error.printStackTrace();
       return "";
     }
   }
