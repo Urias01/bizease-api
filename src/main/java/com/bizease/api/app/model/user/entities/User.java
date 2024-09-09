@@ -46,5 +46,7 @@ public class User {
     @JoinColumn(name = "com_id")
     private Commerce commerce;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "roles")
     private RoleEnum role;
 }

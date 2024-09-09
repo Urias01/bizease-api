@@ -1,0 +1,2 @@
+DROP TABLE roles;
+ALTER TABLE users ADD COLUMN roles TEXT;
