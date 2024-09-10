@@ -25,13 +25,8 @@ public class CreatePurchaseOrderUseCase {
     private CommerceRepository commerceRepository;
 
     public PurchaseOrders execute(PurchaseOrdersRequestDTO purchaseOrdersRequestDTO) {
-        Suppliers suppliers = this.suppliersRepository.findById(purchaseOrdersRequestDTO.getSup_id()).orElseThrow(() -> {
-            throw new NotFoundException("Fornecedor");
-        });
-
-        Commerce commerce = this.commerceRepository.findById(purchaseOrdersRequestDTO.getCom_id()).orElseThrow(() -> {
-            throw new NotFoundException("Comércio");
-        });
+        var suppliers = findSupplier(purchaseOrdersRequestDTO.getSup_id());
+        var commerce = findCommerce(purchaseOrdersRequestDTO.getCom_id());
 
         StatusEnum status = StatusEnum.fromString(purchaseOrdersRequestDTO.getStatus());
 
@@ -43,5 +38,19 @@ public class CreatePurchaseOrderUseCase {
         purchaseOrder.setCommerce(commerce);
 
         return purchaseOrdersRepository.save(purchaseOrder);
+    }
+
+    private Suppliers findSupplier(Long id) {
+        Suppliers suppliers = this.suppliersRepository.findById(id).orElseThrow(() -> {
+            throw new NotFoundException("Fornecedor");
+        });
+        return suppliers;
+    }
+
+    private Commerce findCommerce(Long id) {
+        Commerce commerce = this.commerceRepository.findById(id).orElseThrow(() -> {
+            throw new NotFoundException("Comércio");
+        });
+        return commerce;
     }
 }
