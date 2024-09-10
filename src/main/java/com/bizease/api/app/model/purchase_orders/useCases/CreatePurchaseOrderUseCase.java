@@ -12,6 +12,8 @@ import com.bizease.api.app.model.suppliers.repository.SuppliersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 public class CreatePurchaseOrderUseCase {
 
@@ -28,6 +30,8 @@ public class CreatePurchaseOrderUseCase {
         var suppliers = findSupplier(purchaseOrdersRequestDTO.getSup_id());
         var commerce = findCommerce(purchaseOrdersRequestDTO.getCom_id());
 
+        validateDates(purchaseOrdersRequestDTO.getOrder_date(), purchaseOrdersRequestDTO.getExpected_delivery_date());
+
         StatusEnum status = StatusEnum.fromString(purchaseOrdersRequestDTO.getStatus());
 
         PurchaseOrders purchaseOrder = new PurchaseOrders();
@@ -38,6 +42,12 @@ public class CreatePurchaseOrderUseCase {
         purchaseOrder.setCommerce(commerce);
 
         return purchaseOrdersRepository.save(purchaseOrder);
+    }
+
+    private void validateDates(LocalDate orderDate, LocalDate expectedDeliveryDate) {
+        if (expectedDeliveryDate.isBefore(orderDate)) {
+            throw new IllegalArgumentException("A data esperada de entrega não pode ser inferior à data do pedido.");
+        }
     }
 
     private Suppliers findSupplier(Long id) {
