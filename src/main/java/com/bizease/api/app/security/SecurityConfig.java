@@ -25,7 +25,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> {
                 auth.requestMatchers("/users").permitAll()
                     .requestMatchers("/auth/users").permitAll()
-                    .requestMatchers("/commerces/").permitAll();
+                    .requestMatchers("/commerces/").permitAll()
+                    .requestMatchers("/categories").permitAll()
+                    .requestMatchers("/products").permitAll();
                 auth.anyRequest().authenticated();
             })
             .addFilterBefore(securityFilter, BasicAuthenticationFilter.class)
