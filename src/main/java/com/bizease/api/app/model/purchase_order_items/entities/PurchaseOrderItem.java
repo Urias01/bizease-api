@@ -2,6 +2,8 @@ package com.bizease.api.app.model.purchase_order_items.entities;
 
 import com.bizease.api.app.model.categories.entities.Categories;
 import com.bizease.api.app.model.commerce.entities.Commerce;
+import com.bizease.api.app.model.products.entities.Products;
+import com.bizease.api.app.model.purchase_orders.entities.PurchaseOrders;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -49,10 +51,10 @@ public class PurchaseOrderItem {
     private LocalDateTime updatedAt;
 
     @OneToOne
-    @JoinColumn(name = "com_id")
-    private Commerce commerce;
+    @JoinColumn(name = "prod_id")
+    private Products products;
 
     @OneToOne
-    @JoinColumn(name = "cat_id")
-    private Categories categories;
+    @JoinColumn(name = "por_id")
+    private PurchaseOrders purchaseOrders;
 }

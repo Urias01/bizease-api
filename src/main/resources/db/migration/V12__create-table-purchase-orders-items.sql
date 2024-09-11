@@ -6,6 +6,6 @@ CREATE TABLE purchase_order_items (
     unit_selling_price NUMERIC(10, 2),
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
-    com_id BIGINT REFERENCES commerces(id),
-    cat_id BIGINT REFERENCES categories(id)
+    prod_id BIGINT REFERENCES products(id),
+    por_id BIGINT REFERENCES purchase_orders(id)
 );
