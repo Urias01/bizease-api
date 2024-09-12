@@ -1,0 +1,5 @@
+DROP TABLE roles;
+
+ALTER TABLE users DROP COLUMN role_id;
+ALTER TABLE users ADD COLUMN roles TEXT;
+UPDATE users SET roles = "EMPLOYEE" WHERE is_active IS NULL;

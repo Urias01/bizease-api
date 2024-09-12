@@ -1,8 +1,6 @@
 package com.bizease.api.app.model.suppliers.entities;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -13,12 +11,12 @@ import com.bizease.api.app.model.suppliers.dto.SuppliersDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -57,7 +55,11 @@ public class Suppliers {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    public Suppliers(SuppliersDTO suppliersDTO) {
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "com_id", referencedColumnName = "id")
+    private Commerce commerce;
+
+    public Suppliers(SuppliersDTO suppliersDTO, Commerce commerce) {
         this.cnpj = suppliersDTO.getCnpj();
         this.name = suppliersDTO.getName();
         this.address = suppliersDTO.getAddress();
@@ -71,15 +73,7 @@ public class Suppliers {
         this.email = suppliersDTO.getEmail();
         this.createdAt = suppliersDTO.getCreatedAt();
         this.updatedAt = suppliersDTO.getUpdatedAt();
+        this.commerce = commerce;
     }
-
-    @ManyToMany
-    @JoinTable(
-        name = "commerces_suppliers",
-        joinColumns = @JoinColumn(name = "sup_id"),
-        inverseJoinColumns = @JoinColumn(name = "com_id")
-    )
-
-    private Set<Commerce> commerce = new HashSet<>();
     
 }

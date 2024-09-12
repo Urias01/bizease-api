@@ -22,20 +22,13 @@ public class CreateSuppliersUseCase {
     private CommerceRepository commerceRepository;
 
     public Suppliers execute(SuppliersDTO suppliersDTO) {
-        Optional<Suppliers> suppliersExists = this.suppliersRepository.findByCnpj(suppliersDTO.getCnpj());
-
-        if (suppliersExists.isPresent()) {
-            throw new NotFoundException("Fornecedor");
-        }
-
         Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(suppliersDTO.getCommerceUuid());
 
         if (!commerceExists.isPresent()) {
             throw new NotFoundException("Comércio");
         }
 
-        Suppliers suppliers = new Suppliers(suppliersDTO);
-        suppliers.getCommerce().add(commerceExists.get());
+        Suppliers suppliers = new Suppliers(suppliersDTO, commerceExists.get());
         this.suppliersRepository.save(suppliers);
 
         return suppliers;
