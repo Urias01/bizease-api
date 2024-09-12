@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -41,6 +42,7 @@ public class SuppliersController {
     private DeleteSuppliersUseCase deleteSuppliersUseCase;
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
     public ResponseEntity<Object> create(@RequestBody SuppliersDTO suppliersDTO) {
         try {
             Suppliers suppliers = this.createSuppliersUseCase.execute(suppliersDTO);
