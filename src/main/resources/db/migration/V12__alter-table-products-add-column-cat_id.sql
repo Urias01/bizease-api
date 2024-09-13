@@ -1,0 +1,7 @@
+ALTER TABLE products
+ADD COLUMN cat_id INTEGER;
+
+ALTER TABLE products
+ADD CONSTRAINT cat_id
+FOREIGN KEY (cat_id)
+REFERENCES categories(id) ON DELETE SET NULL;

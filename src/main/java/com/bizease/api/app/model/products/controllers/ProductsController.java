@@ -15,7 +15,7 @@ import com.bizease.api.app.model.commons.PageReturn;
 import com.bizease.api.app.model.products.dto.ProductsDTO;
 import com.bizease.api.app.model.products.entities.Products;
 import com.bizease.api.app.model.products.filter.ProductFilter;
-import com.bizease.api.app.model.products.services.ProductsService;
+import com.bizease.api.app.model.products.useCases.CreateProductUseCase;
 import com.bizease.api.app.model.products.useCases.GetAllProducts;
 
 @RestController
@@ -24,14 +24,14 @@ import com.bizease.api.app.model.products.useCases.GetAllProducts;
 public class ProductsController {
     
     @Autowired
-    private ProductsService productsService;
+    private CreateProductUseCase createProductUseCase;
     @Autowired
     private GetAllProducts getAllProducts;
 
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody ProductsDTO ProductsDTO) {
         try {
-            Products products = this.productsService.create(ProductsDTO);
+            Products products = this.createProductUseCase.execute(ProductsDTO);
             return ResponseEntity.status(201).body(products);
         } catch (NotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
