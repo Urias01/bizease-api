@@ -18,7 +18,7 @@ import static org.springframework.data.jpa.domain.Specification.where;
 import java.util.List;
 
 @Service
-public class GetAllProducts {
+public class GetAllProductsUseCase {
 
     @Autowired
     private ProductsRepository productsRepository;

@@ -16,7 +16,7 @@ import com.bizease.api.app.model.products.dto.ProductsDTO;
 import com.bizease.api.app.model.products.entities.Products;
 import com.bizease.api.app.model.products.filter.ProductFilter;
 import com.bizease.api.app.model.products.useCases.CreateProductUseCase;
-import com.bizease.api.app.model.products.useCases.GetAllProducts;
+import com.bizease.api.app.model.products.useCases.GetAllProductsUseCase;
 
 @RestController
 @RequestMapping("/products")
@@ -26,7 +26,7 @@ public class ProductsController {
     @Autowired
     private CreateProductUseCase createProductUseCase;
     @Autowired
-    private GetAllProducts getAllProducts;
+    private GetAllProductsUseCase getAllProducts;
 
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody ProductsDTO ProductsDTO) {
