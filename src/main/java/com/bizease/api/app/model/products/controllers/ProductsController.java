@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import com.bizease.api.app.model.products.dto.ProductsDTO;
 import com.bizease.api.app.model.products.entities.Products;
 import com.bizease.api.app.model.products.filter.ProductFilter;
 import com.bizease.api.app.model.products.useCases.CreateProductUseCase;
+import com.bizease.api.app.model.products.useCases.DeleteProductUseCase;
 import com.bizease.api.app.model.products.useCases.GetAllProductsUseCase;
 import com.bizease.api.app.model.products.useCases.UpdateProductUseCase;
 
@@ -32,6 +34,8 @@ public class ProductsController {
     private GetAllProductsUseCase getAllProducts;
     @Autowired
     private UpdateProductUseCase updateProductUseCase;
+    @Autowired
+    private DeleteProductUseCase deleteProductUseCase;
 
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody ProductsDTO ProductsDTO) {
@@ -57,6 +61,16 @@ public class ProductsController {
             return ResponseEntity.status(201).body(products);
         } catch (NotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<Object> delete(@PathVariable String uuid) {
+        try {
+            this.deleteProductUseCase.execute(uuid);
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
