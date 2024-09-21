@@ -36,6 +36,8 @@ public class GetAllProductsUseCase {
 
         List<Products> responses = model.getContent();
 
+        System.out.println(responses.size());
+
         return new PageReturn<List<Products>>(responses, model.getTotalElements());
     }
 }

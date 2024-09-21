@@ -23,6 +23,8 @@ import com.bizease.api.app.model.products.useCases.DeleteProductUseCase;
 import com.bizease.api.app.model.products.useCases.GetAllProductsUseCase;
 import com.bizease.api.app.model.products.useCases.UpdateProductUseCase;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/products")
 
@@ -50,7 +52,8 @@ public class ProductsController {
     }
 
     @GetMapping
-    public PageReturn<List<Products>> list(ProductFilter filter) {
+    public PageReturn<List<Products>> list(ProductFilter filter, HttpServletRequest request) {
+        filter.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
         return this.getAllProducts.execute(filter);
     }
 
