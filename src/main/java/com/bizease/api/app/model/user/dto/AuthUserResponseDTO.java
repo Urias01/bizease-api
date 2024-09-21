@@ -9,6 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 public class AuthUserResponseDTO {
 
-    private String acess_token;
-    private Long expires_in;
+    private String accessToken;
+    private Long expiresIn;
 }

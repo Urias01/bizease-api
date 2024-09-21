@@ -27,7 +27,7 @@ import com.bizease.api.app.model.products.useCases.UpdateProductUseCase;
 @RequestMapping("/products")
 
 public class ProductsController {
-    
+
     @Autowired
     private CreateProductUseCase createProductUseCase;
     @Autowired
