@@ -29,12 +29,12 @@ public class CreateProductUseCase {
 
     public Products execute(ProductsDTO productsDTO) {
         
-        this.productsRepository.findByNameAndCommerceId(productsDTO.getName(), productsDTO.getCommerceId())
+        this.productsRepository.findByNameAndCommerceUuid(productsDTO.getName(), productsDTO.getCommerceUuid())
         .ifPresent((products)->{
             throw new AlreadyExistsException("Produto");
         });
 
-        Optional<Commerce> commerceExists = this.commerceRepository.findById(productsDTO.getCommerceId());
+        Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(productsDTO.getCommerceUuid());
         if (!commerceExists.isPresent()) {
             throw new NotFoundException("Comércio");
         }

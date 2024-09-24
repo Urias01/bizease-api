@@ -40,9 +40,10 @@ public class ProductsController {
     private DeleteProductUseCase deleteProductUseCase;
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody ProductsDTO ProductsDTO) {
+    public ResponseEntity<Object> create(@RequestBody ProductsDTO productsDto, HttpServletRequest request) {
         try {
-            Products products = this.createProductUseCase.execute(ProductsDTO);
+            productsDto.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
+            Products products = this.createProductUseCase.execute(productsDto);
             return ResponseEntity.status(201).body(products);
         } catch (NotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -58,9 +59,10 @@ public class ProductsController {
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<Object> update(@RequestBody ProductsDTO ProductsDTO, @PathVariable String uuid) {
+    public ResponseEntity<Object> update(@RequestBody ProductsDTO productsDto, HttpServletRequest request) {
         try {
-            Products products = this.updateProductUseCase.execute(ProductsDTO, uuid);
+            productsDto.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
+            Products products = this.updateProductUseCase.execute(productsDto);
             return ResponseEntity.status(201).body(products);
         } catch (NotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
