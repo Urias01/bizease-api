@@ -3,7 +3,6 @@ CREATE TABLE purchase_order_items (
     uuid UUID NOT NULL,
     quantity INTEGER NOT NULL,
     unit_price NUMERIC(10, 2),
-    unit_selling_price NUMERIC(10, 2),
     created_at TIMESTAMP,
     updated_at TIMESTAMP,
     prod_id BIGINT REFERENCES products(id),

@@ -15,7 +15,6 @@ public class PurchaseOrderItemDTO {
 
     private Integer quantity;
     private BigDecimal unit_price;
-    private BigDecimal unit_selling_price;
     private Long productId;
     private Long purchaseOrderId;
 }

@@ -15,7 +15,7 @@ public class ProductsSpecification {
     }
 
     public static Specification<Products> nameLike(String name) {
-        if (name.isEmpty()) {
+        if (name == null || name.isEmpty()) {
             return null;
         }
         

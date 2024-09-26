@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
+import com.bizease.api.app.model.categories.entities.Categories;
 import com.bizease.api.app.model.commerce.entities.Commerce;
 import com.bizease.api.app.model.products.dto.ProductsDTO;
 
@@ -50,7 +51,11 @@ public class Products {
     @JoinColumn(name = "com_id", referencedColumnName = "id")
     private Commerce commerce;
 
-    public Products (ProductsDTO productsDTO, Commerce commerce) {
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "cat_id", referencedColumnName = "id")
+    private Categories categories;
+
+    public Products (ProductsDTO productsDTO, Commerce commerce, Categories categories) {
         this.name = productsDTO.getName();
         this.unit = productsDTO.getUnit();
         this.minimumStock = productsDTO.getMinimumStock();
@@ -58,6 +63,7 @@ public class Products {
         this.createdAt = productsDTO.getCreatedAt();
         this.updatedAt = productsDTO.getUpdatedAt();
         this.commerce = commerce;
+        this.categories = categories;
     }
 
 }

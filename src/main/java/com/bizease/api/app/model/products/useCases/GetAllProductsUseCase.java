@@ -18,7 +18,7 @@ import static org.springframework.data.jpa.domain.Specification.where;
 import java.util.List;
 
 @Service
-public class GetAllProducts {
+public class GetAllProductsUseCase {
 
     @Autowired
     private ProductsRepository productsRepository;
@@ -35,6 +35,8 @@ public class GetAllProducts {
         Page<Products> model = this.productsRepository.findAll(specification, pageRequest);
 
         List<Products> responses = model.getContent();
+
+        System.out.println(responses.size());
 
         return new PageReturn<List<Products>>(responses, model.getTotalElements());
     }

@@ -39,9 +39,6 @@ public class PurchaseOrderItem {
     @Column(name = "unit_price", precision = 10, scale = 2)
     private BigDecimal unitPrice;
 
-    @Column(name = "unit_selling_price", precision = 10, scale = 2)
-    private BigDecimal unitSellingPrice;
-
     @Column(name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;
