@@ -33,14 +33,15 @@ public class UpdatePurchaseOrderUseCase {
            throw new NotFoundException("Pedido de compra");
         });
 
-        var suppliers = findSupplier(purchaseOrdersRequestDTO.getSup_id());
-        var commerce = findCommerce(purchaseOrdersRequestDTO.getCom_id());
+        var suppliers = findSupplier(purchaseOrdersRequestDTO.getSupplierId());
+        var commerce = findCommerce(purchaseOrdersRequestDTO.getCommerceId());
 
-        validateDates(purchaseOrdersRequestDTO.getOrder_date(), purchaseOrdersRequestDTO.getExpected_delivery_date());
+        validateDates(purchaseOrdersRequestDTO.getOrderDate(), purchaseOrdersRequestDTO.getExpectedDeliveryDate());
 
         updatedPurchaseOrder.setStatus(StatusEnum.fromString(purchaseOrdersRequestDTO.getStatus()));
-        updatedPurchaseOrder.setOrderDate(purchaseOrdersRequestDTO.getOrder_date());
-        updatedPurchaseOrder.setExpectedDeliveryDate(purchaseOrdersRequestDTO.getExpected_delivery_date());
+        updatedPurchaseOrder.setOrderDate(purchaseOrdersRequestDTO.getOrderDate());
+        updatedPurchaseOrder.setExpectedDeliveryDate(purchaseOrdersRequestDTO.getExpectedDeliveryDate());
+        updatedPurchaseOrder.setDeliveryDate(purchaseOrdersRequestDTO.getDeliveryDate());
         updatedPurchaseOrder.setSuppliers(suppliers);
         updatedPurchaseOrder.setCommerce(commerce);
 

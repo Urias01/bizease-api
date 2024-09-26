@@ -12,8 +12,9 @@ import java.time.LocalDate;
 public class PurchaseOrdersRequestDTO {
 
     private String status;
-    private LocalDate order_date;
-    private LocalDate expected_delivery_date;
-    private Long sup_id;
-    private Long com_id;
+    private LocalDate orderDate;
+    private LocalDate expectedDeliveryDate;
+    private LocalDate deliveryDate;
+    private Long supplierId;
+    private Long commerceId;
 }

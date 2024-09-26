@@ -42,6 +42,9 @@ public class PurchaseOrders {
     @Column(name = "expected_delivery_date")
     private LocalDate expectedDeliveryDate;
 
+    @Column(name = "delivery_date")
+    private LocalDate deliveryDate;
+
     @Column(name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;
