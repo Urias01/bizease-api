@@ -1,5 +1,6 @@
 package com.bizease.api.app.model.products.entities;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -40,6 +41,8 @@ public class Products {
     private String name;
     private Integer unit;
     private Integer minimumStock;
+    private String location;
+    private LocalDate expirationDate;
     private String description;
     
     @CreationTimestamp
@@ -59,6 +62,8 @@ public class Products {
         this.name = productsDTO.getName();
         this.unit = productsDTO.getUnit();
         this.minimumStock = productsDTO.getMinimumStock();
+        this.location = productsDTO.getLocation();
+        this.expirationDate = productsDTO.getExpirationDate();
         this.description = productsDTO.getDescription();
         this.createdAt = productsDTO.getCreatedAt();
         this.updatedAt = productsDTO.getUpdatedAt();

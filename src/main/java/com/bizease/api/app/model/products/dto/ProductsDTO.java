@@ -1,5 +1,6 @@
 package com.bizease.api.app.model.products.dto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
@@ -19,6 +20,8 @@ public class ProductsDTO {
     private String name;
     private Integer unit;
     private Integer minimumStock;
+    private String location;
+    private LocalDate expirationDate;
     private String description;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

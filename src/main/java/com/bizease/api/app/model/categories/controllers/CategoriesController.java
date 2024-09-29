@@ -19,6 +19,8 @@ import com.bizease.api.app.model.categories.useCases.UpdateCategoriesUseCase;
 import com.bizease.api.app.model.commons.PageReturn;
 import com.bizease.api.app.responses.ApiResponse;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -41,7 +43,8 @@ public class CategoriesController {
   private GetAllCategoriesUseCase getAllCategoriesUseCase;
 
   @GetMapping
-  public PageReturn<List<Categories>> list(@ModelAttribute CategoriesFilter filter) {
+  public PageReturn<List<Categories>> list(@ModelAttribute CategoriesFilter filter, HttpServletRequest request) {
+    filter.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
     return this.getAllCategoriesUseCase.execute(filter);
   }
 
