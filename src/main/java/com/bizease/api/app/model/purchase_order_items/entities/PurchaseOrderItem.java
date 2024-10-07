@@ -1,8 +1,9 @@
-package com.bizease.api.app.model.purchase_orders.entities;
+package com.bizease.api.app.model.purchase_order_items.entities;
 
+import com.bizease.api.app.model.categories.entities.Categories;
 import com.bizease.api.app.model.commerce.entities.Commerce;
-import com.bizease.api.app.model.purchase_orders.enums.StatusEnum;
-import com.bizease.api.app.model.suppliers.entities.Suppliers;
+import com.bizease.api.app.model.products.entities.Products;
+import com.bizease.api.app.model.purchase_orders.entities.PurchaseOrders;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,38 +13,31 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "purchase_orders")
+@Table(name = "purchase_order_items")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PurchaseOrders {
+public class PurchaseOrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @UuidGenerator()
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private UUID uuid;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private StatusEnum status;
+    private Integer quantity;
 
-    @Column(name = "order_date")
-    private LocalDate orderDate;
-
-    @Column(name = "expected_delivery_date")
-    private LocalDate expectedDeliveryDate;
-
-    @Column(name = "delivery_date")
-    private LocalDate deliveryDate;
+    @Column(name = "unit_price", precision = 10, scale = 2)
+    private BigDecimal unitPrice;
 
     @Column(name = "created_at")
     @CreationTimestamp
@@ -54,10 +48,10 @@ public class PurchaseOrders {
     private LocalDateTime updatedAt;
 
     @OneToOne
-    @JoinColumn(name = "sup_id")
-    private Suppliers suppliers;
+    @JoinColumn(name = "prod_id")
+    private Products products;
 
     @OneToOne
-    @JoinColumn(name = "com_id")
-    private Commerce commerce;
+    @JoinColumn(name = "por_id")
+    private PurchaseOrders purchaseOrders;
 }

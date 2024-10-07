@@ -27,17 +27,18 @@ public class CreatePurchaseOrderUseCase {
     private CommerceRepository commerceRepository;
 
     public PurchaseOrders execute(PurchaseOrdersRequestDTO purchaseOrdersRequestDTO) {
-        var suppliers = findSupplier(purchaseOrdersRequestDTO.getSup_id());
-        var commerce = findCommerce(purchaseOrdersRequestDTO.getCom_id());
+        var suppliers = findSupplier(purchaseOrdersRequestDTO.getSupplierId());
+        var commerce = findCommerce(purchaseOrdersRequestDTO.getCommerceId());
 
-        validateDates(purchaseOrdersRequestDTO.getOrder_date(), purchaseOrdersRequestDTO.getExpected_delivery_date());
+        validateDates(purchaseOrdersRequestDTO.getOrderDate(), purchaseOrdersRequestDTO.getExpectedDeliveryDate());
 
         StatusEnum status = StatusEnum.fromString(purchaseOrdersRequestDTO.getStatus());
 
         PurchaseOrders purchaseOrder = new PurchaseOrders();
         purchaseOrder.setStatus(status);
-        purchaseOrder.setOrderDate(purchaseOrdersRequestDTO.getOrder_date());
-        purchaseOrder.setExpectedDeliveryDate(purchaseOrdersRequestDTO.getExpected_delivery_date());
+        purchaseOrder.setOrderDate(purchaseOrdersRequestDTO.getOrderDate());
+        purchaseOrder.setExpectedDeliveryDate(purchaseOrdersRequestDTO.getExpectedDeliveryDate());
+        purchaseOrder.setDeliveryDate(purchaseOrdersRequestDTO.getDeliveryDate());
         purchaseOrder.setSuppliers(suppliers);
         purchaseOrder.setCommerce(commerce);
 
