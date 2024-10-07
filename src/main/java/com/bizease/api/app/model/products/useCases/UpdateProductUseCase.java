@@ -26,7 +26,7 @@ public class UpdateProductUseCase {
     @Autowired
     CategoriesRepository categoriesRepository;
 
-    public Products execute(ProductsDTO productsDTO) {
+    public Products execute(String uuid, ProductsDTO productsDTO) {
 
         Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(productsDTO.getCommerceUuid());
 
@@ -40,7 +40,7 @@ public class UpdateProductUseCase {
             throw new NotFoundException("Categoria");
           }
 
-        Optional<Products> productExists = this.productsRepository.findByUuid(productsDTO.getUuid());
+        Optional<Products> productExists = this.productsRepository.findByUuid(uuid);
         
         if (!productExists.isPresent()) {
             throw new NotFoundException("Produto");
