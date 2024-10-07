@@ -23,11 +23,13 @@ import com.bizease.api.app.model.products.useCases.DeleteProductUseCase;
 import com.bizease.api.app.model.products.useCases.GetAllProductsUseCase;
 import com.bizease.api.app.model.products.useCases.UpdateProductUseCase;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/products")
 
 public class ProductsController {
-    
+
     @Autowired
     private CreateProductUseCase createProductUseCase;
     @Autowired
@@ -38,9 +40,10 @@ public class ProductsController {
     private DeleteProductUseCase deleteProductUseCase;
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody ProductsDTO ProductsDTO) {
+    public ResponseEntity<Object> create(@RequestBody ProductsDTO productsDto, HttpServletRequest request) {
         try {
-            Products products = this.createProductUseCase.execute(ProductsDTO);
+            productsDto.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
+            Products products = this.createProductUseCase.execute(productsDto);
             return ResponseEntity.status(201).body(products);
         } catch (NotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -50,14 +53,16 @@ public class ProductsController {
     }
 
     @GetMapping
-    public PageReturn<List<Products>> list(ProductFilter filter) {
+    public PageReturn<List<Products>> list(ProductFilter filter, HttpServletRequest request) {
+        filter.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
         return this.getAllProducts.execute(filter);
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<Object> update(@RequestBody ProductsDTO ProductsDTO, @PathVariable String uuid) {
+    public ResponseEntity<Object> update(@RequestBody ProductsDTO productsDto, HttpServletRequest request) {
         try {
-            Products products = this.updateProductUseCase.execute(ProductsDTO, uuid);
+            productsDto.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
+            Products products = this.updateProductUseCase.execute(productsDto);
             return ResponseEntity.status(201).body(products);
         } catch (NotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

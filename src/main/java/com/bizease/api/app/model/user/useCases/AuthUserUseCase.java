@@ -46,13 +46,14 @@ public class AuthUserUseCase {
 
         var token = JWT.create().withIssuer("bizease-api")
                 .withSubject(user.getUuid().toString())
+                .withClaim("commerce", user.getCommerce().getUuid())
                 .withClaim("roles", Arrays.asList(role))
                 .withExpiresAt(expiresIn)
                 .sign(algorithm);
 
         var authUserResponse = AuthUserResponseDTO.builder()
-                .acess_token(token)
-                .expires_in(expiresIn.toEpochMilli())
+                .accessToken(token)
+                .expiresIn(expiresIn.toEpochMilli())
                 .build();
 
         return authUserResponse;
