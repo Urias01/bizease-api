@@ -11,6 +11,7 @@ import com.bizease.api.app.model.commerce.repository.CommerceRepository;
 import com.bizease.api.app.model.user.dto.FirstUserAccessDTO;
 import com.bizease.api.app.model.user.dto.UserResponseDTO;
 import com.bizease.api.app.model.user.entities.User;
+import com.bizease.api.app.model.user.enums.ActiveUserEnum;
 import com.bizease.api.app.model.user.enums.RoleEnum;
 import com.bizease.api.app.model.user.repository.UserRepository;
 
@@ -45,6 +46,7 @@ public class CreateFirstUserAccessUseCase {
     User user = new User();
 
     String password = passwordEncoder.encode(firstUserAccessDTO.getPassword());
+    user.setIsActive(ActiveUserEnum.ACTIVE);
     user.setName(firstUserAccessDTO.getName());
     user.setEmail(firstUserAccessDTO.getEmail());
     user.setPassword(password);

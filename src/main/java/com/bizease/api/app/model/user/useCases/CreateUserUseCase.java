@@ -6,6 +6,7 @@ import com.bizease.api.app.model.commerce.entities.Commerce;
 import com.bizease.api.app.model.commerce.repository.CommerceRepository;
 import com.bizease.api.app.model.user.dto.CreateUserRequestDTO;
 import com.bizease.api.app.model.user.entities.User;
+import com.bizease.api.app.model.user.enums.ActiveUserEnum;
 import com.bizease.api.app.model.user.enums.RoleEnum;
 import com.bizease.api.app.model.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,23 +27,32 @@ public class CreateUserUseCase {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    public User createUser(CreateUserRequestDTO createUserRequestDTO) {
+    public User createUser(CreateUserRequestDTO createUserRequestDTO, String uuid, String requestRole) {
         Optional<User> verifyUser = this.userRepository.findByEmail(createUserRequestDTO.getEmail());
 
-        if(verifyUser.isPresent()) {
+        if (verifyUser.isPresent()) {
             throw new UserAlreadyExistsException("Usuário já existente com este email!");
         } else {
-            Commerce commerce = commerceRepository.findById(createUserRequestDTO.getCommerceId())
-                    .orElseThrow(() -> new NotFoundException("Comércio"));
+            Commerce commerce = new Commerce();
+
+            if (RoleEnum.fromString(requestRole).equals(RoleEnum.ADMIN)) {
+                commerceRepository.findById(createUserRequestDTO.getCommerceId())
+                        .orElseThrow(() -> new NotFoundException("Comércio"));
+            } else if (RoleEnum.fromString(requestRole).equals(RoleEnum.OWNER)) {
+                commerce = commerceRepository.findByUuid(uuid)
+                        .orElseThrow(() -> new NotFoundException("Comércio"));
+            }
 
             RoleEnum role = RoleEnum.fromString(createUserRequestDTO.getRole());
 
             User newUser = new User();
+            newUser.setIsActive(ActiveUserEnum.ACTIVE);
             newUser.setName(createUserRequestDTO.getName());
             newUser.setEmail(createUserRequestDTO.getEmail());
             newUser.setPassword(passwordEncoder.encode(createUserRequestDTO.getPassword()));
             newUser.setCommerce(commerce);
             newUser.setRole(role);
+            newUser.setIsActive(ActiveUserEnum.ACTIVE);
 
             return userRepository.save(newUser);
         }

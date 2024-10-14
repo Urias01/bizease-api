@@ -1,7 +1,6 @@
 package com.bizease.api.app.security;
 
 import java.io.IOException;
-import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,7 +34,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     String requestURI = request.getRequestURI();
 
-    if (requestURI.startsWith("/users") || requestURI.startsWith("/auth/users")
+    if (requestURI.startsWith("/auth/users")
         || requestURI.startsWith("/users/first-access")) {
       filterChain.doFilter(request, response); // Permita que a requisição prossiga
       return; // Saia do filtro

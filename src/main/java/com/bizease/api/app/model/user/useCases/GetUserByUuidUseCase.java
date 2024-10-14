@@ -1,6 +1,6 @@
 package com.bizease.api.app.model.user.useCases;
 
-import com.bizease.api.app.exceptions.UserNotFoundException;
+import com.bizease.api.app.exceptions.NotFoundException;
 import com.bizease.api.app.model.user.dto.UserResponseDTO;
 import com.bizease.api.app.model.user.entities.User;
 import com.bizease.api.app.model.user.repository.UserRepository;
@@ -24,7 +24,7 @@ public class GetUserByUuidUseCase {
             return new UserResponseDTO(foundUser.getId(), foundUser.getUuid(), foundUser.getName(),
                     foundUser.getEmail(), foundUser.getCreatedAt(), foundUser.getUpdatedAt());
         } else {
-            throw new UserNotFoundException("Usuário não encontrado!");
+            throw new NotFoundException("Usuário");
         }
     }
 }

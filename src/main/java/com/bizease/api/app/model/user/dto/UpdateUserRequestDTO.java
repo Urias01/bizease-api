@@ -1,4 +1,23 @@
 package com.bizease.api.app.model.user.dto;
 
-public record UpdateUserRequestDTO (String name, String email, String password) {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class UpdateUserRequestDTO {
+
+  Long id;
+  String uuid;
+  String name;
+  String email;
+  String password;
+  Boolean resetPassword;
+  String role;
+  Integer isActive;
+
 }

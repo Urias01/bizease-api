@@ -2,7 +2,6 @@ package com.bizease.api.app.model.user.useCases;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.bizease.api.app.exceptions.NotFoundException;
 import com.bizease.api.app.model.user.dto.AuthUserRequestDTO;
 import com.bizease.api.app.model.user.dto.AuthUserResponseDTO;
 import com.bizease.api.app.model.user.repository.UserRepository;

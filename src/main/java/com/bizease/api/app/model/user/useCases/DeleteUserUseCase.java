@@ -1,7 +1,8 @@
 package com.bizease.api.app.model.user.useCases;
 
-import com.bizease.api.app.exceptions.UserNotFoundException;
+import com.bizease.api.app.exceptions.NotFoundException;
 import com.bizease.api.app.model.user.entities.User;
+import com.bizease.api.app.model.user.enums.ActiveUserEnum;
 import com.bizease.api.app.model.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,11 @@ public class DeleteUserUseCase {
         Optional<User> verifyUser = userRepository.findByUuid(UUID.fromString(uuid));
 
         if(verifyUser.isPresent()) {
-            userRepository.delete(verifyUser.get());
+            User user = verifyUser.get();
+            user.setIsActive(ActiveUserEnum.INACTIVE);
+            userRepository.save(user);
         } else {
-            throw new UserNotFoundException("Usuário não encontrado!");
+            throw new NotFoundException("Usuário");
         }
     }
 }
