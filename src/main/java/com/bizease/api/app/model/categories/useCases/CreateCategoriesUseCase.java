@@ -21,9 +21,9 @@ public class CreateCategoriesUseCase {
   @Autowired
   private CommerceRepository commerceRepository;
 
-  public Categories execute(CategoriesDTO categoriesDTO) {
+  public Categories execute(CategoriesDTO categoriesDTO, String uuid) {
 
-    Optional<Commerce> commerceExists = this.commerceRepository.findById(categoriesDTO.getCommerceId());
+    Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(uuid);
 
     if (!commerceExists.isPresent()) {
       throw new NotFoundException("Comércio");

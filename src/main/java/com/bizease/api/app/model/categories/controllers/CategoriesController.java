@@ -49,9 +49,10 @@ public class CategoriesController {
   }
 
   @PostMapping
-  public ResponseEntity<Object> create(@RequestBody CategoriesDTO categoriesDTO) {
+  public ResponseEntity<Object> create(@RequestBody CategoriesDTO categoriesDTO, HttpServletRequest request) {
     try {
-      Categories response = this.createCategoriesUseCase.execute(categoriesDTO);
+      String commerceUuid = (String) request.getAttribute("commerce_uuid");
+      Categories response = this.createCategoriesUseCase.execute(categoriesDTO, commerceUuid);
       ApiResponse<Categories> apiResponse = new ApiResponse<>(true, 1, response);
       return ResponseEntity.status(201).body(apiResponse);
     } catch (AlreadyExistsException e) {
