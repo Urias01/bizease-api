@@ -2,6 +2,7 @@ package com.bizease.api.app.model.inventories.controller;
 
 import com.bizease.api.app.model.inventories.dto.InventoriesDTO;
 import com.bizease.api.app.model.inventories.useCases.CreateInventoryUseCase;
+import com.bizease.api.app.model.inventories.useCases.DeleteInventoryUseCase;
 import com.bizease.api.app.model.inventories.useCases.GetInventoriesUseCase;
 import com.bizease.api.app.model.inventories.useCases.UpdateInventoryUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class InventoriesController {
 
     @Autowired
     private GetInventoriesUseCase getInventoriesUseCase;
+
+    @Autowired
+    private DeleteInventoryUseCase deleteInventoryUseCase;
 
     @GetMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
@@ -67,6 +71,17 @@ public class InventoriesController {
         try {
             var result = this.updateInventoryUseCase.execute(uuid, inventoriesDTO);
             return ResponseEntity.ok(result);
+        } catch (Exception exception) {
+            return ResponseEntity.badRequest().body(exception.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{uuid}")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
+    public ResponseEntity<Object> deleteInventory(@PathVariable UUID uuid) {
+        try {
+            this.deleteInventoryUseCase.execute(uuid);
+            return ResponseEntity.ok("Inventário excluído com sucesso.");
         } catch (Exception exception) {
             return ResponseEntity.badRequest().body(exception.getMessage());
         }
