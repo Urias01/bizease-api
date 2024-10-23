@@ -22,8 +22,8 @@ public class CreateInventoryUseCase {
         var commerce = findCommerce(inventoriesDTO.getCommerceId());
 
         Inventories inventories = new Inventories();
-        inventories.setQuantity(inventories.getQuantity());
-        inventories.setLocation(inventories.getLocation());
+        inventories.setQuantity(inventoriesDTO.getQuantity());
+        inventories.setLocation(inventoriesDTO.getLocation());
         inventories.setCommerce(commerce);
 
         return inventoriesRepository.save(inventories);
