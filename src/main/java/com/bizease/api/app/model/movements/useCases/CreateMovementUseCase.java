@@ -35,7 +35,7 @@ public class CreateMovementUseCase {
         var inventory = findInventory(movementDTO.getInventoryId());
 
         TypeEnum type = TypeEnum.fromString(movementDTO.getType());
-        
+
         Movement movement = new Movement();
         movement.setType(type);
         movement.setQuantity(movementDTO.getQuantity());
