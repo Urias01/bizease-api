@@ -9,7 +9,11 @@ import com.bizease.api.app.exceptions.NotFoundException;
 import com.bizease.api.app.model.sales_orders.dto.SalesOrdersDTO;
 import com.bizease.api.app.model.sales_orders.entities.SalesOrders;
 import com.bizease.api.app.model.sales_orders.useCases.CreateSalesOrderUseCase;
+import com.bizease.api.app.model.sales_orders.useCases.UpdateSalesOrderUseCase;
+
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
@@ -19,6 +23,8 @@ public class SalesOrdersControllers {
 
     @Autowired
     private CreateSalesOrderUseCase createSalesOrderUseCase;
+    @Autowired
+    private UpdateSalesOrderUseCase updateSalesOrderUseCase;
     
     @PostMapping
      public ResponseEntity<Object> create(@RequestBody SalesOrdersDTO salesOrdersDTO) {
@@ -32,5 +38,16 @@ public class SalesOrdersControllers {
         }
      }
     
+     @PutMapping("/{uuid}")
+     public ResponseEntity<Object> update(@RequestBody SalesOrdersDTO salesOrdersDTO, @PathVariable String uuid) {
+        try {
+            SalesOrders salesOrders = this.updateSalesOrderUseCase.execute(salesOrdersDTO, uuid);
+            return ResponseEntity.status(200).body(salesOrders);
+        } catch(NotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch(Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+     }
     
 }
