@@ -10,7 +10,9 @@ import com.bizease.api.app.model.sales_orders.dto.SalesOrdersDTO;
 import com.bizease.api.app.model.sales_orders.entities.SalesOrders;
 import com.bizease.api.app.model.sales_orders.useCases.CreateSalesOrderUseCase;
 import com.bizease.api.app.model.sales_orders.useCases.UpdateSalesOrderUseCase;
+import com.bizease.api.app.model.sales_orders.useCases.DeleteSalesOrderUseCase;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -25,6 +27,8 @@ public class SalesOrdersControllers {
     private CreateSalesOrderUseCase createSalesOrderUseCase;
     @Autowired
     private UpdateSalesOrderUseCase updateSalesOrderUseCase;
+    @Autowired
+    private DeleteSalesOrderUseCase deleteSalesOrderUseCase;
     
     @PostMapping
      public ResponseEntity<Object> create(@RequestBody SalesOrdersDTO salesOrdersDTO) {
@@ -49,5 +53,15 @@ public class SalesOrdersControllers {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
      }
+
+     @DeleteMapping("/{uuid}")
+    public ResponseEntity<Object> delete(@PathVariable String uuid) {
+        try {
+            this.deleteSalesOrderUseCase.execute(uuid);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
     
 }
