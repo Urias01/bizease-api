@@ -1,6 +1,6 @@
 package com.bizease.api.app.model.movements.entities;
 
-import com.bizease.api.app.model.inventories.entities.Inventories;
+import com.bizease.api.app.model.commerce.entities.Commerce;
 import com.bizease.api.app.model.movements.enums.TypeEnum;
 import com.bizease.api.app.model.products.entities.Products;
 import com.bizease.api.app.model.user.entities.User;
@@ -68,6 +68,6 @@ public class Movement {
     private Products product;
 
     @OneToOne
-    @JoinColumn(name = "inv_id")
-    private Inventories inventory;
+    @JoinColumn(name = "com_id")
+    private Commerce commerce;
 }

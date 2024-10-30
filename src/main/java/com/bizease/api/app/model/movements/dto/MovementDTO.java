@@ -21,5 +21,5 @@ public class MovementDTO {
     private String observation;
     private Long userId;
     private Long productId;
-    private Long inventoryId;
+    private Long commerceId;
 }

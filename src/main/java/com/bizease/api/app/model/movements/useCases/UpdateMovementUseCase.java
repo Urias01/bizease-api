@@ -1,8 +1,8 @@
 package com.bizease.api.app.model.movements.useCases;
 
 import com.bizease.api.app.exceptions.NotFoundException;
-import com.bizease.api.app.model.inventories.entities.Inventories;
-import com.bizease.api.app.model.inventories.repository.InventoriesRepository;
+import com.bizease.api.app.model.commerce.entities.Commerce;
+import com.bizease.api.app.model.commerce.repository.CommerceRepository;
 import com.bizease.api.app.model.movements.dto.MovementDTO;
 import com.bizease.api.app.model.movements.entities.Movement;
 import com.bizease.api.app.model.movements.enums.TypeEnum;
@@ -29,7 +29,7 @@ public class UpdateMovementUseCase {
     private ProductsRepository productsRepository;
 
     @Autowired
-    private InventoriesRepository inventoriesRepository;
+    private CommerceRepository commerceRepository;
 
     public Movement execute(UUID uuid, MovementDTO movementDTO) {
         Movement updatedMovement = this.movementRepository.findByUuid(uuid).orElseThrow(() -> {
@@ -38,7 +38,7 @@ public class UpdateMovementUseCase {
 
         var user = findUser(movementDTO.getUserId());
         var product = findProduct(movementDTO.getProductId());
-        var inventory = findInventory(movementDTO.getInventoryId());
+        var commerce = findCommerce(movementDTO.getCommerceId());
 
         TypeEnum type = TypeEnum.fromString(movementDTO.getType());
 
@@ -50,7 +50,7 @@ public class UpdateMovementUseCase {
         updatedMovement.setObservation(movementDTO.getObservation());
         updatedMovement.setUser(user);
         updatedMovement.setProduct(product);
-        updatedMovement.setInventory(inventory);
+        updatedMovement.setCommerce(commerce);
 
         return this.movementRepository.save(updatedMovement);
     }
@@ -69,10 +69,10 @@ public class UpdateMovementUseCase {
         return product;
     }
 
-    private Inventories findInventory(Long id) {
-        Inventories inventory = this.inventoriesRepository.findById(id).orElseThrow(() -> {
-            throw new NotFoundException("Usuário");
+    private Commerce findCommerce(Long id) {
+        Commerce commerce = this.commerceRepository.findById(id).orElseThrow(() -> {
+            throw new NotFoundException("Comércio");
         });
-        return inventory;
+        return commerce;
     }
 }

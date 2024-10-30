@@ -1,8 +1,8 @@
 package com.bizease.api.app.model.movements.useCases;
 
 import com.bizease.api.app.exceptions.NotFoundException;
-import com.bizease.api.app.model.inventories.entities.Inventories;
-import com.bizease.api.app.model.inventories.repository.InventoriesRepository;
+import com.bizease.api.app.model.commerce.entities.Commerce;
+import com.bizease.api.app.model.commerce.repository.CommerceRepository;
 import com.bizease.api.app.model.movements.entities.Movement;
 import com.bizease.api.app.model.movements.repositories.MovementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class GetMovementsUseCase {
     private MovementRepository movementRepository;
 
     @Autowired
-    private InventoriesRepository inventoriesRepository;
+    private CommerceRepository commerceRepository;
 
     public List<Movement> getAllMovements() {
         return this.movementRepository.findAll().stream().toList();
@@ -30,13 +30,13 @@ public class GetMovementsUseCase {
         });
     }
 
-    public List<Movement> getAllMovementsFromInventory(Long id) {
-        return this.movementRepository.findByInventoryId(id).stream().toList();
+    public List<Movement> getAllMovementsFromCommerce(Long id) {
+        return this.movementRepository.findByCommerceId(id).stream().toList();
     }
 
-    private Inventories findInventory(Long id) {
-        return this.inventoriesRepository.findById(id).orElseThrow(() -> {
-            throw new NotFoundException("Inventário");
+    private Commerce findCommerce(Long id) {
+        return this.commerceRepository.findById(id).orElseThrow(() -> {
+            throw new NotFoundException("Comércio");
         });
     }
 }

@@ -11,5 +11,5 @@ import java.util.UUID;
 @Repository
 public interface MovementRepository extends JpaRepository<Movement, Long> {
     Optional<Movement> findByUuid(UUID uuid);
-    List<Movement> findByInventoryId(Long id);
+    List<Movement> findByCommerceId(Long id);
 }

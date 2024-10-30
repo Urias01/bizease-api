@@ -43,10 +43,10 @@ public class MovementController {
         }
     }
 
-    @GetMapping("/inventory/{id}")
+    @GetMapping("/commerce/{id}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<List> getMovementsByInventory(@PathVariable Long id) {
-        var result = this.getMovementsUseCase.getAllMovementsFromInventory(id);
+    public ResponseEntity<List> getMovementsByCommerce(@PathVariable Long id) {
+        var result = this.getMovementsUseCase.getAllMovementsFromCommerce(id);
         return ResponseEntity.ok(result);
     }
 
