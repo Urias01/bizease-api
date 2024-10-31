@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.bizease.api.app.exceptions.NotFoundException;
 import com.bizease.api.app.exceptions.UnauthorizedAccessException;
+import com.bizease.api.app.model.commons.enums.IsActiveEnum;
 import com.bizease.api.app.model.user.dto.UpdateUserRequestDTO;
 import com.bizease.api.app.model.user.entities.User;
-import com.bizease.api.app.model.user.enums.ActiveUserEnum;
 import com.bizease.api.app.model.user.enums.RoleEnum;
 import com.bizease.api.app.model.user.repository.UserRepository;
 
@@ -40,7 +40,7 @@ public class ManagerUsersUseCase {
     model.setEmail(userToUpdate.getEmail());
     model.setName(userToUpdate.getName());
     model.setRole(RoleEnum.fromString(userToUpdate.getRole()));
-    model.setIsActive(ActiveUserEnum.from(userToUpdate.getIsActive()));
+    model.setIsActive(IsActiveEnum.from(userToUpdate.getIsActive()));
 
     if (userToUpdate.getResetPassword()) {
       String password = Math.random() * 1000 + "easebiz";

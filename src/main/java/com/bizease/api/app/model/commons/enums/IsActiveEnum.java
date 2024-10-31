@@ -1,13 +1,12 @@
-package com.bizease.api.app.model.user.enums;
+package com.bizease.api.app.model.commons.enums;
 
-public enum ActiveUserEnum {
-
-  ACTIVE(0),
+public enum IsActiveEnum {
+    ACTIVE(0),
   INACTIVE(1);
 
   private final Integer isActive;
 
-  ActiveUserEnum(Integer isActive) {
+  IsActiveEnum(Integer isActive) {
     this.isActive = isActive;
   }
 
@@ -15,8 +14,8 @@ public enum ActiveUserEnum {
     return this.isActive;
   }
 
-  public static ActiveUserEnum from(Integer isActive) {
-    for (ActiveUserEnum r : ActiveUserEnum.values()) {
+  public static IsActiveEnum from(Integer isActive) {
+    for (IsActiveEnum r : IsActiveEnum.values()) {
       if (r.getIsActive().equals(isActive)) {
         return r;
       }

@@ -4,9 +4,9 @@ import com.bizease.api.app.exceptions.NotFoundException;
 import com.bizease.api.app.exceptions.UserAlreadyExistsException;
 import com.bizease.api.app.model.commerce.entities.Commerce;
 import com.bizease.api.app.model.commerce.repository.CommerceRepository;
+import com.bizease.api.app.model.commons.enums.IsActiveEnum;
 import com.bizease.api.app.model.user.dto.CreateUserRequestDTO;
 import com.bizease.api.app.model.user.entities.User;
-import com.bizease.api.app.model.user.enums.ActiveUserEnum;
 import com.bizease.api.app.model.user.enums.RoleEnum;
 import com.bizease.api.app.model.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,13 +46,13 @@ public class CreateUserUseCase {
             RoleEnum role = RoleEnum.fromString(createUserRequestDTO.getRole());
 
             User newUser = new User();
-            newUser.setIsActive(ActiveUserEnum.ACTIVE);
+            newUser.setIsActive(IsActiveEnum.ACTIVE);
             newUser.setName(createUserRequestDTO.getName());
             newUser.setEmail(createUserRequestDTO.getEmail());
             newUser.setPassword(passwordEncoder.encode(createUserRequestDTO.getPassword()));
             newUser.setCommerce(commerce);
             newUser.setRole(role);
-            newUser.setIsActive(ActiveUserEnum.ACTIVE);
+            newUser.setIsActive(IsActiveEnum.ACTIVE);
 
             return userRepository.save(newUser);
         }

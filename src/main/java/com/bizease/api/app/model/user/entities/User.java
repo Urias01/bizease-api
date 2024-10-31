@@ -1,7 +1,7 @@
 package com.bizease.api.app.model.user.entities;
 
 import com.bizease.api.app.model.commerce.entities.Commerce;
-import com.bizease.api.app.model.user.enums.ActiveUserEnum;
+import com.bizease.api.app.model.commons.enums.IsActiveEnum;
 import com.bizease.api.app.model.user.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -38,7 +38,7 @@ public class User {
     private String password;
 
     @Column(nullable = false, name = "is_active")
-    private ActiveUserEnum isActive;
+    private IsActiveEnum isActive;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
