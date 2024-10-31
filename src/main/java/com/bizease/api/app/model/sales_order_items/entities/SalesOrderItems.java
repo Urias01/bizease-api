@@ -3,6 +3,8 @@ package com.bizease.api.app.model.sales_order_items.entities;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.bizease.api.app.model.sales_order_items.enums.SalesOrderItemStatus;
+import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
@@ -11,14 +13,6 @@ import com.bizease.api.app.model.products.entities.Products;
 import com.bizease.api.app.model.sales_order_items.dto.SalesOrderItemsDTO;
 import com.bizease.api.app.model.sales_orders.entities.SalesOrders;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,7 +38,8 @@ public class SalesOrderItems {
     @Column(nullable = false, precision = 7, scale = 2)
     private BigDecimal unitPrice;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private SalesOrderItemStatus status;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -63,9 +58,7 @@ public class SalesOrderItems {
     public SalesOrderItems (SalesOrderItemsDTO salesOrderItemsDTO, Products products, SalesOrders salesOrders) {
         this.quantity = salesOrderItemsDTO.getQuantity();
         this.unitPrice = salesOrderItemsDTO.getUnitPrice();
-        this.status = salesOrderItemsDTO.getStatus();
-        this.createdAt = salesOrderItemsDTO.getCreatedAt();
-        this.updatedAt = salesOrderItemsDTO.getUpdatedAt();
+        this.status = SalesOrderItemStatus.valueOf(salesOrderItemsDTO.getStatus());
         this.products = products;
         this.salesOrders = salesOrders;
     }

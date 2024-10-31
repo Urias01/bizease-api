@@ -7,7 +7,7 @@ public enum SalesOrderStatus {
     ENVIADO("ENVIADO"),
     ENTREGUE("ENTREGUE"),
     CANCELADO("CANCELADO"),
-    RETORNADO("RETORNADO");
+    DEVOLVIDO("DEVOLVIDO");
 
     private final String salesOrderStatus;
 
