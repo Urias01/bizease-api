@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bizease.api.app.exceptions.NotFoundException;
+import com.bizease.api.app.model.commons.enums.IsActiveEnum;
 import com.bizease.api.app.model.products.entities.Products;
 import com.bizease.api.app.model.products.repository.ProductsRepository;
 
@@ -24,7 +25,9 @@ public class DeleteProductUseCase {
 
         Products product = productExists.get();
 
-        this.productsRepository.delete(product);
+        product.setIsActive(IsActiveEnum.INACTIVE);
+
+        this.productsRepository.save(product);
     }
 
 }

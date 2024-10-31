@@ -9,8 +9,10 @@ import org.hibernate.annotations.UuidGenerator;
 
 import com.bizease.api.app.model.categories.entities.Categories;
 import com.bizease.api.app.model.commerce.entities.Commerce;
+import com.bizease.api.app.model.commons.enums.IsActiveEnum;
 import com.bizease.api.app.model.products.dto.ProductsDTO;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -45,6 +47,9 @@ public class Products {
     private LocalDate expirationDate;
     private String description;
     
+    @Column(nullable = false, name = "is_active")
+    private IsActiveEnum isActive;
+    
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
@@ -65,6 +70,7 @@ public class Products {
         this.location = productsDTO.getLocation();
         this.expirationDate = productsDTO.getExpirationDate();
         this.description = productsDTO.getDescription();
+        this.isActive =  productsDTO.getIsActive() != null ? IsActiveEnum.from(productsDTO.getIsActive()) : IsActiveEnum.ACTIVE;
         this.createdAt = productsDTO.getCreatedAt();
         this.updatedAt = productsDTO.getUpdatedAt();
         this.commerce = commerce;

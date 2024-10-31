@@ -12,7 +12,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class ProductsDTO {
     
     private Long id;
@@ -20,6 +19,7 @@ public class ProductsDTO {
     private String name;
     private Integer unit;
     private Integer minimumStock;
+    private Integer isActive;
     private String location;
     private LocalDate expirationDate;
     private String description;
