@@ -2,6 +2,7 @@ package com.bizease.api.app.model.sales_orders.useCases;
 
 import java.util.Optional;
 
+import com.bizease.api.app.model.sales_orders.enums.SalesOrderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +38,7 @@ public class UpdateSalesOrderUseCase {
 
         SalesOrders salesOrders = salesOrderExists.get();
 
-        salesOrders.setStatus(salesOrdersDTO.getStatus());
+        salesOrders.setStatus(SalesOrderStatus.fromString(salesOrdersDTO.getStatus()));
         salesOrders.setOrderDate(salesOrdersDTO.getOrderDate());
         salesOrders.setDeliveryDate(salesOrdersDTO.getDeliveryDate());
 

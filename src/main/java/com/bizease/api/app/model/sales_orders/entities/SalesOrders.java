@@ -3,21 +3,15 @@ package com.bizease.api.app.model.sales_orders.entities;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.bizease.api.app.model.sales_orders.enums.SalesOrderStatus;
+import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
-import org.hibernate.validator.constraints.Length;
 
 import com.bizease.api.app.model.commerce.entities.Commerce;
 import com.bizease.api.app.model.sales_orders.dto.SalesOrdersDTO;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,8 +31,8 @@ public class SalesOrders {
     @UuidGenerator
     private String uuid;
 
-    @Length(max = 30)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private SalesOrderStatus status;
     private LocalDate orderDate;
     private LocalDate deliveryDate;
 
@@ -52,11 +46,9 @@ public class SalesOrders {
     private Commerce commerce;
 
     public SalesOrders(SalesOrdersDTO salesOrdersDTO, Commerce commerce) {
-        this.status = salesOrdersDTO.getStatus();
+        this.status = SalesOrderStatus.valueOf(salesOrdersDTO.getStatus());
         this.orderDate = salesOrdersDTO.getOrderDate();
         this.deliveryDate = salesOrdersDTO.getDeliveryDate();
-        this.createdAt = salesOrdersDTO.getCreatedAt();
-        this.updatedAt = salesOrdersDTO.getUpdatedAt();
         this.commerce = commerce;
     }
 

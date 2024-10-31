@@ -14,14 +14,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SalesOrdersDTO {
 
-    private Long id;
-    private String uuid;
     private String status;
     private LocalDate orderDate;
     private LocalDate deliveryDate;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
     private String commerceUuid;
     
 }
