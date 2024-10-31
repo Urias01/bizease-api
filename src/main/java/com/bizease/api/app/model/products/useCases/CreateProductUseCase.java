@@ -11,7 +11,6 @@ import com.bizease.api.app.model.categories.entities.Categories;
 import com.bizease.api.app.model.categories.repository.CategoriesRepository;
 import com.bizease.api.app.model.commerce.entities.Commerce;
 import com.bizease.api.app.model.commerce.repository.CommerceRepository;
-import com.bizease.api.app.model.commons.enums.IsActiveEnum;
 import com.bizease.api.app.model.products.dto.ProductsDTO;
 import com.bizease.api.app.model.products.entities.Products;
 import com.bizease.api.app.model.products.repository.ProductsRepository;

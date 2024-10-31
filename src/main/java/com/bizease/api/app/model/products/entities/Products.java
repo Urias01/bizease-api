@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.validator.constraints.Length;
 
 import com.bizease.api.app.model.categories.entities.Categories;
 import com.bizease.api.app.model.commerce.entities.Commerce;
@@ -37,12 +38,20 @@ public class Products {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Length(max = 36)
     @UuidGenerator
     private String uuid;
 
+    @Column(nullable = false)
+    @Length(max = 100)
     private String name;
+
+    @Column(nullable = false)
     private Integer unit;
     private Integer minimumStock;
+
+    @Column(nullable = false)
+    @Length(max = 100)
     private String location;
     private LocalDate expirationDate;
     private String description;
