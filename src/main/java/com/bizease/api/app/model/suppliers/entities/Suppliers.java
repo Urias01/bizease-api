@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.validator.constraints.Length;
 
 import com.bizease.api.app.model.commerce.entities.Commerce;
 import com.bizease.api.app.model.suppliers.dto.SuppliersDTO;
@@ -34,20 +35,42 @@ public class Suppliers {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Length(max = 36)
     @UuidGenerator
     private String uuid;
 
-    @Column(unique = true)
+    @Column(nullable = false)
+    @Length(max = 14)
     private String cnpj;
+
+    @Length(max = 100)
     private String name;
+
     private String address;
+
+    @Length(max = 6)
     private String addressNumber;
+
+    @Length(max = 100)
     private String neighborhood;
+
+    @Length(max = 100)
     private String city;
+
+    @Length(max = 2)
     private String uf;
+
+    @Length(max = 8)
     private String postalCode;
+
+    @Column(nullable = false)
+    @Length(max = 50)
     private String category;
+
+    @Length(max = 11)
     private String phoneNumber;
+
+    @Length(max = 254)
     private String email;
     
     @CreationTimestamp
