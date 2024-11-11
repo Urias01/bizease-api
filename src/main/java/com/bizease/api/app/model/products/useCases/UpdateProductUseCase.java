@@ -54,7 +54,6 @@ public class UpdateProductUseCase {
         product.setUnit(productsDTO.getUnit());
         product.setMinimumStock(productsDTO.getMinimumStock());
         product.setLocation(productsDTO.getLocation());
-        product.setExpirationDate(productsDTO.getExpirationDate());
         product.setDescription(productsDTO.getDescription());
         product.setIsActive(IsActiveEnum.from(productsDTO.getIsActive()));
         product.setCategories(categories);

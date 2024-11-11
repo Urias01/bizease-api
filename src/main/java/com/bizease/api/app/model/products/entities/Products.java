@@ -1,6 +1,5 @@
 package com.bizease.api.app.model.products.entities;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -53,7 +52,6 @@ public class Products {
     @Column(nullable = false)
     @Length(max = 100)
     private String location;
-    private LocalDate expirationDate;
     private String description;
     
     @Column(nullable = false, name = "is_active")
@@ -77,7 +75,6 @@ public class Products {
         this.unit = productsDTO.getUnit();
         this.minimumStock = productsDTO.getMinimumStock();
         this.location = productsDTO.getLocation();
-        this.expirationDate = productsDTO.getExpirationDate();
         this.description = productsDTO.getDescription();
         this.isActive =  productsDTO.getIsActive() != null ? IsActiveEnum.from(productsDTO.getIsActive()) : IsActiveEnum.ACTIVE;
         this.createdAt = productsDTO.getCreatedAt();
