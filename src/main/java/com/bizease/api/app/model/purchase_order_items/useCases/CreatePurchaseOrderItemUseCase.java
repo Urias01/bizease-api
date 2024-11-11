@@ -30,6 +30,7 @@ public class CreatePurchaseOrderItemUseCase {
         PurchaseOrderItem purchaseOrderItem = new PurchaseOrderItem();
         purchaseOrderItem.setQuantity(purchaseOrdemItemDTO.getQuantity());
         purchaseOrderItem.setUnitPrice(purchaseOrdemItemDTO.getUnit_price());
+        purchaseOrderItem.setExpirationDate(purchaseOrdemItemDTO.getExpirationDate());
         purchaseOrderItem.setProducts(product);
         purchaseOrderItem.setPurchaseOrders(purchaseOrder);
 

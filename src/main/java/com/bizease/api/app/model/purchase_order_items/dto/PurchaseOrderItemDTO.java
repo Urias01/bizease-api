@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -15,6 +16,7 @@ public class PurchaseOrderItemDTO {
 
     private Integer quantity;
     private BigDecimal unit_price;
+    private LocalDate expirationDate;
     private Long productId;
     private Long purchaseOrderId;
 }
