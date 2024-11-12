@@ -35,7 +35,8 @@ public class SecurityFilter extends OncePerRequestFilter {
     String requestURI = request.getRequestURI();
 
     if (requestURI.startsWith("/auth/users")
-        || requestURI.startsWith("/users/first-access")) {
+        || requestURI.startsWith("/users/first-access")
+        || requestURI.startsWith("/auth/password-reset")) {
       filterChain.doFilter(request, response); // Permita que a requisição prossiga
       return; // Saia do filtro
     }

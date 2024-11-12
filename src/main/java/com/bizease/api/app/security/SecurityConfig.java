@@ -28,7 +28,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/users").permitAll()
                             .requestMatchers("/users/first-access").permitAll()
-                            .requestMatchers("/auth/users").permitAll();
+                            .requestMatchers("/auth/users").permitAll()
+                            .requestMatchers("/auth/password-reset").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .exceptionHandling(exception -> {
