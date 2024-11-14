@@ -1,10 +1,13 @@
 package com.bizease.api.app.model.purchase_order_items.controller;
 
+import com.bizease.api.app.exceptions.NotFoundException;
 import com.bizease.api.app.model.purchase_order_items.dto.PurchaseOrderItemDTO;
 import com.bizease.api.app.model.purchase_order_items.entities.PurchaseOrderItem;
 import com.bizease.api.app.model.purchase_order_items.useCases.CreatePurchaseOrderItemUseCase;
 import com.bizease.api.app.model.purchase_order_items.useCases.GetAllPurchaseOrderItemsUseCase;
 import com.bizease.api.app.model.purchase_order_items.useCases.GetPurchaseOrderItemUseCase;
+import com.bizease.api.app.model.purchase_order_items.useCases.UpdatePurchaseOrderItemsUseCase;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +28,9 @@ public class PurchaseOrderItemController {
 
     @Autowired
     private GetAllPurchaseOrderItemsUseCase getAllPurchaseOrderItemsUseCase;
+
+    @Autowired
+    private UpdatePurchaseOrderItemsUseCase updatePurchaseOrderItemsUseCase;
 
     @GetMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
@@ -52,6 +58,18 @@ public class PurchaseOrderItemController {
             return ResponseEntity.status(201).body(result);
         } catch (Exception exception) {
             return ResponseEntity.badRequest().body(exception.getMessage());
+        }
+    }
+
+    @PutMapping("/{uuid}")
+    public ResponseEntity<Object> update(@PathVariable String uuid, @RequestBody PurchaseOrderItemDTO purchaseOrderItemDTO) {
+        try {
+            PurchaseOrderItem purchaseOrderItem = this.updatePurchaseOrderItemsUseCase.execute(uuid, purchaseOrderItemDTO);
+            return ResponseEntity.status(200).body(purchaseOrderItem);
+        } catch (NotFoundException exception) {
+            return ResponseEntity.badRequest().body(exception.getMessage());
+        } catch (Exception exception) {
+            return ResponseEntity.internalServerError().body(exception.getMessage());
         }
     }
 }
