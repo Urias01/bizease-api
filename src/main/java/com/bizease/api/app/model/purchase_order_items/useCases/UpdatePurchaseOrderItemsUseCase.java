@@ -1,6 +1,7 @@
 package com.bizease.api.app.model.purchase_order_items.useCases;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ import com.bizease.api.app.model.purchase_orders.repository.PurchaseOrdersReposi
 
 @Service
 public class UpdatePurchaseOrderItemsUseCase {
-    
+
     @Autowired
     private PurchaseOrdemItemRepository purchaseOrdemItemRepository;
 
@@ -27,18 +28,18 @@ public class UpdatePurchaseOrderItemsUseCase {
     private PurchaseOrdersRepository purchaseOrdersRepository;
 
     public PurchaseOrderItem execute(String uuid, PurchaseOrderItemDTO purchaseOrderItemDTO) {
-        
-        Optional<Products> productExists = this.productsRepository.findByUuid(uuid);
+
+        Optional<Products> productExists = this.productsRepository.findById(purchaseOrderItemDTO.getProductId());
         if (!productExists.isPresent()) {
             throw new NotFoundException("Produto");
         }
 
-        Optional<PurchaseOrders> purchaseOrderExists = this.purchaseOrdersRepository.findByUuid(null);
+        Optional<PurchaseOrders> purchaseOrderExists = this.purchaseOrdersRepository.findById(purchaseOrderItemDTO.getPurchaseOrderId());
         if (!purchaseOrderExists.isPresent()) {
             throw new NotFoundException("Pedido de compra");
         }
 
-        Optional<PurchaseOrderItem> purchaseOrderItemExists = this.purchaseOrdemItemRepository.findByUuid(null);
+        Optional<PurchaseOrderItem> purchaseOrderItemExists = this.purchaseOrdemItemRepository.findByUuid(UUID.fromString(uuid));
         if (!purchaseOrderItemExists.isPresent()) {
             throw new NotFoundException("Item do pedido de compra");
         }
