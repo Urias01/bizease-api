@@ -27,4 +27,30 @@ public enum SalesOrderStatus {
         }
         throw new IllegalArgumentException("Invalid Sale Order Status: " + salesOrderStatus);
     }
+
+    public boolean canTransitionTo(SalesOrderStatus nextStatus) {
+        switch (this) {
+            case PENDENTE:
+                return nextStatus == CONFIRMADO || nextStatus == CANCELADO;
+            case CONFIRMADO:
+                return nextStatus == ENVIADO || nextStatus == CANCELADO;
+            case ENVIADO:
+                return nextStatus == ENTREGUE || nextStatus == DEVOLVIDO;
+            case ENTREGUE:
+                return false;
+            case CANCELADO:
+            case DEVOLVIDO:
+                return false;
+            default:
+                return false;
+        }
+    }
+
+    public SalesOrderStatus transitionTo(SalesOrderStatus nextStatus) {
+        if (canTransitionTo(nextStatus)) {
+            return nextStatus;
+        } else {
+            throw new IllegalArgumentException("Não pode alterar de " + this + " para " + nextStatus);
+        }
+    }
 }

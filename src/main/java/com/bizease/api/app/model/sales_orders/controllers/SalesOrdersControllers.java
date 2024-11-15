@@ -1,9 +1,10 @@
 package com.bizease.api.app.model.sales_orders.controllers;
 
+import com.bizease.api.app.model.sales_orders.enums.SalesOrderStatus;
+import com.bizease.api.app.model.sales_orders.useCases.UpdateSalesOrderStatusUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.bizease.api.app.exceptions.NotFoundException;
 import com.bizease.api.app.model.sales_orders.dto.SalesOrdersDTO;
@@ -12,11 +13,7 @@ import com.bizease.api.app.model.sales_orders.useCases.CreateSalesOrderUseCase;
 import com.bizease.api.app.model.sales_orders.useCases.UpdateSalesOrderUseCase;
 import com.bizease.api.app.model.sales_orders.useCases.DeleteSalesOrderUseCase;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import java.util.UUID;
 
 
 @RestController
@@ -29,6 +26,8 @@ public class SalesOrdersControllers {
     private UpdateSalesOrderUseCase updateSalesOrderUseCase;
     @Autowired
     private DeleteSalesOrderUseCase deleteSalesOrderUseCase;
+    @Autowired
+    private UpdateSalesOrderStatusUseCase updateSalesOrderStatusUseCase;
     
     @PostMapping
      public ResponseEntity<Object> create(@RequestBody SalesOrdersDTO salesOrdersDTO) {
@@ -51,6 +50,17 @@ public class SalesOrdersControllers {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch(Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+     }
+
+     @PutMapping("/{uuid}/status")
+     public ResponseEntity<Object> updateSalesOrderStatus(@PathVariable UUID uuid, @RequestParam("status") String status) {
+        try {
+            SalesOrderStatus newStatus = SalesOrderStatus.fromString(status);
+            SalesOrders updatedOrder = this.updateSalesOrderStatusUseCase.execute(uuid, newStatus);
+            return ResponseEntity.ok(updatedOrder);
+        } catch (Exception error) {
+            return ResponseEntity.badRequest().body(error.getMessage());
         }
      }
 
