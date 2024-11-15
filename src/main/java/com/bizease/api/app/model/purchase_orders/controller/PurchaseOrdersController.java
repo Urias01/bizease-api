@@ -2,10 +2,8 @@ package com.bizease.api.app.model.purchase_orders.controller;
 
 import com.bizease.api.app.model.purchase_orders.dto.PurchaseOrdersRequestDTO;
 import com.bizease.api.app.model.purchase_orders.entities.PurchaseOrders;
-import com.bizease.api.app.model.purchase_orders.useCases.CreatePurchaseOrderUseCase;
-import com.bizease.api.app.model.purchase_orders.useCases.GetAllPurchaseOrdersUseCase;
-import com.bizease.api.app.model.purchase_orders.useCases.GetPurchaseOrderUseCase;
-import com.bizease.api.app.model.purchase_orders.useCases.UpdatePurchaseOrderUseCase;
+import com.bizease.api.app.model.purchase_orders.enums.StatusEnum;
+import com.bizease.api.app.model.purchase_orders.useCases.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,6 +27,9 @@ public class PurchaseOrdersController {
 
     @Autowired
     private UpdatePurchaseOrderUseCase updatePurchaseOrderUseCase;
+
+    @Autowired
+    private UpdatePurchaseOrderStatusUseCase updatePurchaseOrderStatusUseCase;
 
     @GetMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
@@ -67,6 +68,18 @@ public class PurchaseOrdersController {
             return ResponseEntity.ok(result);
         } catch (Exception exception) {
             return ResponseEntity.badRequest().body(exception.getMessage());
+        }
+    }
+
+    @PutMapping("/{uuid}/status")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
+    public ResponseEntity<Object> updatePurchaseOrderStatus(@PathVariable UUID uuid, @RequestParam("status") String status) {
+        try {
+            StatusEnum newStatus = StatusEnum.fromString(status);
+            var result = this.updatePurchaseOrderStatusUseCase.execute(uuid, newStatus);
+            return ResponseEntity.ok(result);
+        } catch (Exception error) {
+            return ResponseEntity.badRequest().body(error.getMessage());
         }
     }
 }
