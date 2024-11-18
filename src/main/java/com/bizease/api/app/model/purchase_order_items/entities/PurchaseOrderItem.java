@@ -1,7 +1,5 @@
 package com.bizease.api.app.model.purchase_order_items.entities;
 
-import com.bizease.api.app.model.categories.entities.Categories;
-import com.bizease.api.app.model.commerce.entities.Commerce;
 import com.bizease.api.app.model.products.entities.Products;
 import com.bizease.api.app.model.purchase_orders.entities.PurchaseOrders;
 import jakarta.persistence.*;
@@ -14,6 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -36,8 +35,11 @@ public class PurchaseOrderItem {
     @Column(nullable = false)
     private Integer quantity;
 
-    @Column(name = "unit_price", precision = 10, scale = 2)
+    @Column(name = "unit_price", precision = 7, scale = 2)
     private BigDecimal unitPrice;
+
+    @Column(name = "expiration_date")
+    private LocalDate expirationDate;
 
     @Column(name = "created_at")
     @CreationTimestamp
