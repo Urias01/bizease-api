@@ -1,27 +1,18 @@
 package com.bizease.api.app.model.products.controllers;
 
 import java.util.List;
+import java.util.Map;
 
+import com.bizease.api.app.model.products.useCases.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.bizease.api.app.exceptions.NotFoundException;
 import com.bizease.api.app.model.commons.PageReturn;
 import com.bizease.api.app.model.products.dto.ProductsDTO;
 import com.bizease.api.app.model.products.entities.Products;
 import com.bizease.api.app.model.products.filter.ProductFilter;
-import com.bizease.api.app.model.products.useCases.CreateProductUseCase;
-import com.bizease.api.app.model.products.useCases.DeleteProductUseCase;
-import com.bizease.api.app.model.products.useCases.GetAllProductsUseCase;
-import com.bizease.api.app.model.products.useCases.UpdateProductUseCase;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -38,6 +29,8 @@ public class ProductsController {
     private UpdateProductUseCase updateProductUseCase;
     @Autowired
     private DeleteProductUseCase deleteProductUseCase;
+    @Autowired
+    private GetPopularProductsUseCase getPopularProductsUseCase;
 
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody ProductsDTO productsDto, HttpServletRequest request) {
@@ -56,6 +49,11 @@ public class ProductsController {
     public PageReturn<List<Products>> list(ProductFilter filter, HttpServletRequest request) {
         filter.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
         return this.getAllProducts.execute(filter);
+    }
+
+    @GetMapping("/popular-products")
+    public ResponseEntity<List<Map<String, Object>>> getPopularProducts(@RequestParam Long comId) {
+        return ResponseEntity.ok(getPopularProductsUseCase.execute(comId));
     }
 
     @PutMapping("/{uuid}")
