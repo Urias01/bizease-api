@@ -1,18 +1,19 @@
 package com.bizease.api.app.model.sales_orders.controllers;
 
 import com.bizease.api.app.model.sales_orders.enums.SalesOrderStatus;
-import com.bizease.api.app.model.sales_orders.useCases.UpdateSalesOrderStatusUseCase;
+import com.bizease.api.app.model.sales_orders.useCases.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.bizease.api.app.exceptions.NotFoundException;
 import com.bizease.api.app.model.sales_orders.dto.SalesOrdersDTO;
 import com.bizease.api.app.model.sales_orders.entities.SalesOrders;
-import com.bizease.api.app.model.sales_orders.useCases.CreateSalesOrderUseCase;
-import com.bizease.api.app.model.sales_orders.useCases.UpdateSalesOrderUseCase;
-import com.bizease.api.app.model.sales_orders.useCases.DeleteSalesOrderUseCase;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -28,6 +29,8 @@ public class SalesOrdersControllers {
     private DeleteSalesOrderUseCase deleteSalesOrderUseCase;
     @Autowired
     private UpdateSalesOrderStatusUseCase updateSalesOrderStatusUseCase;
+    @Autowired
+    private GetRevenueByPeriodUseCase getRevenueByPeriodUseCase;
     
     @PostMapping
      public ResponseEntity<Object> create(@RequestBody SalesOrdersDTO salesOrdersDTO) {
@@ -62,6 +65,15 @@ public class SalesOrdersControllers {
         } catch (Exception error) {
             return ResponseEntity.badRequest().body(error.getMessage());
         }
+     }
+
+     @GetMapping("/revenue")
+     public ResponseEntity<List<Map<String, Object>>> getRevenueByPeriod
+             (@RequestParam Long comId,
+             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate startDate,
+             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate endDate) {
+        var result = this.getRevenueByPeriodUseCase.execute(comId, startDate, endDate);
+        return ResponseEntity.ok(result);
      }
 
      @DeleteMapping("/{uuid}")
