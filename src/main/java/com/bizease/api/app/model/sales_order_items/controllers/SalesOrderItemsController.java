@@ -1,5 +1,6 @@
 package com.bizease.api.app.model.sales_order_items.controllers;
 
+import com.bizease.api.app.model.sales_order_items.useCases.GetLostProductsUseCase;
 import com.bizease.api.app.model.sales_order_items.useCases.UpdateSalesOrderItemsUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,9 @@ import com.bizease.api.app.exceptions.NotFoundException;
 import com.bizease.api.app.model.sales_order_items.dto.SalesOrderItemsDTO;
 import com.bizease.api.app.model.sales_order_items.entities.SalesOrderItems;
 import com.bizease.api.app.model.sales_order_items.useCases.CreateSalesOrderItemsUseCase;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/sales_order_items")
@@ -20,6 +24,9 @@ public class SalesOrderItemsController {
     @Autowired
     private UpdateSalesOrderItemsUseCase updateSalesOrderItemsUseCase;
 
+    @Autowired
+    private GetLostProductsUseCase getLostProductsUseCase;
+
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody SalesOrderItemsDTO salesOrderItemsDTO) {
         try {
@@ -30,6 +37,12 @@ public class SalesOrderItemsController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
+    }
+
+    @GetMapping("/lost-products")
+    public ResponseEntity<List<Map<String, Object>>> getLostProducts(@RequestParam Long comId) {
+        var result = this.getLostProductsUseCase.execute(comId);
+        return ResponseEntity.ok(result);
     }
 
     @PutMapping("/{uuid}")
