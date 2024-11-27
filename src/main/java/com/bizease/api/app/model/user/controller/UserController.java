@@ -1,15 +1,14 @@
 package com.bizease.api.app.model.user.controller;
 
-import com.bizease.api.app.model.user.dto.FirstUserAccessDTO;
-import com.bizease.api.app.model.user.dto.UpdateUserRequestDTO;
-import com.bizease.api.app.model.user.dto.CreateUserRequestDTO;
-import com.bizease.api.app.model.user.dto.UserResponseDTO;
+import com.bizease.api.app.exceptions.InvalidPasswordException;
+import com.bizease.api.app.model.user.dto.*;
 import com.bizease.api.app.model.user.entities.User;
 import com.bizease.api.app.model.user.useCases.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
@@ -44,6 +44,9 @@ public class UserController {
 
     @Autowired
     private ManagerUsersUseCase managerUsersUseCase;
+
+    @Autowired
+    private ChangePasswordUseCase changePasswordUseCase;
 
     @GetMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
@@ -121,6 +124,21 @@ public class UserController {
             return ResponseEntity.ok().build();
         } catch (Exception error) {
             return ResponseEntity.badRequest().body(error.getMessage());
+        }
+    }
+
+    @PatchMapping("/change-password")
+    public ResponseEntity<String> changePassword(@RequestBody PasswordChangeDTO passwordChangeDTO, HttpServletRequest request) {
+        try {
+            String userUuidString = (String) request.getAttribute("user_uuid");
+            UUID userUuid = UUID.fromString(userUuidString);
+            changePasswordUseCase.changePassword(userUuid, passwordChangeDTO);
+
+            return ResponseEntity.ok("Sua senha foi alterada com sucesso!");
+        } catch (InvalidPasswordException error) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error.getMessage());
+        } catch (Exception error) {
+            return ResponseEntity.internalServerError().body("Erro ao alterar a senha.");
         }
     }
 
