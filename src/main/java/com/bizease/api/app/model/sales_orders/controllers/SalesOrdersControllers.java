@@ -34,6 +34,8 @@ public class SalesOrdersControllers {
     @Autowired
     private GetRevenueByPeriodUseCase getRevenueByPeriodUseCase;
     @Autowired
+    private GetAnnualBuyingAndSellingUseCase getAnnualBuyingAndSellingUseCase;
+    @Autowired
     private FindCommerceIdByUuidUseCase findCommerceIdByUuidUseCase;
     
     @PostMapping
@@ -85,7 +87,19 @@ public class SalesOrdersControllers {
         } catch (Exception error) {
             return ResponseEntity.badRequest().body(error.getMessage());
         }
+     }
 
+     @GetMapping("/annual-buying-selling")
+     public ResponseEntity<?> getAnnualBuyingAndSelling(HttpServletRequest request) {
+        try {
+            String commerceUuid = (String) request.getAttribute("commerce_uuid");
+            Long comId = findCommerceIdByUuidUseCase.findIdByUuid(commerceUuid);
+
+            var result = this.getAnnualBuyingAndSellingUseCase.execute(comId);
+            return ResponseEntity.ok(result);
+        } catch (Exception error) {
+            return ResponseEntity.badRequest().body(error.getMessage());
+        }
      }
 
      @DeleteMapping("/{uuid}")
