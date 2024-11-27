@@ -1,7 +1,9 @@
 package com.bizease.api.app.model.sales_order_items.controllers;
 
+import com.bizease.api.app.model.commerce.useCases.FindCommerceIdByUuidUseCase;
 import com.bizease.api.app.model.sales_order_items.useCases.GetLostProductsUseCase;
 import com.bizease.api.app.model.sales_order_items.useCases.UpdateSalesOrderItemsUseCase;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +29,9 @@ public class SalesOrderItemsController {
     @Autowired
     private GetLostProductsUseCase getLostProductsUseCase;
 
+    @Autowired
+    private FindCommerceIdByUuidUseCase findCommerceIdByUuidUseCase;
+
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody SalesOrderItemsDTO salesOrderItemsDTO) {
         try {
@@ -40,9 +45,16 @@ public class SalesOrderItemsController {
     }
 
     @GetMapping("/lost-products")
-    public ResponseEntity<List<Map<String, Object>>> getLostProducts(@RequestParam Long comId) {
-        var result = this.getLostProductsUseCase.execute(comId);
-        return ResponseEntity.ok(result);
+    public ResponseEntity<?> getLostProducts(HttpServletRequest request) {
+        try {
+            String commerceUuid = (String) request.getAttribute("commerce_uuid");
+            Long comId = findCommerceIdByUuidUseCase.findIdByUuid(commerceUuid);
+
+            var result = this.getLostProductsUseCase.execute(comId);
+            return ResponseEntity.ok(result);
+        } catch (Exception error) {
+            return ResponseEntity.badRequest().body(error.getMessage());
+        }
     }
 
     @PutMapping("/{uuid}")

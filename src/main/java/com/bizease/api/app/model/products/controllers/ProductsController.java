@@ -3,6 +3,7 @@ package com.bizease.api.app.model.products.controllers;
 import java.util.List;
 import java.util.Map;
 
+import com.bizease.api.app.model.commerce.useCases.FindCommerceIdByUuidUseCase;
 import com.bizease.api.app.model.products.useCases.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,8 @@ public class ProductsController {
     private DeleteProductUseCase deleteProductUseCase;
     @Autowired
     private GetPopularProductsUseCase getPopularProductsUseCase;
+    @Autowired
+    private FindCommerceIdByUuidUseCase findCommerceIdByUuidUseCase;
 
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody ProductsDTO productsDto, HttpServletRequest request) {
@@ -52,8 +55,15 @@ public class ProductsController {
     }
 
     @GetMapping("/popular-products")
-    public ResponseEntity<List<Map<String, Object>>> getPopularProducts(@RequestParam Long comId) {
-        return ResponseEntity.ok(getPopularProductsUseCase.execute(comId));
+    public ResponseEntity<?> getPopularProducts(HttpServletRequest request) {
+        try {
+            String commerceUuid = (String) request.getAttribute("commerce_uuid");
+            Long comId = findCommerceIdByUuidUseCase.findIdByUuid(commerceUuid);
+
+            return ResponseEntity.ok(getPopularProductsUseCase.execute(comId));
+        } catch (Exception error) {
+            return ResponseEntity.internalServerError().body(error.getMessage());
+        }
     }
 
     @PutMapping("/{uuid}")

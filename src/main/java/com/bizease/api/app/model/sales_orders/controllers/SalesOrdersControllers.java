@@ -1,7 +1,9 @@
 package com.bizease.api.app.model.sales_orders.controllers;
 
+import com.bizease.api.app.model.commerce.useCases.FindCommerceIdByUuidUseCase;
 import com.bizease.api.app.model.sales_orders.enums.SalesOrderStatus;
 import com.bizease.api.app.model.sales_orders.useCases.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,8 @@ public class SalesOrdersControllers {
     private UpdateSalesOrderStatusUseCase updateSalesOrderStatusUseCase;
     @Autowired
     private GetRevenueByPeriodUseCase getRevenueByPeriodUseCase;
+    @Autowired
+    private FindCommerceIdByUuidUseCase findCommerceIdByUuidUseCase;
     
     @PostMapping
      public ResponseEntity<Object> create(@RequestBody SalesOrdersDTO salesOrdersDTO) {
@@ -68,12 +72,20 @@ public class SalesOrdersControllers {
      }
 
      @GetMapping("/revenue")
-     public ResponseEntity<List<Map<String, Object>>> getRevenueByPeriod
-             (@RequestParam Long comId,
-             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate startDate,
-             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate endDate) {
-        var result = this.getRevenueByPeriodUseCase.execute(comId, startDate, endDate);
-        return ResponseEntity.ok(result);
+     public ResponseEntity<?> getRevenueByPeriod
+             (HttpServletRequest request,
+              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate startDate,
+              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate endDate) {
+        try {
+           String commerceUuid = (String) request.getAttribute("commerce_uuid");
+           Long comId = findCommerceIdByUuidUseCase.findIdByUuid(commerceUuid);
+
+           var result = this.getRevenueByPeriodUseCase.execute(comId, startDate, endDate);
+           return ResponseEntity.ok(result);
+        } catch (Exception error) {
+            return ResponseEntity.badRequest().body(error.getMessage());
+        }
+
      }
 
      @DeleteMapping("/{uuid}")
