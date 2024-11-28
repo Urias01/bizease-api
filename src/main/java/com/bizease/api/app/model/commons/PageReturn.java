@@ -8,11 +8,22 @@ import lombok.Setter;
 public class PageReturn<T> {
 
     private T data;
-    private Long total;
+    private Long totalCount;
+    private int pageIndex;
+    private int perPage;
 
-    public PageReturn(T responses, Long total) {
+    public PageReturn(T responses, Long total, int pageIndex, int perPage) {
         this.data = responses;
-        this.total = total;
+        this.totalCount = total;
+        this.pageIndex = pageIndex;
+        this.perPage = perPage;
+    }
+
+    public PageReturn(T responses, Long total, int pageIndex) {
+        this.data = responses;
+        this.totalCount = total;
+        this.pageIndex = pageIndex;
+        this.perPage = 5;
     }
 
 }

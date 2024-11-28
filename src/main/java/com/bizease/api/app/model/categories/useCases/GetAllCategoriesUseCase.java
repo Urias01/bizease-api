@@ -1,6 +1,8 @@
 package com.bizease.api.app.model.categories.useCases;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,7 +25,7 @@ public class GetAllCategoriesUseCase {
   @Autowired
   private CategoriesRepository categoriesRepository;
 
-  public PageReturn<List<Categories>> execute(CategoriesFilter filter) {
+  public PageReturn<List<Map<String, Object>>> execute(CategoriesFilter filter) {
 
     Specification<Categories> specification = where(commerceUuidEquals(filter.getCommerceUuid())
         .and(nameLike(filter.getName())));
@@ -34,9 +36,16 @@ public class GetAllCategoriesUseCase {
 
     Page<Categories> model = this.categoriesRepository.findAll(specification, pageRequest);
 
-    List<Categories> responses = model.getContent();
+     List<Map<String, Object>> responses = model.getContent().stream().map(category -> {
+        Map<String, Object> categoryMap = new HashMap<>();
+        categoryMap.put("id", category.getId());
+        categoryMap.put("uuid", category.getUuid());
+        categoryMap.put("name", category.getName());
+        categoryMap.put("description", category.getDescription());
+        return categoryMap;
+    }).toList();
 
-    return new PageReturn<List<Categories>>(responses, model.getTotalElements());
+    return new PageReturn<>(responses, model.getTotalElements(), pageRequest.getPageNumber(), pageRequest.getPageSize());
 
   }
 

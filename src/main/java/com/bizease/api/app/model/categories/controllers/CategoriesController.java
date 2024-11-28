@@ -1,6 +1,7 @@
 package com.bizease.api.app.model.categories.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +44,7 @@ public class CategoriesController {
   private GetAllCategoriesUseCase getAllCategoriesUseCase;
 
   @GetMapping
-  public PageReturn<List<Categories>> list(@ModelAttribute CategoriesFilter filter, HttpServletRequest request) {
+  public PageReturn<List<Map<String, Object>>> list(@ModelAttribute CategoriesFilter filter, HttpServletRequest request) {
     filter.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
     return this.getAllCategoriesUseCase.execute(filter);
   }

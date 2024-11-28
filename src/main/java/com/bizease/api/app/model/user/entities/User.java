@@ -57,6 +57,5 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
-    @Length(max = 50)
     private RoleEnum role;
 }
