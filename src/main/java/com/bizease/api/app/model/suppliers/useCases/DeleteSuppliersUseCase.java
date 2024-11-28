@@ -1,6 +1,7 @@
 package com.bizease.api.app.model.suppliers.useCases;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ public class DeleteSuppliersUseCase {
     private SuppliersRepository suppliersRepository;
 
     public void execute(String uuid) {
-        Optional<Suppliers> supplierExists = suppliersRepository.findByUuid(uuid);
+        Optional<Suppliers> supplierExists = suppliersRepository.findByUuid(UUID.fromString(uuid));
 
         if (!supplierExists.isPresent()) {
             throw new NotFoundException("Fornecedor");

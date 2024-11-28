@@ -1,6 +1,7 @@
 package com.bizease.api.app.model.suppliers.repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -11,6 +12,6 @@ public interface SuppliersRepository extends JpaRepository<Suppliers, Long>, Jpa
     
     Optional<Suppliers> findByCnpj(String cnpj);
 
-    Optional<Suppliers> findByUuid(String uuid);
+    Optional<Suppliers> findByUuid(UUID uuid);
 
 }

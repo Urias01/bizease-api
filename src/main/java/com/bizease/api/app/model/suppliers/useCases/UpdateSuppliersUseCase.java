@@ -1,6 +1,7 @@
 package com.bizease.api.app.model.suppliers.useCases;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class UpdateSuppliersUseCase {
             throw new NotFoundException("Comércio"); 
         }
 
-        Optional<Suppliers> supplierExists = this.suppliersRepository.findByUuid(uuid);
+        Optional<Suppliers> supplierExists = this.suppliersRepository.findByUuid(UUID.fromString(uuid));
 
         if (!supplierExists.isPresent()) {
             throw new NotFoundException("Fornecedor"); 

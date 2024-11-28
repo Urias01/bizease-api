@@ -1,6 +1,7 @@
 package com.bizease.api.app.model.suppliers.entities;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -35,9 +36,9 @@ public class Suppliers {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Length(max = 36)
-    @UuidGenerator
-    private String uuid;
+    @UuidGenerator()
+    @Column(unique = true, nullable = false)
+    private UUID uuid;
 
     @Column(nullable = false)
     @Length(max = 14)

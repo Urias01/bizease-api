@@ -1,6 +1,7 @@
 package com.bizease.api.app.model.suppliers.dto;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import lombok.Setter;
 public class SuppliersDTO {
     
     private Long id;
-    private String uuid;
+    private UUID uuid;
     private String cnpj;
     private String name;
     private String address;
