@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.bizease.api.app.model.commons.PageReturn;
+import com.bizease.api.app.model.commons.enums.IsActiveEnum;
 import com.bizease.api.app.model.products.entities.Products;
 import com.bizease.api.app.model.products.filter.ProductFilter;
 import com.bizease.api.app.model.products.repository.ProductsRepository;
@@ -26,7 +27,9 @@ public class GetAllProductsUseCase {
     public PageReturn<List<Products>> execute(ProductFilter filter) {
 
         Specification<Products> specification = where(commerceUuidEquals(filter.getCommerceUuid())
-        .and(nameLike(filter.getName())));
+                .and(idEquals(filter.getId()))
+                .and(isActive(filter.getIsActive()))
+                .and(nameLike(filter.getName())));
 
         Direction direction = Direction.valueOf(filter.getDirection().toUpperCase());
 
@@ -35,8 +38,6 @@ public class GetAllProductsUseCase {
         Page<Products> model = this.productsRepository.findAll(specification, pageRequest);
 
         List<Products> responses = model.getContent();
-
-        System.out.println(responses.size());
 
         return new PageReturn<List<Products>>(responses, model.getTotalElements(), pageRequest.getPageNumber(),
                 pageRequest.getPageSize());

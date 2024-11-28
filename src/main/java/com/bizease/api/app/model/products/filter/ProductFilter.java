@@ -8,7 +8,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProductFilter extends BasePagination {
-    
+
+    private Long id;
+
+    private String isActive;
+
     private String name;
 
     private Integer unit;
