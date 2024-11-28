@@ -9,26 +9,21 @@ import org.springframework.stereotype.Service;
 import com.bizease.api.app.exceptions.NotFoundException;
 import com.bizease.api.app.model.categories.entities.Categories;
 import com.bizease.api.app.model.categories.repository.CategoriesRepository;
-import com.bizease.api.app.model.commons.enums.IsActiveEnum;
 
 @Service
-public class DeleteCategoriesUseCase {
+public class GetCategoryByUuidUseCase {
 
   @Autowired
   private CategoriesRepository categoriesRepository;
 
-  public void execute(String uuid) {
-    Optional<Categories> categoriesExists = categoriesRepository.findByUuid(UUID.fromString(uuid));
+  public Categories execute(String uuid) {
+    Optional<Categories> categoryExists = categoriesRepository.findByUuid(UUID.fromString(uuid));
 
-    if (!categoriesExists.isPresent()) {
-      throw new NotFoundException("Categorias");
+    if (!categoryExists.isPresent()) {
+      throw new NotFoundException("Categoria");
     }
 
-    Categories categories = categoriesExists.get();
-
-    categories.setIsActive(IsActiveEnum.INACTIVE);
-    
-    this.categoriesRepository.save(categories);
+    return categoryExists.get();
   }
 
 }

@@ -16,6 +16,7 @@ import com.bizease.api.app.model.categories.filter.CategoriesFilter;
 import com.bizease.api.app.model.categories.useCases.CreateCategoriesUseCase;
 import com.bizease.api.app.model.categories.useCases.DeleteCategoriesUseCase;
 import com.bizease.api.app.model.categories.useCases.GetAllCategoriesUseCase;
+import com.bizease.api.app.model.categories.useCases.GetCategoryByUuidUseCase;
 import com.bizease.api.app.model.categories.useCases.UpdateCategoriesUseCase;
 import com.bizease.api.app.model.commons.PageReturn;
 import com.bizease.api.app.responses.ApiResponse;
@@ -42,9 +43,18 @@ public class CategoriesController {
   private DeleteCategoriesUseCase deleteCategoriesUseCase;
   @Autowired
   private GetAllCategoriesUseCase getAllCategoriesUseCase;
+  @Autowired
+  private GetCategoryByUuidUseCase getCategoryByUuidUseCase;
+
+  @GetMapping("/{uuid}")
+  public ResponseEntity<Categories> list(@PathVariable String uuid) {
+    Categories categories = this.getCategoryByUuidUseCase.execute(uuid);
+    return ResponseEntity.ok(categories);
+  }
 
   @GetMapping
-  public PageReturn<List<Map<String, Object>>> list(@ModelAttribute CategoriesFilter filter, HttpServletRequest request) {
+  public PageReturn<List<Map<String, Object>>> list(@ModelAttribute CategoriesFilter filter,
+      HttpServletRequest request) {
     filter.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
     return this.getAllCategoriesUseCase.execute(filter);
   }
@@ -66,8 +76,11 @@ public class CategoriesController {
   }
 
   @PutMapping("/{uuid}")
-  public ResponseEntity<Object> update(@RequestBody CategoriesDTO categoriesDTO, @PathVariable String uuid) {
+  public ResponseEntity<Object> update(@RequestBody CategoriesDTO categoriesDTO, @PathVariable String uuid,
+      HttpServletRequest request) {
     try {
+      String commerceUuid = (String) request.getAttribute("commerce_uuid");
+      categoriesDTO.setCommerceUuid(commerceUuid);
       Categories response = this.updateCategoriesUseCase.execute(categoriesDTO, uuid);
       ApiResponse<Categories> apiResponse = new ApiResponse<>(true, 1, response);
       return ResponseEntity.status(200).body(apiResponse);

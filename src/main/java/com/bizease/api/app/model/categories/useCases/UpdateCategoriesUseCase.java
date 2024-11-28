@@ -25,7 +25,7 @@ public class UpdateCategoriesUseCase {
 
   public Categories execute(CategoriesDTO categoriesDTO, String uuid) {
 
-    Optional<Commerce> commerceExists = this.commerceRepository.findById(categoriesDTO.getCommerceId());
+    Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(categoriesDTO.getCommerceUuid());
 
     if (!commerceExists.isPresent()) {
       throw new NotFoundException("Comércio");
@@ -49,8 +49,9 @@ public class UpdateCategoriesUseCase {
 
     model.setName(categoriesDTO.getName());
     model.setDescription(categoriesDTO.getDescription());
-    model.setIsActive(IsActiveEnum.from(categoriesDTO.getIsActive()));
-    model.setCommerce(commerce);
+    if (categoriesDTO.getIsActive() != null) {
+      model.setIsActive(IsActiveEnum.from(categoriesDTO.getIsActive()));
+    }
 
     model = this.categoriesRepository.save(model);
 

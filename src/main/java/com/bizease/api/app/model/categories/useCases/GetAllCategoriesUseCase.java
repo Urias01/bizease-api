@@ -43,6 +43,7 @@ public class GetAllCategoriesUseCase {
       categoryMap.put("uuid", category.getUuid());
       categoryMap.put("name", category.getName());
       categoryMap.put("description", category.getDescription());
+      categoryMap.put("isActive", category.getIsActive());
       return categoryMap;
     }).toList();
 
