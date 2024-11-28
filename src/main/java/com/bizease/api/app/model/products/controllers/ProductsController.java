@@ -54,7 +54,7 @@ public class ProductsController {
         return this.getAllProducts.execute(filter);
     }
 
-    @GetMapping("/popular-products")
+    @GetMapping("/popular")
     public ResponseEntity<?> getPopularProducts(HttpServletRequest request) {
         try {
             String commerceUuid = (String) request.getAttribute("commerce_uuid");
