@@ -28,6 +28,7 @@ public class GetAllCategoriesUseCase {
   public PageReturn<List<Map<String, Object>>> execute(CategoriesFilter filter) {
 
     Specification<Categories> specification = where(commerceUuidEquals(filter.getCommerceUuid())
+        .and(idEquals(filter.getId()))
         .and(nameLike(filter.getName())));
 
     Direction direction = Direction.valueOf(filter.getDirection().toUpperCase());
@@ -36,16 +37,17 @@ public class GetAllCategoriesUseCase {
 
     Page<Categories> model = this.categoriesRepository.findAll(specification, pageRequest);
 
-     List<Map<String, Object>> responses = model.getContent().stream().map(category -> {
-        Map<String, Object> categoryMap = new HashMap<>();
-        categoryMap.put("id", category.getId());
-        categoryMap.put("uuid", category.getUuid());
-        categoryMap.put("name", category.getName());
-        categoryMap.put("description", category.getDescription());
-        return categoryMap;
+    List<Map<String, Object>> responses = model.getContent().stream().map(category -> {
+      Map<String, Object> categoryMap = new HashMap<>();
+      categoryMap.put("id", category.getId());
+      categoryMap.put("uuid", category.getUuid());
+      categoryMap.put("name", category.getName());
+      categoryMap.put("description", category.getDescription());
+      return categoryMap;
     }).toList();
 
-    return new PageReturn<>(responses, model.getTotalElements(), pageRequest.getPageNumber(), pageRequest.getPageSize());
+    return new PageReturn<>(responses, model.getTotalElements(), pageRequest.getPageNumber(),
+        pageRequest.getPageSize());
 
   }
 

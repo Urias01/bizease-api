@@ -9,6 +9,8 @@ import lombok.Setter;
 @Setter
 public class CategoriesFilter extends BasePagination {
 
+  private Long id;
+
   private String name;
 
   private String commerceUuid;

@@ -14,12 +14,20 @@ public class CategoriesSpecification {
     return (root, query, cb) -> cb.equal(root.get("commerce").get("uuid"), uuid);
   }
 
+  public static Specification<Categories> idEquals(Long id) {
+    if (id == null) {
+      return null;
+    }
+
+    return (root, query, cb) -> cb.equal(root.get("id"), id);
+  }
+
   public static Specification<Categories> nameLike(String name) {
     if (name == null) {
       return null;
     }
 
-    return (root, query, cb) -> cb.like(root.get("name"), "%" + name + "%");
+    return (root, query, cb) -> cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%");
   }
 
 }
