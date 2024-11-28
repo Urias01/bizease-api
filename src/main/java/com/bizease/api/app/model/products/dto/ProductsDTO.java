@@ -25,6 +25,6 @@ public class ProductsDTO {
     private LocalDateTime updatedAt;
 
     private String commerceUuid;
-    private Long categoryId;
+    private String categoryUuid;
 
 }

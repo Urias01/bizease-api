@@ -1,6 +1,7 @@
 package com.bizease.api.app.model.products.useCases;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ import com.bizease.api.app.model.products.repository.ProductsRepository;
 
 @Service
 public class CreateProductUseCase {
-    
+
     @Autowired
     private ProductsRepository productsRepository;
 
@@ -28,18 +29,19 @@ public class CreateProductUseCase {
     private CategoriesRepository categoriesRepository;
 
     public Products execute(ProductsDTO productsDTO) {
-        
+
         this.productsRepository.findByNameAndCommerceUuid(productsDTO.getName(), productsDTO.getCommerceUuid())
-        .ifPresent((products)->{
-            throw new AlreadyExistsException("Produto");
-        });
+                .ifPresent((products) -> {
+                    throw new AlreadyExistsException("Produto");
+                });
 
         Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(productsDTO.getCommerceUuid());
         if (!commerceExists.isPresent()) {
             throw new NotFoundException("Comércio");
         }
 
-        Optional<Categories> categoryExists = this.categoriesRepository.findById(productsDTO.getCategoryId());
+        Optional<Categories> categoryExists = this.categoriesRepository
+                .findByUuid(UUID.fromString(productsDTO.getCategoryUuid()));
         if (!categoryExists.isPresent()) {
             throw new NotFoundException("Categoria");
         }
