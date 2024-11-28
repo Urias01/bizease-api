@@ -16,8 +16,8 @@ public class GetUserByUuidUseCase {
     @Autowired
     private UserRepository userRepository;
 
-    public UserResponseDTO getUserByUuid(String uuid) {
-        Optional<User> user = userRepository.findByUuid(UUID.fromString(uuid));
+    public UserResponseDTO getUserByUuid(UUID uuid) {
+        Optional<User> user = userRepository.findByUuid(uuid);
 
         if (user.isPresent()) {
             User foundUser = user.get();

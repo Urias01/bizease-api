@@ -67,9 +67,18 @@ public class UserController {
 
     @GetMapping("/{uuid}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<UserResponseDTO> getUserByUuid(@PathVariable String uuid) {
+    public ResponseEntity<UserResponseDTO> getUserByUuid(@PathVariable UUID uuid) {
         UserResponseDTO userResponseDTO = getUserByUuidUseCase.getUserByUuid(uuid);
         return ResponseEntity.ok(userResponseDTO);
+    }
+
+    @GetMapping("/see-my-profile")
+    public ResponseEntity<UserResponseDTO> seeMyProfile(HttpServletRequest request) {
+            String userUuidString = (String) request.getAttribute("user_uuid");
+            UUID userUuid = UUID.fromString(userUuidString);
+
+            var result = getUserByUuidUseCase.getUserByUuid(userUuid);
+            return ResponseEntity.ok(result);
     }
 
     @PostMapping
