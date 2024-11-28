@@ -1,6 +1,7 @@
 package com.bizease.api.app.model.categories.useCases;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ public class DeleteCategoriesUseCase {
   private CategoriesRepository categoriesRepository;
 
   public void execute(String uuid) {
-    Optional<Categories> categoriesExists = categoriesRepository.findByUuid(uuid);
+    Optional<Categories> categoriesExists = categoriesRepository.findByUuid(UUID.fromString(uuid));
 
     if (!categoriesExists.isPresent()) {
       throw new NotFoundException("Categorias");

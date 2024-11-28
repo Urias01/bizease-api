@@ -13,6 +13,7 @@ public class CategoriesDTO {
   
   private String name;
   private String description;
+  private Integer isActive;
   private Long commerceId;
 
 
