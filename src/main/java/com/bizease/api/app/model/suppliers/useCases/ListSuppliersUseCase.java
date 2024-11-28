@@ -36,7 +36,8 @@ public class ListSuppliersUseCase {
 
         List<Suppliers> responses = model.getContent();
 
-        return new PageReturn<List<Suppliers>>(responses, model.getTotalElements());
+        return new PageReturn<List<Suppliers>>(responses, model.getTotalElements(), pageRequest.getPageNumber(),
+                pageRequest.getPageSize());
     }
 
 }

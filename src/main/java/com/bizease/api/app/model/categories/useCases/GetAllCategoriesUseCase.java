@@ -47,7 +47,7 @@ public class GetAllCategoriesUseCase {
     }).toList();
 
     return new PageReturn<>(responses, model.getTotalElements(), pageRequest.getPageNumber(),
-        pageRequest.getPageSize());
+            pageRequest.getPageSize());
 
   }
 
