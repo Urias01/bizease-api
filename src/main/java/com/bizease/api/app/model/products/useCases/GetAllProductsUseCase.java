@@ -8,7 +8,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.bizease.api.app.model.commons.PageReturn;
-import com.bizease.api.app.model.commons.enums.IsActiveEnum;
 import com.bizease.api.app.model.products.entities.Products;
 import com.bizease.api.app.model.products.filter.ProductFilter;
 import com.bizease.api.app.model.products.repository.ProductsRepository;

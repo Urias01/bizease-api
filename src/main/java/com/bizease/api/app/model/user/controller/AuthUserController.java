@@ -5,7 +5,6 @@ import com.bizease.api.app.model.user.dto.AuthUserRequestDTO;
 import com.bizease.api.app.model.user.dto.EmailRequestDTO;
 import com.bizease.api.app.model.user.useCases.AuthUserUseCase;
 import com.bizease.api.app.model.user.useCases.ResetUserPasswordUseCase;
-import jakarta.validation.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,8 +1,6 @@
 package com.bizease.api.app.model.products.controllers;
 
 import java.util.List;
-import java.util.Map;
-
 import com.bizease.api.app.model.commerce.useCases.FindCommerceIdByUuidUseCase;
 import com.bizease.api.app.model.products.useCases.*;
 import org.springframework.beans.factory.annotation.Autowired;

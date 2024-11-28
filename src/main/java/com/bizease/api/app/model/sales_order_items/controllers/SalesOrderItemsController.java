@@ -13,9 +13,6 @@ import com.bizease.api.app.model.sales_order_items.dto.SalesOrderItemsDTO;
 import com.bizease.api.app.model.sales_order_items.entities.SalesOrderItems;
 import com.bizease.api.app.model.sales_order_items.useCases.CreateSalesOrderItemsUseCase;
 
-import java.util.List;
-import java.util.Map;
-
 @RestController
 @RequestMapping("/sales_order_items")
 public class SalesOrderItemsController {
