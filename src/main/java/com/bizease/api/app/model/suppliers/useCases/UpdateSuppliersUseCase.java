@@ -23,7 +23,7 @@ public class UpdateSuppliersUseCase {
     private CommerceRepository commerceRepository;
 
     public Suppliers execute(SuppliersDTO suppliersDTO, String uuid) {
-        Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(suppliersDTO.getCommerceUuid());
+        Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(UUID.fromString(suppliersDTO.getCommerceUuid()));
 
         if (!commerceExists.isPresent()) {
             throw new NotFoundException("Comércio"); 

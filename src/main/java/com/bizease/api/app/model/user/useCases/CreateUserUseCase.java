@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CreateUserUseCase {
@@ -39,7 +40,7 @@ public class CreateUserUseCase {
                 commerceRepository.findById(createUserRequestDTO.getCommerceId())
                         .orElseThrow(() -> new NotFoundException("Comércio"));
             } else if (RoleEnum.fromString(requestRole).equals(RoleEnum.OWNER)) {
-                commerce = commerceRepository.findByUuid(uuid)
+                commerce = commerceRepository.findByUuid(UUID.fromString(uuid))
                         .orElseThrow(() -> new NotFoundException("Comércio"));
             }
 

@@ -1,6 +1,7 @@
 package com.bizease.api.app.model.categories.useCases;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class CreateCategoriesUseCase {
 
   public Categories execute(CategoriesDTO categoriesDTO, String uuid) {
 
-    Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(uuid);
+    Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(UUID.fromString(uuid));
 
     if (!commerceExists.isPresent()) {
       throw new NotFoundException("Comércio");

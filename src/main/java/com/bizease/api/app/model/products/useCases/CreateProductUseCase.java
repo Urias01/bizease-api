@@ -1,6 +1,7 @@
 package com.bizease.api.app.model.products.useCases;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class CreateProductUseCase {
             throw new AlreadyExistsException("Produto");
         });
 
-        Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(productsDTO.getCommerceUuid());
+        Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(UUID.fromString(productsDTO.getCommerceUuid()));
         if (!commerceExists.isPresent()) {
             throw new NotFoundException("Comércio");
         }

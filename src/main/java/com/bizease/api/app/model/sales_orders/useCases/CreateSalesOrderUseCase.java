@@ -1,6 +1,7 @@
 package com.bizease.api.app.model.sales_orders.useCases;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class CreateSalesOrderUseCase {
     private CommerceRepository commerceRepository;
 
     public SalesOrders execute(SalesOrdersDTO salesOrdersDTO) {
-        Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(salesOrdersDTO.getCommerceUuid());
+        Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(UUID.fromString(salesOrdersDTO.getCommerceUuid()));
 
         if (!commerceExists.isPresent()) {
             throw new NotFoundException("Comércio");

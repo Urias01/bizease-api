@@ -2,6 +2,7 @@ package com.bizease.api.app.model.commerce.useCases;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ public class UpdateCommerceUseCase {
   private CommerceRepository commerceRepository;
 
   public Commerce execute(String uuid, Commerce commerceEntity) {
-     Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(uuid);
+     Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(UUID.fromString(uuid));
 
     if (!commerceExists.isPresent()) {
       throw new NotFoundException("Comércio");

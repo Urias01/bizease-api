@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.bizease.api.app.exceptions.CommerceFoundException;
 import com.bizease.api.app.model.commerce.entities.Commerce;
 import com.bizease.api.app.model.commerce.repository.CommerceRepository;
+import com.bizease.api.app.model.commons.enums.IsActiveEnum;
 
 @Service
 public class CreateCommerceUseCase {
@@ -19,7 +20,7 @@ public class CreateCommerceUseCase {
         throw new CommerceFoundException("CNPJ já cadastrado");
       });
 
-      commerceEntity.setActive(true);
+      commerceEntity.setIsActive(IsActiveEnum.ACTIVE);
       
       return this.commerceRepository.save(commerceEntity);
   }
