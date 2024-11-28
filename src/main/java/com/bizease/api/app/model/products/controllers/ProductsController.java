@@ -34,6 +34,8 @@ public class ProductsController {
     private GetPopularProductsUseCase getPopularProductsUseCase;
     @Autowired
     private FindCommerceIdByUuidUseCase findCommerceIdByUuidUseCase;
+    @Autowired
+    private GetProductByUuidUseCase getProductByUuidUseCase;
 
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody ProductsDTO productsDto, HttpServletRequest request) {
@@ -54,6 +56,13 @@ public class ProductsController {
         return this.getAllProducts.execute(filter);
     }
 
+    @GetMapping("/{uuid}")
+    public ResponseEntity<Products> getByUuid(@PathVariable String uuid) {
+        Products product = this.getProductByUuidUseCase.execute(uuid);
+
+        return ResponseEntity.ok(product);
+    }
+
     @GetMapping("/popular")
     public ResponseEntity<?> getPopularProducts(HttpServletRequest request) {
         try {
@@ -67,7 +76,8 @@ public class ProductsController {
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<Object> update(@PathVariable String uuid, @RequestBody ProductsDTO productsDto, HttpServletRequest request) {
+    public ResponseEntity<Object> update(@PathVariable String uuid, @RequestBody ProductsDTO productsDto,
+            HttpServletRequest request) {
         try {
             productsDto.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
             Products products = this.updateProductUseCase.execute(uuid, productsDto);
