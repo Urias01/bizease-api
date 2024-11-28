@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -31,9 +32,13 @@ public class User {
     private UUID uuid;
 
     @Column(nullable = false)
+    @Length(max = 100)
     private String name;
+
     @Column(nullable = false)
+    @Length(max = 254)
     private String email;
+
     @Column(nullable = false)
     private String password;
 
@@ -51,6 +56,7 @@ public class User {
     private Commerce commerce;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "roles")
+    @Column(name = "role")
+    @Length(max = 50)
     private RoleEnum role;
 }
