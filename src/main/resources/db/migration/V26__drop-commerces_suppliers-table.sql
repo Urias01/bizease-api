@@ -1,0 +1,1 @@
+DROP TABLE commerces_suppliers;
