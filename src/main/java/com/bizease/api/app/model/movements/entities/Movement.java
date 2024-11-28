@@ -12,6 +12,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -33,18 +34,21 @@ public class Movement {
     @Column(unique = true, nullable = false)
     private UUID uuid;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Length(max = 50)
     private TypeEnum type;
 
     @Column(nullable = false)
     private Integer quantity;
 
-    @Column(name = "from_location")
-    private String fromLocation;
+    @Column(nullable = false)
+    @Length(max = 100)
+    private String origin;
 
-    @Column(name = "to_location")
-    private String toLocation;
+    @Column(nullable = false)
+    @Length(max = 100)
+    private String destination;
 
     @Column(name = "movement_date")
     private LocalDate movementDate;

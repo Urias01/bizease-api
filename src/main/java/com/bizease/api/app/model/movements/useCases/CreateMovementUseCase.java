@@ -39,8 +39,8 @@ public class CreateMovementUseCase {
         Movement movement = new Movement();
         movement.setType(type);
         movement.setQuantity(movementDTO.getQuantity());
-        movement.setFromLocation(movementDTO.getFromLocation());
-        movement.setToLocation(movementDTO.getToLocation());
+        movement.setOrigin(movementDTO.getOrigin());
+        movement.setDestination(movementDTO.getDestination());
         movement.setMovementDate(movementDTO.getMovementDate());
         movement.setObservation(movementDTO.getObservation());
         movement.setUser(user);

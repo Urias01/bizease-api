@@ -44,8 +44,8 @@ public class UpdateMovementUseCase {
 
         updatedMovement.setType(type);
         updatedMovement.setQuantity(movementDTO.getQuantity());
-        updatedMovement.setFromLocation(movementDTO.getFromLocation());
-        updatedMovement.setToLocation(movementDTO.getToLocation());
+        updatedMovement.setOrigin(movementDTO.getOrigin());
+        updatedMovement.setDestination(movementDTO.getDestination());
         updatedMovement.setMovementDate(movementDTO.getMovementDate());
         updatedMovement.setObservation(movementDTO.getObservation());
         updatedMovement.setUser(user);

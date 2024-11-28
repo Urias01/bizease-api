@@ -15,8 +15,8 @@ public class MovementDTO {
 
     private String type;
     private Integer quantity;
-    private String fromLocation;
-    private String toLocation;
+    private String origin;
+    private String destination;
     private LocalDate movementDate;
     private String observation;
     private Long userId;
