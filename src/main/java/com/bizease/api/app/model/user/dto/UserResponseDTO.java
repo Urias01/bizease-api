@@ -3,6 +3,7 @@ package com.bizease.api.app.model.user.dto;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.bizease.api.app.model.commerce.entities.Commerce;
 import com.bizease.api.app.model.user.entities.User;
 
 import lombok.AllArgsConstructor;
@@ -23,6 +24,8 @@ public class UserResponseDTO {
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
 
+  private Commerce commerce;
+
   public UserResponseDTO(User user) {
     this.id = user.getId();
     this.uuid = user.getUuid();
@@ -30,6 +33,7 @@ public class UserResponseDTO {
     this.name = user.getName();
     this.createdAt = user.getCreatedAt();
     this.updatedAt = user.getUpdatedAt();
+    this.commerce = user.getCommerce();
   }
 
 }

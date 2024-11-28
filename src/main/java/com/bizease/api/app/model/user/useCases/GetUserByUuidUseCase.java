@@ -1,6 +1,8 @@
 package com.bizease.api.app.model.user.useCases;
 
 import com.bizease.api.app.exceptions.NotFoundException;
+import com.bizease.api.app.model.commerce.entities.Commerce;
+import com.bizease.api.app.model.commerce.repository.CommerceRepository;
 import com.bizease.api.app.model.user.dto.UserResponseDTO;
 import com.bizease.api.app.model.user.entities.User;
 import com.bizease.api.app.model.user.repository.UserRepository;
@@ -15,14 +17,21 @@ public class GetUserByUuidUseCase {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private CommerceRepository commerceRepository;
 
-    public UserResponseDTO getUserByUuid(UUID uuid) {
+    public UserResponseDTO getUserByUuid(UUID uuid, String commerceUuid) {
         Optional<User> user = userRepository.findByUuid(uuid);
+        Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(commerceUuid);
+
+        if (!commerceExists.isPresent()) {
+            throw new NotFoundException("Comércio");
+        }
 
         if (user.isPresent()) {
             User foundUser = user.get();
             return new UserResponseDTO(foundUser.getId(), foundUser.getUuid(), foundUser.getName(),
-                    foundUser.getEmail(), foundUser.getCreatedAt(), foundUser.getUpdatedAt());
+                    foundUser.getEmail(), foundUser.getCreatedAt(), foundUser.getUpdatedAt(), commerceExists.get());
         } else {
             throw new NotFoundException("Usuário");
         }

@@ -18,6 +18,6 @@ public class GetAllUsersUseCase {
     public List<UserResponseDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
         return users.stream().map(user -> new UserResponseDTO(user.getId(), user.getUuid(),
-                user.getName(), user.getEmail(), user.getCreatedAt(), user.getUpdatedAt())).collect(Collectors.toList());
+                user.getName(), user.getEmail(), user.getCreatedAt(), user.getUpdatedAt(), null)).collect(Collectors.toList());
     }
 }
