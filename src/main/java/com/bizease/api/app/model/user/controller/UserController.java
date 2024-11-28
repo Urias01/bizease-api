@@ -67,18 +67,20 @@ public class UserController {
 
     @GetMapping("/{uuid}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<UserResponseDTO> getUserByUuid(@PathVariable UUID uuid) {
-        UserResponseDTO userResponseDTO = getUserByUuidUseCase.getUserByUuid(uuid);
+    public ResponseEntity<UserResponseDTO> getUserByUuid(@PathVariable UUID uuid, HttpServletRequest request) {
+        String commerceUuid = (String) request.getAttribute("commerce_uuid");
+        UserResponseDTO userResponseDTO = getUserByUuidUseCase.getUserByUuid(uuid, commerceUuid);
         return ResponseEntity.ok(userResponseDTO);
     }
 
     @GetMapping("/see-my-profile")
     public ResponseEntity<UserResponseDTO> seeMyProfile(HttpServletRequest request) {
-            String userUuidString = (String) request.getAttribute("user_uuid");
-            UUID userUuid = UUID.fromString(userUuidString);
+        String userUuidString = (String) request.getAttribute("user_uuid");
+        String commerceUuid = (String) request.getAttribute("commerce_uuid");
+        UUID userUuid = UUID.fromString(userUuidString);
 
-            var result = getUserByUuidUseCase.getUserByUuid(userUuid);
-            return ResponseEntity.ok(result);
+        var result = getUserByUuidUseCase.getUserByUuid(userUuid, commerceUuid);
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping
@@ -118,7 +120,8 @@ public class UserController {
 
     @PutMapping("/{uuid}/manager")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<Object> managerUser(@PathVariable String uuid, @RequestBody UpdateUserRequestDTO updateUserRequestDTO,
+    public ResponseEntity<Object> managerUser(@PathVariable String uuid,
+            @RequestBody UpdateUserRequestDTO updateUserRequestDTO,
             HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -137,7 +140,8 @@ public class UserController {
     }
 
     @PatchMapping("/change-password")
-    public ResponseEntity<String> changePassword(@RequestBody PasswordChangeDTO passwordChangeDTO, HttpServletRequest request) {
+    public ResponseEntity<String> changePassword(@RequestBody PasswordChangeDTO passwordChangeDTO,
+            HttpServletRequest request) {
         try {
             String userUuidString = (String) request.getAttribute("user_uuid");
             UUID userUuid = UUID.fromString(userUuidString);
