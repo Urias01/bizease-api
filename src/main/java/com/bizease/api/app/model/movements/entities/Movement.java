@@ -36,7 +36,6 @@ public class Movement {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    @Length(max = 50)
     private TypeEnum type;
 
     @Column(nullable = false)

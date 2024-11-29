@@ -4,6 +4,9 @@ import com.bizease.api.app.model.movements.dto.MovementDTO;
 import com.bizease.api.app.model.movements.useCases.CreateMovementUseCase;
 import com.bizease.api.app.model.movements.useCases.GetMovementsUseCase;
 import com.bizease.api.app.model.movements.useCases.UpdateMovementUseCase;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -52,8 +55,10 @@ public class MovementController {
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<Object> createMovement(@RequestBody MovementDTO movementDTO) {
+    public ResponseEntity<Object> createMovement(@RequestBody MovementDTO movementDTO, HttpServletRequest request) {
         try {
+            movementDTO.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
+            movementDTO.setUserUuid((String) request.getAttribute("user_uuid"));
             var result = this.createMovementUseCase.execute(movementDTO);
             return ResponseEntity.status(201).body(result);
         } catch (Exception exception) {

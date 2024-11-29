@@ -19,7 +19,7 @@ public class MovementDTO {
     private String destination;
     private LocalDate movementDate;
     private String observation;
-    private Long userId;
-    private Long productId;
-    private Long commerceId;
+    private String userUuid;
+    private String productUuid;
+    private String commerceUuid;
 }
