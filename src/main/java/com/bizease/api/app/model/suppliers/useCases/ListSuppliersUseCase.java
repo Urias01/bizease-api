@@ -26,6 +26,7 @@ public class ListSuppliersUseCase {
     public PageReturn<List<Suppliers>> execute(SuppliersFilter filter) {
 
         Specification<Suppliers> specification = where(commerceUuidEquals(filter.getCommerceUuid())
+                .and(idEquals(filter.getId()))
                 .and(nameLike(filter.getName())));
 
         Direction direction = Direction.valueOf(filter.getDirection().toUpperCase());

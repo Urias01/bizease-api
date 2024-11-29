@@ -8,8 +8,12 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SuppliersFilter extends BasePagination {
-    
+
+    private Long id;
+
     private String name;
+
+    private String isActive;
 
     private String commerceUuid;
 
