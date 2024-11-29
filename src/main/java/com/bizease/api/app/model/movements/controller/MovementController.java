@@ -1,8 +1,11 @@
 package com.bizease.api.app.model.movements.controller;
 
+import com.bizease.api.app.model.commons.PageReturn;
 import com.bizease.api.app.model.movements.dto.MovementDTO;
+import com.bizease.api.app.model.movements.entities.Movement;
+import com.bizease.api.app.model.movements.filter.MovementFilter;
 import com.bizease.api.app.model.movements.useCases.CreateMovementUseCase;
-import com.bizease.api.app.model.movements.useCases.GetMovementsUseCase;
+import com.bizease.api.app.model.movements.useCases.GetAllMovementsUseCase;
 import com.bizease.api.app.model.movements.useCases.UpdateMovementUseCase;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,32 +29,25 @@ public class MovementController {
     private UpdateMovementUseCase updateMovementUseCase;
 
     @Autowired
-    private GetMovementsUseCase getMovementsUseCase;
+    private GetAllMovementsUseCase getAllMovementsUseCase;
 
     @GetMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<List> getAllMovements() {
-        var result = this.getMovementsUseCase.getAllMovements();
-        return ResponseEntity.ok(result);
+    public PageReturn<List<Movement>>  getAllMovements(MovementFilter filter, HttpServletRequest request) {
+        filter.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
+        return this.getAllMovementsUseCase.execute(filter);
     }
 
-    @GetMapping("/{uuid}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<Object> getMovement(@PathVariable UUID uuid) {
-        try {
-            var result = this.getMovementsUseCase.getByUuid(uuid);
-            return ResponseEntity.ok(result);
-        } catch (Exception exception) {
-            return ResponseEntity.badRequest().body(exception.getMessage());
-        }
-    }
-
-    @GetMapping("/commerce/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<List> getMovementsByCommerce(@PathVariable Long id) {
-        var result = this.getMovementsUseCase.getAllMovementsFromCommerce(id);
-        return ResponseEntity.ok(result);
-    }
+    // @GetMapping("/{uuid}")
+    // @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
+    // public ResponseEntity<Object> getMovement(@PathVariable UUID uuid) {
+    //     try {
+    //         var result = this.getMovementsUseCase.getByUuid(uuid);
+    //         return ResponseEntity.ok(result);
+    //     } catch (Exception exception) {
+    //         return ResponseEntity.badRequest().body(exception.getMessage());
+    //     }
+    // }
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
