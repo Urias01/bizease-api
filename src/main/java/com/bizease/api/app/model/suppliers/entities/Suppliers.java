@@ -41,7 +41,6 @@ public class Suppliers {
     private UUID uuid;
 
     @Column(nullable = false)
-    @Length(max = 14)
     private String cnpj;
 
     @Length(max = 100)
@@ -61,14 +60,12 @@ public class Suppliers {
     @Length(max = 2)
     private String uf;
 
-    @Length(max = 8)
     private String postalCode;
 
     @Column(nullable = false)
     @Length(max = 50)
     private String category;
 
-    @Length(max = 11)
     private String phoneNumber;
 
     @Length(max = 254)
