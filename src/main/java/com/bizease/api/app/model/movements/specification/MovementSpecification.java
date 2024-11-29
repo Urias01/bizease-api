@@ -23,12 +23,12 @@ public class MovementSpecification {
     return (root, query, cb) -> cb.equal(root.get("commerce").get("uuid"), uuid);
   }
 
-  public static Specification<Movement> nameLike(String name) {
-    if (name == null || name.isEmpty()) {
+  public static Specification<Movement> originLike(String origin) {
+    if (origin == null || origin.isEmpty()) {
       return null;
     }
 
-    return (root, query, cb) -> cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%");
+    return (root, query, cb) -> cb.like(cb.lower(root.get("origin")), "%" + origin.toLowerCase() + "%");
   }
 
   public static Specification<Movement> typeEnumEquals(String type) {

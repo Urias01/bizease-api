@@ -1,6 +1,5 @@
 package com.bizease.api.app.model.movements.useCases;
 
-import com.bizease.api.app.model.commerce.repository.CommerceRepository;
 import com.bizease.api.app.model.commons.PageReturn;
 import com.bizease.api.app.model.movements.entities.Movement;
 import com.bizease.api.app.model.movements.filter.MovementFilter;
@@ -28,7 +27,8 @@ public class GetAllMovementsUseCase {
 
         Specification<Movement> specification = where(commerceUuidEquals(filter.getCommerceUuid()))
                 .and(idEquals(filter.getId()))
-                .and(typeEnumEquals(filter.getType()));
+                .and(typeEnumEquals(filter.getType()))
+                .and(originLike(filter.getOrigin()));
 
         Direction direction = Direction.valueOf(filter.getDirection().toUpperCase());
 

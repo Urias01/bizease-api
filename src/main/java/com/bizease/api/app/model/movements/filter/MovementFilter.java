@@ -15,6 +15,8 @@ public class MovementFilter extends BasePagination {
 
   private String type;
 
+  private String origin;
+
   private String commerceUuid;
 
   private LocalDate movementDate;
