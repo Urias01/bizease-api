@@ -48,6 +48,9 @@ public class UserController {
     @Autowired
     private ChangePasswordUseCase changePasswordUseCase;
 
+    @Autowired
+    private UpdateUserNameAndEmailUseCase updateUserNameAndEmailUseCase;
+
     @GetMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
@@ -154,6 +157,20 @@ public class UserController {
             return ResponseEntity.internalServerError().body("Erro ao alterar a senha.");
         }
     }
+
+    @PatchMapping("/change-name-and-email")
+    public ResponseEntity<String> changeNameAndEmail(@RequestBody UpdateUserNameAndEmailDTO updateUserNameAndEmailDTO,
+     HttpServletRequest request) {
+        try{
+            String userUuidString = (String) request.getAttribute("user_uuid");
+            UUID userUuid = UUID.fromString(userUuidString);
+            updateUserNameAndEmailUseCase.execute(userUuid, updateUserNameAndEmailDTO);
+
+            return ResponseEntity.ok("Seus dados foram alterados com sucesso!");
+        } catch(Exception error) {
+            return ResponseEntity.badRequest().body("Erro ao alterar os dados.");
+        }
+     }
 
     @DeleteMapping("/{uuid}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
