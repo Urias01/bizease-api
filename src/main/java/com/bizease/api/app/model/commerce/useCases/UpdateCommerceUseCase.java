@@ -3,6 +3,7 @@ package com.bizease.api.app.model.commerce.useCases;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import com.bizease.api.app.model.commerce.dto.UpdateCommerceDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,27 +17,24 @@ public class UpdateCommerceUseCase {
   @Autowired
   private CommerceRepository commerceRepository;
 
-  public Commerce execute(String uuid, Commerce commerceEntity) {
-     Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(uuid);
+  public Commerce execute(String uuid, UpdateCommerceDTO updateCommerceDTO) {
+    Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(uuid);
 
-    if (!commerceExists.isPresent()) {
+    if (commerceExists.isPresent()) {
+      Commerce updatedCommerce = commerceExists.get();
+      updatedCommerce.setName(updateCommerceDTO.getName());
+      updatedCommerce.setPhoneNumber(updateCommerceDTO.getPhoneNumber());
+      updatedCommerce.setPostalCode(updateCommerceDTO.getPostalCode());
+      updatedCommerce.setAddress(updateCommerceDTO.getAddress());
+      updatedCommerce.setAddressNumber(updateCommerceDTO.getAddressNumber());
+      updatedCommerce.setCity(updateCommerceDTO.getCity());
+      updatedCommerce.setUf(updateCommerceDTO.getUf());
+      updatedCommerce.setNeighborhood(updateCommerceDTO.getNeighborhood());
+
+      this.commerceRepository.save(updatedCommerce);
+      return updatedCommerce;
+    } else {
       throw new NotFoundException("Comércio");
     }
-
-    Commerce model = commerceExists.get();
-
-    model.setName(commerceEntity.getName());
-    model.setCnpj(commerceEntity.getCnpj());
-    model.setPostalCode(commerceEntity.getPostalCode());
-    model.setAddress(commerceEntity.getAddress());
-    model.setAddressNumber(commerceEntity.getAddressNumber());
-    model.setNeighborhood(commerceEntity.getNeighborhood());
-    model.setCity(commerceEntity.getCity());
-    model.setUf(commerceEntity.getUf());
-    model.setUpdatedAt(LocalDateTime.now());
-
-
-    return this.commerceRepository.save(model);
   }
-  
 }

@@ -40,6 +40,7 @@ public class CreateFirstUserAccessUseCase {
 
     commerce.setName(firstUserAccessDTO.getCommerceName());
     commerce.setCnpj(firstUserAccessDTO.getCnpj());
+    commerce.setIsActive(IsActiveEnum.ACTIVE);
 
     commerce = this.commerceRepository.save(commerce);
 

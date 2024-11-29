@@ -1,5 +1,7 @@
 package com.bizease.api.app.model.commerce.controller;
 
+import com.bizease.api.app.model.commerce.dto.UpdateCommerceDTO;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,10 +35,11 @@ public class CommerceController {
   @Autowired
   private FindMyCommerceUseCase findMyCommerceUseCase;
 
-  @GetMapping("/{uuid}")
-  public  ResponseEntity<Object> getMyCommerce(@PathVariable String uuid) {
+  @GetMapping("/details")
+  public  ResponseEntity<Object> getMyCommerce(HttpServletRequest request) {
     try {
-      var result = this.findMyCommerceUseCase.execute(uuid);
+      String commerceUuid = (String) request.getAttribute("commerce_uuid");
+      var result = this.findMyCommerceUseCase.execute(commerceUuid);
       return ResponseEntity.ok().body(result);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
@@ -53,20 +56,22 @@ public class CommerceController {
     }
   }
 
-  @PutMapping("/{uuid}")
-  public ResponseEntity<Object> update(@PathVariable String uuid, @RequestBody Commerce commerceEntity) {
+  @PutMapping("/update")
+  public ResponseEntity<Object> update(@RequestBody UpdateCommerceDTO updateCommerceDTO, HttpServletRequest request) {
     try {
-      var result = this.updateCommerceUseCase.execute(uuid, commerceEntity);
+      String commerceUuid = (String) request.getAttribute("commerce_uuid");
+      var result = this.updateCommerceUseCase.execute(commerceUuid, updateCommerceDTO);
       return ResponseEntity.ok().body(result);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
 
-  @PatchMapping("/{uuid}")
-  public ResponseEntity<Object> patch(@PathVariable String uuid) {
+  @PatchMapping("/active-deactive")
+  public ResponseEntity<Object> activeDeactive(HttpServletRequest request) {
     try {
-      String response = this.activeDeactiveCommerceUseCase.execute(uuid);
+      String commerceUuid = (String) request.getAttribute("commerce_uuid");
+      String response = this.activeDeactiveCommerceUseCase.execute(commerceUuid);
       return ResponseEntity.ok().body(response);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());

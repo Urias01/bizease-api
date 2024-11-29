@@ -1,5 +1,6 @@
 package com.bizease.api.app.model.commerce.useCases;
 
+import com.bizease.api.app.model.commons.enums.IsActiveEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class CreateCommerceUseCase {
         throw new CommerceFoundException("CNPJ já cadastrado");
       });
 
-      commerceEntity.setActive(true);
+      commerceEntity.setIsActive(IsActiveEnum.ACTIVE);
       
       return this.commerceRepository.save(commerceEntity);
   }

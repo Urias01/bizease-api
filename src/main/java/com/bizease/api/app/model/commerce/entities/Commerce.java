@@ -1,6 +1,8 @@
 package com.bizease.api.app.model.commerce.entities;
 
 import java.time.LocalDateTime;
+
+import com.bizease.api.app.model.commons.enums.IsActiveEnum;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
@@ -36,7 +38,8 @@ public class Commerce {
   private String neighborhood;
   private String city;
   private String uf;
-  private boolean isActive;
+  @Column(nullable = false, name = "is_active")
+  private IsActiveEnum isActive;
 
   @CreationTimestamp
   private LocalDateTime createdAt;

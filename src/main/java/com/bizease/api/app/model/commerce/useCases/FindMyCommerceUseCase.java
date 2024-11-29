@@ -2,6 +2,7 @@ package com.bizease.api.app.model.commerce.useCases;
 
 import java.util.Optional;
 
+import com.bizease.api.app.model.commons.enums.IsActiveEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class FindMyCommerceUseCase {
 
     Commerce commerce = commerceExists.get();
     
-    if (!commerce.isActive()) {
+    if (commerce.getIsActive() == IsActiveEnum.INACTIVE) {
       throw new NotActiveCommerceException();
     }
 
