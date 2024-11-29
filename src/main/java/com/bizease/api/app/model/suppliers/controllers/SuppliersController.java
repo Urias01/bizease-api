@@ -20,6 +20,7 @@ import com.bizease.api.app.model.suppliers.entities.Suppliers;
 import com.bizease.api.app.model.suppliers.filter.SuppliersFilter;
 import com.bizease.api.app.model.suppliers.useCases.CreateSuppliersUseCase;
 import com.bizease.api.app.model.suppliers.useCases.DeleteSuppliersUseCase;
+import com.bizease.api.app.model.suppliers.useCases.GetSupplierByUuidUseCase;
 import com.bizease.api.app.model.suppliers.useCases.ListSuppliersUseCase;
 import com.bizease.api.app.model.suppliers.useCases.UpdateSuppliersUseCase;
 
@@ -27,6 +28,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/suppliers")
@@ -37,6 +39,8 @@ public class SuppliersController {
     private CreateSuppliersUseCase createSuppliersUseCase;
     @Autowired
     private ListSuppliersUseCase listSuppliersUseCase;
+    @Autowired
+    private GetSupplierByUuidUseCase getSupplierByUuidUseCase;
     @Autowired
     private UpdateSuppliersUseCase updateSuppliersUseCase;
     @Autowired
@@ -65,9 +69,20 @@ public class SuppliersController {
         return this.listSuppliersUseCase.execute(filter);
     }
 
+    @GetMapping("/{uuid}")
+    public ResponseEntity<Suppliers> getByUuid(@PathVariable String uuid) {
+
+        Suppliers suppliers = this.getSupplierByUuidUseCase.execute(uuid);
+
+        return ResponseEntity.ok(suppliers);
+    }
+
     @PutMapping("/{uuid}")
-    public ResponseEntity<Object> update(@RequestBody SuppliersDTO suppliersDTO, @PathVariable String uuid) {
+    public ResponseEntity<Object> update(@RequestBody SuppliersDTO suppliersDTO, @PathVariable String uuid,
+            HttpServletRequest request) {
         try {
+            String commerceUuid = (String) request.getAttribute("commerce_uuid");
+            suppliersDTO.setCommerceUuid(commerceUuid);
             Suppliers suppliers = this.updateSuppliersUseCase.execute(suppliersDTO, uuid);
             return ResponseEntity.status(200).body(suppliers);
         } catch (NotFoundException e) {
