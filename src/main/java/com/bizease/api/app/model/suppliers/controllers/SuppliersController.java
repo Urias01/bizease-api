@@ -23,9 +23,10 @@ import com.bizease.api.app.model.suppliers.useCases.DeleteSuppliersUseCase;
 import com.bizease.api.app.model.suppliers.useCases.ListSuppliersUseCase;
 import com.bizease.api.app.model.suppliers.useCases.UpdateSuppliersUseCase;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-
 
 @RestController
 @RequestMapping("/suppliers")
@@ -36,15 +37,17 @@ public class SuppliersController {
     private CreateSuppliersUseCase createSuppliersUseCase;
     @Autowired
     private ListSuppliersUseCase listSuppliersUseCase;
-    @Autowired 
+    @Autowired
     private UpdateSuppliersUseCase updateSuppliersUseCase;
     @Autowired
     private DeleteSuppliersUseCase deleteSuppliersUseCase;
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<Object> create(@RequestBody SuppliersDTO suppliersDTO) {
+    public ResponseEntity<Object> create(@RequestBody SuppliersDTO suppliersDTO, HttpServletRequest request) {
         try {
+            String commerceUuid = (String) request.getAttribute("commerce_uuid");
+            suppliersDTO.setCommerceUuid(commerceUuid);
             Suppliers suppliers = this.createSuppliersUseCase.execute(suppliersDTO);
             return ResponseEntity.status(201).body(suppliers);
         } catch (NotFoundException e) {
@@ -55,9 +58,12 @@ public class SuppliersController {
     }
 
     @GetMapping()
-    public PageReturn<List<Suppliers>> list(@ModelAttribute SuppliersFilter filter) {
+    public PageReturn<List<Suppliers>> list(@ModelAttribute SuppliersFilter filter, HttpServletRequest request) {
+        String commerceUuid = (String) request.getAttribute("commerce_uuid");
+        filter.setCommerceUuid(commerceUuid);
+
         return this.listSuppliersUseCase.execute(filter);
-      }
+    }
 
     @PutMapping("/{uuid}")
     public ResponseEntity<Object> update(@RequestBody SuppliersDTO suppliersDTO, @PathVariable String uuid) {
