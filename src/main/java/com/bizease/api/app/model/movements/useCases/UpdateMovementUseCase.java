@@ -36,9 +36,9 @@ public class UpdateMovementUseCase {
             throw new NotFoundException("Movimentação");
         });
 
-        var user = findUser(movementDTO.getUserId());
-        var product = findProduct(movementDTO.getProductId());
-        var commerce = findCommerce(movementDTO.getCommerceId());
+        var user = findUser(movementDTO.getUserUuid());
+        var product = findProduct(movementDTO.getProductUuid());
+        var commerce = findCommerce(movementDTO.getCommerceUuid());
 
         TypeEnum type = TypeEnum.fromString(movementDTO.getType());
 
@@ -55,22 +55,22 @@ public class UpdateMovementUseCase {
         return this.movementRepository.save(updatedMovement);
     }
 
-    private User findUser(Long id) {
-        User user = this.userRepository.findById(id).orElseThrow(() -> {
+    private User findUser(String uuid) {
+        User user = this.userRepository.findByUuid(UUID.fromString(uuid)).orElseThrow(() -> {
             throw new NotFoundException("Usuário");
         });
         return user;
     }
 
-    private Products findProduct(Long id) {
-        Products product = this.productsRepository.findById(id).orElseThrow(() -> {
+    private Products findProduct(String uuid) {
+        Products product = this.productsRepository.findByUuid(uuid).orElseThrow(() -> {
             throw new NotFoundException("Produto");
         });
         return product;
     }
 
-    private Commerce findCommerce(Long id) {
-        Commerce commerce = this.commerceRepository.findById(id).orElseThrow(() -> {
+    private Commerce findCommerce(String uuid) {
+        Commerce commerce = this.commerceRepository.findByUuid(uuid).orElseThrow(() -> {
             throw new NotFoundException("Comércio");
         });
         return commerce;
