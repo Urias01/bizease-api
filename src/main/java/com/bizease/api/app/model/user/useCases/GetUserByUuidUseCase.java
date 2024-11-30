@@ -30,8 +30,7 @@ public class GetUserByUuidUseCase {
 
         if (user.isPresent()) {
             User foundUser = user.get();
-            return new UserResponseDTO(foundUser.getId(), foundUser.getUuid(), foundUser.getName(),
-                    foundUser.getEmail(), foundUser.getCreatedAt(), foundUser.getUpdatedAt(), commerceExists.get());
+            return new UserResponseDTO(foundUser);
         } else {
             throw new NotFoundException("Usuário");
         }

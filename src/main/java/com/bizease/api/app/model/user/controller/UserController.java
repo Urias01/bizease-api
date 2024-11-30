@@ -1,8 +1,10 @@
 package com.bizease.api.app.model.user.controller;
 
 import com.bizease.api.app.exceptions.InvalidPasswordException;
+import com.bizease.api.app.model.commons.PageReturn;
 import com.bizease.api.app.model.user.dto.*;
 import com.bizease.api.app.model.user.entities.User;
+import com.bizease.api.app.model.user.filters.UserFilter;
 import com.bizease.api.app.model.user.useCases.*;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -53,9 +55,10 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
-        List<UserResponseDTO> users = getAllUsersUseCase.getAllUsers();
-        return ResponseEntity.ok(users);
+    public PageReturn<List<UserResponseDTO>> getAllUsers(UserFilter filter, HttpServletRequest request) {
+        String commerceUuid = (String) request.getAttribute("commerce_uuid");
+        filter.setCommerceUuid(commerceUuid);
+        return getAllUsersUseCase.execute(filter);
     }
 
     @PostMapping("/first-access")
@@ -160,17 +163,17 @@ public class UserController {
 
     @PatchMapping("/change-name-and-email")
     public ResponseEntity<String> changeNameAndEmail(@RequestBody UpdateUserNameAndEmailDTO updateUserNameAndEmailDTO,
-     HttpServletRequest request) {
-        try{
+            HttpServletRequest request) {
+        try {
             String userUuidString = (String) request.getAttribute("user_uuid");
             UUID userUuid = UUID.fromString(userUuidString);
             updateUserNameAndEmailUseCase.execute(userUuid, updateUserNameAndEmailDTO);
 
             return ResponseEntity.ok("Seus dados foram alterados com sucesso!");
-        } catch(Exception error) {
+        } catch (Exception error) {
             return ResponseEntity.badRequest().body("Erro ao alterar os dados.");
         }
-     }
+    }
 
     @DeleteMapping("/{uuid}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")

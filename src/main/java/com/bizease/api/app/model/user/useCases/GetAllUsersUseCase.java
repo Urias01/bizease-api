@@ -1,13 +1,21 @@
 package com.bizease.api.app.model.user.useCases;
 
+import com.bizease.api.app.model.commons.PageReturn;
 import com.bizease.api.app.model.user.dto.UserResponseDTO;
 import com.bizease.api.app.model.user.entities.User;
+import com.bizease.api.app.model.user.filters.UserFilter;
 import com.bizease.api.app.model.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import static com.bizease.api.app.model.user.specification.UserSpecification.*;
+import static org.springframework.data.jpa.domain.Specification.where;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class GetAllUsersUseCase {
@@ -15,9 +23,23 @@ public class GetAllUsersUseCase {
     @Autowired
     private UserRepository userRepository;
 
-    public List<UserResponseDTO> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        return users.stream().map(user -> new UserResponseDTO(user.getId(), user.getUuid(),
-                user.getName(), user.getEmail(), user.getCreatedAt(), user.getUpdatedAt(), null)).collect(Collectors.toList());
+    public PageReturn<List<UserResponseDTO>> execute(UserFilter filter) {
+
+        Specification<User> specification = where(commerceUuidEquals(filter.getCommerceUuid())
+                .and(idEquals(filter.getId()))
+                .and(nameLike(filter.getName()))
+                .and(isActive(filter.getIsActive())));
+
+        Direction direction = Direction.valueOf(filter.getDirection().toUpperCase());
+
+        PageRequest pageRequest = PageRequest.of(filter.getPage(), filter.getSize(), direction, filter.getField());
+
+        Page<User> model = this.userRepository.findAll(specification, pageRequest);
+
+        List<UserResponseDTO> responses = UserResponseDTO.toList(model.getContent());
+
+        return new PageReturn<List<UserResponseDTO>>(responses, model.getTotalElements(), pageRequest.getPageNumber(),
+                pageRequest.getPageSize());
     }
+
 }
