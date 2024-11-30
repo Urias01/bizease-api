@@ -41,7 +41,7 @@ public class SalesOrderItemsController {
         }
     }
 
-    @GetMapping("/lost-products")
+    @GetMapping("/lost_products")
     public ResponseEntity<?> getLostProducts(HttpServletRequest request) {
         try {
             String commerceUuid = (String) request.getAttribute("commerce_uuid");
