@@ -31,6 +31,14 @@ public class UserSpecification {
     return (root, query, cb) -> cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%");
   }
 
+  public static Specification<User> emailLike(String email) {
+    if (email == null || email.isEmpty()) {
+      return null;
+    }
+
+    return (root, query, cb) -> cb.like(cb.lower(root.get("email")), "%" + email.toLowerCase() + "%");
+  }
+
   public static Specification<User> isActive(String isActive) {
     if (isActive == null) {
       return null;

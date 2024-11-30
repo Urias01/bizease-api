@@ -28,6 +28,7 @@ public class GetAllUsersUseCase {
         Specification<User> specification = where(commerceUuidEquals(filter.getCommerceUuid())
                 .and(idEquals(filter.getId()))
                 .and(nameLike(filter.getName()))
+                .and(emailLike(filter.getEmail()))
                 .and(isActive(filter.getIsActive())));
 
         Direction direction = Direction.valueOf(filter.getDirection().toUpperCase());
