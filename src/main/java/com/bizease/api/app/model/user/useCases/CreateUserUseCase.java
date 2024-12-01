@@ -36,7 +36,7 @@ public class CreateUserUseCase {
             Commerce commerce = new Commerce();
 
             if (RoleEnum.fromString(requestRole).equals(RoleEnum.ADMIN)) {
-                commerceRepository.findById(createUserRequestDTO.getCommerceId())
+                commerceRepository.findByUuid(createUserRequestDTO.getCommerceUuid())
                         .orElseThrow(() -> new NotFoundException("Comércio"));
             } else if (RoleEnum.fromString(requestRole).equals(RoleEnum.OWNER)) {
                 commerce = commerceRepository.findByUuid(uuid)
@@ -46,13 +46,12 @@ public class CreateUserUseCase {
             RoleEnum role = RoleEnum.fromString(createUserRequestDTO.getRole());
 
             User newUser = new User();
-            newUser.setIsActive(IsActiveEnum.ACTIVE);
             newUser.setName(createUserRequestDTO.getName());
             newUser.setEmail(createUserRequestDTO.getEmail());
             newUser.setPassword(passwordEncoder.encode(createUserRequestDTO.getPassword()));
+            newUser.setIsActive(IsActiveEnum.ACTIVE);
             newUser.setCommerce(commerce);
             newUser.setRole(role);
-            newUser.setIsActive(IsActiveEnum.ACTIVE);
 
             return userRepository.save(newUser);
         }

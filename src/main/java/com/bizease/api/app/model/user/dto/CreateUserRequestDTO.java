@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -14,7 +16,7 @@ public class CreateUserRequestDTO {
     private String name;
     private String email;
     private String password;
-    private Long commerceId;
+    private String commerceUuid;
     private String role;
     
 }

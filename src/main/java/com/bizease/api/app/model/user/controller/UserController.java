@@ -89,7 +89,7 @@ public class UserController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping
+    @PostMapping("/create-employee")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
     public ResponseEntity<Object> createUser(@RequestBody CreateUserRequestDTO createUserRequestDTO,
             HttpServletRequest request) {
