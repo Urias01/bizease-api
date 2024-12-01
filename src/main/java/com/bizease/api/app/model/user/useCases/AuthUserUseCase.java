@@ -2,6 +2,7 @@ package com.bizease.api.app.model.user.useCases;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.bizease.api.app.model.commons.enums.IsActiveEnum;
 import com.bizease.api.app.model.user.dto.AuthUserRequestDTO;
 import com.bizease.api.app.model.user.dto.AuthUserResponseDTO;
 import com.bizease.api.app.model.user.repository.UserRepository;
@@ -32,6 +33,10 @@ public class AuthUserUseCase {
         var user = this.userRepository.findByEmail(authUserRequestDTO.getEmail()).orElseThrow(() -> {
             throw new UsernameNotFoundException("Email/senha incorretos");
         });
+
+        if (user.getIsActive() == IsActiveEnum.INACTIVE) {
+            throw new AuthenticationException("Usuário inativo. Não é possível autenticar.");
+        }
 
         var passwordMatches = this.passwordEncoder.matches(authUserRequestDTO.getPassword(), user.getPassword());
 

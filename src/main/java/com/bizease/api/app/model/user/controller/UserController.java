@@ -53,6 +53,9 @@ public class UserController {
     @Autowired
     private UpdateUserNameAndEmailUseCase updateUserNameAndEmailUseCase;
 
+    @Autowired
+    EnableAndDisableUserUseCase enableAndDisableUserUseCase;
+
     @GetMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
     public PageReturn<List<UserResponseDTO>> getAllUsers(UserFilter filter, HttpServletRequest request) {
@@ -159,6 +162,13 @@ public class UserController {
         } catch (Exception error) {
             return ResponseEntity.internalServerError().body("Erro ao alterar a senha.");
         }
+    }
+
+    @PatchMapping("/{uuid}/enable-or-disable")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
+    public ResponseEntity<Void> enableAndDisable(@PathVariable UUID uuid) {
+        enableAndDisableUserUseCase.execute(uuid);
+        return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/change-name-and-email")
