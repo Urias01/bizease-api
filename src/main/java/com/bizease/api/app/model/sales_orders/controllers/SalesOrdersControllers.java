@@ -87,7 +87,7 @@ public class SalesOrdersControllers {
         }
      }
 
-     @GetMapping("/annual-buying-selling")
+     @GetMapping("/annual_buying_selling")
      public ResponseEntity<?> getAnnualBuyingAndSelling(HttpServletRequest request) {
         try {
             String commerceUuid = (String) request.getAttribute("commerce_uuid");
