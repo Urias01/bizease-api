@@ -36,14 +36,14 @@ public class MovementController {
     private GetMovementsByUuidUseCase getMovementsByUuidUseCase;
 
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER') or hasRole('ROLE_EMPLOYEE')")
     public PageReturn<List<Movement>> getAllMovements(MovementFilter filter, HttpServletRequest request) {
         filter.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
         return this.getAllMovementsUseCase.execute(filter);
     }
 
     @GetMapping("/{uuid}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER') or hasRole('ROLE_EMPLOYEE')")
     public ResponseEntity<Object> getMovementByUuid(@PathVariable String uuid) {
         try {
             var result = this.getMovementsByUuidUseCase.execute(uuid);
@@ -54,7 +54,7 @@ public class MovementController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER') or hasRole('ROLE_EMPLOYEE')")
     public ResponseEntity<Object> createMovement(@RequestBody MovementDTO movementDTO, HttpServletRequest request) {
         try {
             movementDTO.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
@@ -67,7 +67,7 @@ public class MovementController {
     }
 
     @PutMapping("/{uuid}")
-    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER') or hasRole('ROLE_EMPLOYEE')")
     public ResponseEntity<Object> updateMovement(@PathVariable UUID uuid, @RequestBody MovementDTO movementDTO,
             HttpServletRequest request) {
         try {
