@@ -55,6 +55,30 @@ public interface ProductsRepository extends JpaRepository<Products, Long>, JpaSp
             p.id, p.name, c.name
         ORDER BY
             expired_quantity DESC
-            """, nativeQuery = true)
+        """, nativeQuery = true)
     List<Map<String, Object>> findExpiredProducts(@Param("comId") Long comId);
+
+    @Query(value = """
+        SELECT
+            p.id AS product_id,
+            p.name AS product_name,
+            c.name AS category_name,
+            SUM(soi.quantity) AS returned_quantity
+        FROM
+            products p
+        JOIN
+            categories c ON p.cat_id = c.id
+        JOIN
+            sales_order_items soi ON soi.prod_id = p.id
+        JOIN
+            sales_orders so ON soi.sor_id = so.id
+        WHERE
+            so.status = 'DEVOLVIDO'
+            AND p.com_id = :comId
+        GROUP BY
+            p.id, p.name, c.name
+        ORDER BY
+            returned_quantity DESC;
+        """, nativeQuery = true)
+    List<Map<String, Object>> findReturnedProducts(@Param("comId") Long comId);
 }

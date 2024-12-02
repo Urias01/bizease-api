@@ -36,6 +36,8 @@ public class ProductsController {
     private GetProductByUuidUseCase getProductByUuidUseCase;
     @Autowired
     private GetExpiredProductsUseCase expiredProductsUseCase;
+    @Autowired
+    private GetReturnedProductsUseCase returnedProductsUseCase;
 
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody ProductsDTO productsDto, HttpServletRequest request) {
@@ -88,6 +90,17 @@ public class ProductsController {
         }
     }
 
+    @GetMapping("/returned")
+    public ResponseEntity<?> getReturnedProducts(HttpServletRequest request) {
+        try {
+            String commerceUuid = (String) request.getAttribute("commerce_uuid");
+            Long comId = findCommerceIdByUuidUseCase.findIdByUuid(commerceUuid);
+
+            return ResponseEntity.ok(returnedProductsUseCase.execute(comId));
+        } catch (Exception error) {
+            return ResponseEntity.internalServerError().body(error.getMessage());
+        }
+    }
 
     @PutMapping("/{uuid}")
     public ResponseEntity<Object> update(@PathVariable String uuid, @RequestBody ProductsDTO productsDto,
