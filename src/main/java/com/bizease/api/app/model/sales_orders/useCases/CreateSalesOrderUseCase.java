@@ -51,9 +51,18 @@ public class CreateSalesOrderUseCase {
 
                 if (!productExists.isPresent()) {
                     throw new NotFoundException("Produto");
-
                 }
-                SalesOrderItems salesOrderItems = new SalesOrderItems(salesOrderItem, productExists.get(), salesOrders);
+
+                Products product = productExists.get();
+
+                if (product.getUnit() < salesOrderItem.getQuantity()) {
+                    throw new IllegalArgumentException("Estoque insuficiente para o produto: " + product.getName());
+                }
+
+                product.setUnit(product.getUnit() - salesOrderItem.getQuantity());
+                this.productsRepository.save(product);
+
+                SalesOrderItems salesOrderItems = new SalesOrderItems(salesOrderItem, product, salesOrders);
                 this.salesOrderItemsRepository.save(salesOrderItems);
             });
         }
