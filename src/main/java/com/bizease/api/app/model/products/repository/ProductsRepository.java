@@ -35,4 +35,26 @@ public interface ProductsRepository extends JpaRepository<Products, Long>, JpaSp
         LIMIT 5
         """, nativeQuery = true)
     List<Map<String, Object>> findPopularProducts(@Param("comId") Long comId);
+
+    @Query(value = """
+        SELECT
+            p.id AS product_id,
+            p.name AS product_name,
+            c.name AS category_name,
+            SUM(poi.quantity) AS expired_quantity
+        FROM
+            products p
+        JOIN
+            categories c ON p.cat_id = c.id
+        JOIN
+            purchase_order_items poi ON poi.prod_id = p.id
+        WHERE
+            poi.expiration_date < CURRENT_DATE
+            AND p.com_id = :comId
+        GROUP BY
+            p.id, p.name, c.name
+        ORDER BY
+            expired_quantity DESC
+            """, nativeQuery = true)
+    List<Map<String, Object>> findExpiredProducts(@Param("comId") Long comId);
 }
