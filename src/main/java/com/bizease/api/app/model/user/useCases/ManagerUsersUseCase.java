@@ -40,14 +40,8 @@ public class ManagerUsersUseCase {
     model.setEmail(userToUpdate.getEmail());
     model.setName(userToUpdate.getName());
     model.setRole(RoleEnum.fromString(userToUpdate.getRole()));
-    model.setIsActive(IsActiveEnum.from(userToUpdate.getIsActive()));
 
-    if (userToUpdate.getResetPassword()) {
-      String password = Math.random() * 1000 + "easebiz";
-      String hashedPassword = passwordEncoder.encode(password);
-      model.setPassword(hashedPassword);
-      // Caso adicionemos envio de e-mail enviar a nova senha para o usuário
-    }
+  //  TODO: add reset password
 
     this.userRepository.save(model);
 
