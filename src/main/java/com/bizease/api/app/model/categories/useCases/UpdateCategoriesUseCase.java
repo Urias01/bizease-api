@@ -36,16 +36,8 @@ public class UpdateCategoriesUseCase {
     if (!categoriesExists.isPresent()) {
       throw new NotFoundException("Categoria");
     }
-
-    Commerce commerce = commerceExists.get();
-
+    
     Categories model = categoriesExists.get();
-
-    this.categoriesRepository.findByNameAndCommerceId(
-        categoriesDTO.getName(),
-        commerce.getId()).ifPresent((category) -> {
-          throw new AlreadyExistsException("Categoria");
-        });
 
     model.setName(categoriesDTO.getName());
     model.setDescription(categoriesDTO.getDescription());
