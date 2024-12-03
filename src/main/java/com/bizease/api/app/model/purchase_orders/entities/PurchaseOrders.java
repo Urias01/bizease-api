@@ -1,6 +1,7 @@
 package com.bizease.api.app.model.purchase_orders.entities;
 
 import com.bizease.api.app.model.commerce.entities.Commerce;
+import com.bizease.api.app.model.purchase_order_items.entities.PurchaseOrderItem;
 import com.bizease.api.app.model.purchase_orders.enums.StatusEnum;
 import com.bizease.api.app.model.suppliers.entities.Suppliers;
 import jakarta.persistence.*;
@@ -14,6 +15,7 @@ import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -60,4 +62,7 @@ public class PurchaseOrders {
     @OneToOne
     @JoinColumn(name = "com_id")
     private Commerce commerce;
+
+    @OneToMany(mappedBy = "purchaseOrders")
+    private List<PurchaseOrderItem> purchaseOrderItems;
 }

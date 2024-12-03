@@ -1,8 +1,10 @@
 package com.bizease.api.app.model.purchase_orders.controller;
 
+import com.bizease.api.app.model.commons.PageReturn;
 import com.bizease.api.app.model.purchase_orders.dto.PurchaseOrdersRequestDTO;
 import com.bizease.api.app.model.purchase_orders.entities.PurchaseOrders;
 import com.bizease.api.app.model.purchase_orders.enums.StatusEnum;
+import com.bizease.api.app.model.purchase_orders.filter.PurchaseOrderFilter;
 import com.bizease.api.app.model.purchase_orders.useCases.*;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,9 +38,10 @@ public class PurchaseOrdersController {
 
     @GetMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<List<PurchaseOrders>> getAllPurchaseOrders() {
-        var result = this.getAllPurchaseOrdersUseCase.execute();
-        return ResponseEntity.ok(result);
+    public PageReturn<List<PurchaseOrders>> getAllPurchaseOrders(PurchaseOrderFilter filter,
+            HttpServletRequest request) {
+        filter.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
+        return this.getAllPurchaseOrdersUseCase.execute(filter);
     }
 
     @GetMapping("/{uuid}")
@@ -54,7 +57,8 @@ public class PurchaseOrdersController {
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<Object> createPurchaseOrder(@RequestBody PurchaseOrdersRequestDTO purchaseOrdersRequestDTO, HttpServletRequest request) {
+    public ResponseEntity<Object> createPurchaseOrder(@RequestBody PurchaseOrdersRequestDTO purchaseOrdersRequestDTO,
+            HttpServletRequest request) {
         try {
             purchaseOrdersRequestDTO.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
             var result = this.createPurchaseOrderUseCase.execute(purchaseOrdersRequestDTO);
@@ -66,7 +70,8 @@ public class PurchaseOrdersController {
 
     @PutMapping("/{uuid}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<Object> updatePurchaseOrder(@PathVariable UUID uuid, @RequestBody PurchaseOrdersRequestDTO purchaseOrdersRequestDTO) {
+    public ResponseEntity<Object> updatePurchaseOrder(@PathVariable UUID uuid,
+            @RequestBody PurchaseOrdersRequestDTO purchaseOrdersRequestDTO) {
         try {
             var result = this.updatePurchaseOrderUseCase.execute(uuid, purchaseOrdersRequestDTO);
             return ResponseEntity.ok(result);
@@ -77,7 +82,8 @@ public class PurchaseOrdersController {
 
     @PutMapping("/{uuid}/status")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<Object> updatePurchaseOrderStatus(@PathVariable UUID uuid, @RequestParam("status") String status) {
+    public ResponseEntity<Object> updatePurchaseOrderStatus(@PathVariable UUID uuid,
+            @RequestParam("status") String status) {
         try {
             StatusEnum newStatus = StatusEnum.fromString(status);
             var result = this.updatePurchaseOrderStatusUseCase.execute(uuid, newStatus);

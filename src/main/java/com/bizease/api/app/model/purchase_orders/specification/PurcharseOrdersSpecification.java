@@ -1,11 +1,11 @@
-package com.bizease.api.app.model.sales_orders.specifications;
+package com.bizease.api.app.model.purchase_orders.specification;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import com.bizease.api.app.model.sales_orders.entities.SalesOrders;
-public class SalesOrderSpecification {
+import com.bizease.api.app.model.purchase_orders.entities.PurchaseOrders;
 
-  public static Specification<SalesOrders> idEquals(Long id) {
+public class PurcharseOrdersSpecification {
+  public static Specification<PurchaseOrders> idEquals(Long id) {
     if (id == null) {
       return null;
     }
@@ -13,7 +13,7 @@ public class SalesOrderSpecification {
     return (root, query, cb) -> cb.equal(root.get("id"), id);
   }
 
-  public static Specification<SalesOrders> commerceUuidEquals(String uuid) {
+  public static Specification<PurchaseOrders> commerceUuidEquals(String uuid) {
     if (uuid.isEmpty()) {
       return null;
     }
@@ -21,12 +21,11 @@ public class SalesOrderSpecification {
     return (root, query, cb) -> cb.equal(root.get("commerce").get("uuid"), uuid);
   }
 
-  public static Specification<SalesOrders> statusEquals(String status) {
+  public static Specification<PurchaseOrders> statusEquals(String status) {
     if (status == null) {
       return null;
     }
 
     return (root, query, cb) -> cb.equal(root.get("status"), status);
   }
-
 }
