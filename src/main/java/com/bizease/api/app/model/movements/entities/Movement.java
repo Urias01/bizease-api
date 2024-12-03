@@ -27,7 +27,7 @@ import java.util.UUID;
 public class Movement {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @UuidGenerator
