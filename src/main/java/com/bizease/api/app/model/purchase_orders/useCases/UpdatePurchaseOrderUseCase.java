@@ -32,8 +32,8 @@ public class UpdatePurchaseOrderUseCase {
            throw new NotFoundException("Pedido de compra");
         });
 
-        var suppliers = findSupplier(purchaseOrdersRequestDTO.getSupplierId());
-        var commerce = findCommerce(purchaseOrdersRequestDTO.getCommerceId());
+        var suppliers = findSupplier(purchaseOrdersRequestDTO.getSupplierUuid());
+        var commerce = findCommerce(purchaseOrdersRequestDTO.getCommerceUuid());
 
         validateDates(purchaseOrdersRequestDTO.getOrderDate(), purchaseOrdersRequestDTO.getExpectedDeliveryDate());
 
@@ -53,15 +53,15 @@ public class UpdatePurchaseOrderUseCase {
         }
     }
 
-    private Suppliers findSupplier(Long id) {
-        Suppliers suppliers = this.suppliersRepository.findById(id).orElseThrow(() -> {
+    private Suppliers findSupplier(String uuid) {
+        Suppliers suppliers = this.suppliersRepository.findByUuid(UUID.fromString(uuid)).orElseThrow(() -> {
             throw new NotFoundException("Fornecedor");
         });
         return suppliers;
     }
 
-    private Commerce findCommerce(Long id) {
-        Commerce commerce = this.commerceRepository.findById(id).orElseThrow(() -> {
+    private Commerce findCommerce(String uuid) {
+        Commerce commerce = this.commerceRepository.findByUuid(uuid).orElseThrow(() -> {
             throw new NotFoundException("Comércio");
         });
         return commerce;

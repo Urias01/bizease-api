@@ -49,7 +49,7 @@ public class UpdatePurchaseOrderItemsUseCase {
         PurchaseOrderItem purchaseOrderItem = purchaseOrderItemExists.get();
 
         purchaseOrderItem.setQuantity(purchaseOrderItemDTO.getQuantity());
-        purchaseOrderItem.setUnitPrice(purchaseOrderItemDTO.getUnit_price());
+        purchaseOrderItem.setUnitPrice(purchaseOrderItemDTO.getUnitPrice());
         purchaseOrderItem.setExpirationDate(purchaseOrderItemDTO.getExpirationDate());
         purchaseOrderItem.setProducts(product);
         purchaseOrderItem.setPurchaseOrders(purchaseOrders);
