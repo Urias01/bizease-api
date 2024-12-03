@@ -37,28 +37,50 @@ public interface SalesOrdersRepository extends JpaRepository<SalesOrders, Long>,
             @Param("endDate") LocalDate endDate);
 
     @Query(value = """
+        SELECT
+            TO_CHAR(months.month_date, 'Month') AS month,
+            COALESCE(SUM(DISTINCT poi_total), 0) AS buying_total,
+            COALESCE(SUM(DISTINCT soi_total), 0) AS selling_total
+        FROM
+            generate_series(
+                DATE_TRUNC('year', CURRENT_DATE),
+                DATE_TRUNC('year', CURRENT_DATE) + INTERVAL '11 months',
+                INTERVAL '1 month'
+            ) AS months(month_date) -- Aqui foi adicionado o alias "months" com a coluna "month_date"
+        LEFT JOIN (
             SELECT
-                TO_CHAR(months.month_date, 'Month') AS month,
-                COALESCE(SUM(CASE WHEN po.id IS NOT NULL THEN poi.quantity * poi.unit_price END), 0) AS buyingTotal,
-                COALESCE(SUM(CASE WHEN so.id IS NOT NULL THEN soi.quantity * soi.unit_price END), 0) AS sellingTotal
+                DATE_TRUNC('month', po.order_date) AS order_month,
+                SUM(poi.quantity * poi.unit_price) AS poi_total,
+                po.com_id
             FROM
-                generate_series(
-                    DATE_TRUNC('month', CURRENT_DATE) - INTERVAL '11 months',
-                    DATE_TRUNC('month', CURRENT_DATE),
-                    INTERVAL '1 month'
-                ) AS months (month_date)  -- Definir alias como "months"
-            LEFT JOIN
-                purchase_orders po ON DATE_TRUNC('month', po.order_date) = months.month_date AND po.com_id = :comId
-            LEFT JOIN
+                purchase_orders po
+            JOIN
                 purchase_order_items poi ON poi.por_id = po.id
-            LEFT JOIN
-                sales_orders so ON DATE_TRUNC('month', so.order_date) = months.month_date AND so.com_id = :comId
-            LEFT JOIN
-                sales_order_items soi ON soi.sor_id = so.id
+            WHERE
+                po.com_id = :comId
             GROUP BY
-                months.month_date
-            ORDER BY
-                months.month_date;
+                order_month, po.com_id
+        ) purchase_totals
+        ON months.month_date = purchase_totals.order_month
+        LEFT JOIN (
+            SELECT
+                DATE_TRUNC('month', so.order_date) AS order_month,
+                SUM(soi.quantity * soi.unit_price) AS soi_total,
+                so.com_id
+            FROM
+                sales_orders so
+            JOIN
+                sales_order_items soi ON soi.sor_id = so.id
+            WHERE
+                so.com_id = :comId
+            GROUP BY
+                order_month, so.com_id
+        ) sales_totals
+        ON months.month_date = sales_totals.order_month
+        GROUP BY
+            months.month_date
+        ORDER BY
+            months.month_date;
                 """, nativeQuery = true)
     List<Object[]> findAnnualBuyingAndSelling(@Param("comId") Long comId);
 }
