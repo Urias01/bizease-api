@@ -1,6 +1,8 @@
 package com.bizease.api.app.model.products.controllers;
 
 import java.util.List;
+import java.util.Map;
+
 import com.bizease.api.app.model.commerce.useCases.FindCommerceIdByUuidUseCase;
 import com.bizease.api.app.model.products.useCases.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import com.bizease.api.app.exceptions.NotFoundException;
 import com.bizease.api.app.model.commons.PageReturn;
 import com.bizease.api.app.model.products.dto.ProductsDTO;
 import com.bizease.api.app.model.products.entities.Products;
+import com.bizease.api.app.model.products.filter.ProductExpiredFilter;
 import com.bizease.api.app.model.products.filter.ProductFilter;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -78,12 +81,11 @@ public class ProductsController {
     }
 
     @GetMapping("/expired")
-    public ResponseEntity<?> getExpiredProducts(HttpServletRequest request) {
+    public ResponseEntity<?> getExpiredProducts(ProductExpiredFilter filter, HttpServletRequest request) {
         try {
-            String commerceUuid = (String) request.getAttribute("commerce_uuid");
-            Long comId = findCommerceIdByUuidUseCase.findIdByUuid(commerceUuid);
+            filter.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
 
-            return ResponseEntity.ok(expiredProductsUseCase.execute(comId));
+            return ResponseEntity.ok(expiredProductsUseCase.execute(filter));
 
         } catch (Exception error) {
             return ResponseEntity.internalServerError().body(error.getMessage());
