@@ -25,7 +25,7 @@ public class PurchaseOrdersController {
     private CreatePurchaseOrderUseCase createPurchaseOrderUseCase;
 
     @Autowired
-    private GetPurchaseOrderUseCase getPurchaseOrderUseCase;
+    private GetPurchaseOrderByUuid getPurchaseOrderByUuid;
 
     @Autowired
     private GetAllPurchaseOrdersUseCase getAllPurchaseOrdersUseCase;
@@ -46,9 +46,9 @@ public class PurchaseOrdersController {
 
     @GetMapping("/{uuid}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<Object> getPurchaseOrder(@PathVariable UUID uuid) {
+    public ResponseEntity<Object> getPurchaseOrder(@PathVariable String uuid) {
         try {
-            var result = this.getPurchaseOrderUseCase.execute(uuid);
+            var result = this.getPurchaseOrderByUuid.execute(uuid);
             return ResponseEntity.ok(result);
         } catch (Exception exception) {
             return ResponseEntity.badRequest().body(exception.getMessage());
