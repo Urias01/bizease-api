@@ -3,11 +3,11 @@ package com.bizease.api.app.model.movements.enums;
 public enum TypeEnum {
 
     ENTRADA("ENTRADA"),
-    SAIDA("SAÍDA"),
+    SAIDA("SAIDA"),
     PERDA("PERDA"),
-    DEVOLUCAO("DEVOLUÇÃO"),
+    DEVOLUCAO("DEVOLUCAO"),
     AJUSTE("AJUSTE"),
-    TRANSFERENCIA("TRANSFERÊNCIA");
+    TRANSFERENCIA("TRANSFERENCIA");
 
     private final String type;
 
