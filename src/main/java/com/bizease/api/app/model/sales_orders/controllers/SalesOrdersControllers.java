@@ -16,7 +16,6 @@ import com.bizease.api.app.model.sales_orders.entities.SalesOrders;
 import java.time.LocalDate;
 import java.util.UUID;
 
-
 @RestController
 @RequestMapping("/sales_orders")
 public class SalesOrdersControllers {
@@ -35,33 +34,35 @@ public class SalesOrdersControllers {
     private GetAnnualBuyingAndSellingUseCase getAnnualBuyingAndSellingUseCase;
     @Autowired
     private FindCommerceIdByUuidUseCase findCommerceIdByUuidUseCase;
-    
+
     @PostMapping
-     public ResponseEntity<Object> create(@RequestBody SalesOrdersDTO salesOrdersDTO) {
+    public ResponseEntity<Object> create(@RequestBody SalesOrdersDTO salesOrdersDTO, HttpServletRequest request) {
         try {
+            salesOrdersDTO.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
             SalesOrders salesOrders = this.createSalesOrderUseCase.execute(salesOrdersDTO);
             return ResponseEntity.status(201).body(salesOrders);
-        }catch (NotFoundException e) {
+        } catch (NotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
-     }
-    
-     @PutMapping("/{uuid}")
-     public ResponseEntity<Object> update(@RequestBody SalesOrdersDTO salesOrdersDTO, @PathVariable String uuid) {
+    }
+
+    @PutMapping("/{uuid}")
+    public ResponseEntity<Object> update(@RequestBody SalesOrdersDTO salesOrdersDTO, @PathVariable String uuid) {
         try {
             SalesOrders salesOrders = this.updateSalesOrderUseCase.execute(salesOrdersDTO, uuid);
             return ResponseEntity.status(200).body(salesOrders);
-        } catch(NotFoundException e) {
+        } catch (NotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch(Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
-     }
+    }
 
-     @PutMapping("/{uuid}/status")
-     public ResponseEntity<Object> updateSalesOrderStatus(@PathVariable UUID uuid, @RequestParam("status") String status) {
+    @PutMapping("/{uuid}/status")
+    public ResponseEntity<Object> updateSalesOrderStatus(@PathVariable UUID uuid,
+            @RequestParam("status") String status) {
         try {
             SalesOrderStatus newStatus = SalesOrderStatus.fromString(status);
             SalesOrders updatedOrder = this.updateSalesOrderStatusUseCase.execute(uuid, newStatus);
@@ -69,26 +70,25 @@ public class SalesOrdersControllers {
         } catch (Exception error) {
             return ResponseEntity.badRequest().body(error.getMessage());
         }
-     }
+    }
 
-     @GetMapping("/revenue")
-     public ResponseEntity<?> getRevenueByPeriod
-             (HttpServletRequest request,
-              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate startDate,
-              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate endDate) {
+    @GetMapping("/revenue")
+    public ResponseEntity<?> getRevenueByPeriod(HttpServletRequest request,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         try {
-           String commerceUuid = (String) request.getAttribute("commerce_uuid");
-           Long comId = findCommerceIdByUuidUseCase.findIdByUuid(commerceUuid);
+            String commerceUuid = (String) request.getAttribute("commerce_uuid");
+            Long comId = findCommerceIdByUuidUseCase.findIdByUuid(commerceUuid);
 
-           var result = this.getRevenueByPeriodUseCase.execute(comId, startDate, endDate);
-           return ResponseEntity.ok(result);
+            var result = this.getRevenueByPeriodUseCase.execute(comId, startDate, endDate);
+            return ResponseEntity.ok(result);
         } catch (Exception error) {
             return ResponseEntity.badRequest().body(error.getMessage());
         }
-     }
+    }
 
-     @GetMapping("/annual_buying_selling")
-     public ResponseEntity<?> getAnnualBuyingAndSelling(HttpServletRequest request) {
+    @GetMapping("/annual_buying_selling")
+    public ResponseEntity<?> getAnnualBuyingAndSelling(HttpServletRequest request) {
         try {
             String commerceUuid = (String) request.getAttribute("commerce_uuid");
             Long comId = findCommerceIdByUuidUseCase.findIdByUuid(commerceUuid);
@@ -98,9 +98,9 @@ public class SalesOrdersControllers {
         } catch (Exception error) {
             return ResponseEntity.badRequest().body(error.getMessage());
         }
-     }
+    }
 
-     @DeleteMapping("/{uuid}")
+    @DeleteMapping("/{uuid}")
     public ResponseEntity<Object> delete(@PathVariable String uuid) {
         try {
             this.deleteSalesOrderUseCase.execute(uuid);
@@ -109,5 +109,5 @@ public class SalesOrdersControllers {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
-    
+
 }

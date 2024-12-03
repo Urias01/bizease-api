@@ -43,11 +43,12 @@ public class CreateSalesOrderUseCase {
         SalesOrders salesOrders = new SalesOrders(salesOrdersDTO, commerceExists.get());
         this.salesOrdersRepository.save(salesOrders);
 
-        if (salesOrdersDTO.getSalesOrdersItems() != null && !salesOrdersDTO.getSalesOrdersItems().isEmpty()) {
-            List<SalesOrderItemsDTO> salesOrdersItems = salesOrdersDTO.getSalesOrdersItems();
+        List<SalesOrderItemsDTO> salesOrderItems = salesOrdersDTO.getSalesOrdersItems();
 
-            salesOrdersItems.parallelStream().forEach((salesOrderItem) -> {
-                Optional<Products> productExists = this.productsRepository.findByUuid(salesOrderItem.getProductUuid());
+        if (salesOrderItems.size() > 0) {
+            salesOrderItems.parallelStream().forEach((salesOrderItemDTO) -> {
+                Optional<Products> productExists = this.productsRepository
+                        .findByUuid(salesOrderItemDTO.getProductUuid());
 
                 if (!productExists.isPresent()) {
                     throw new NotFoundException("Produto");
@@ -55,15 +56,15 @@ public class CreateSalesOrderUseCase {
 
                 Products product = productExists.get();
 
-                if (product.getUnit() < salesOrderItem.getQuantity()) {
+                if (product.getUnit() < salesOrderItemDTO.getQuantity()) {
                     throw new IllegalArgumentException("Estoque insuficiente para o produto: " + product.getName());
                 }
 
-                product.setUnit(product.getUnit() - salesOrderItem.getQuantity());
+                product.setUnit(product.getUnit() - salesOrderItemDTO.getQuantity());
                 this.productsRepository.save(product);
 
-                SalesOrderItems salesOrderItems = new SalesOrderItems(salesOrderItem, product, salesOrders);
-                this.salesOrderItemsRepository.save(salesOrderItems);
+                SalesOrderItems salesOrderItem = new SalesOrderItems(salesOrderItemDTO, product, salesOrders);
+                this.salesOrderItemsRepository.save(salesOrderItem);
             });
         }
 
