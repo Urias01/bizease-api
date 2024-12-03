@@ -3,6 +3,7 @@ package com.bizease.api.app.model.sales_orders.specifications;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.bizease.api.app.model.sales_orders.entities.SalesOrders;
+import com.bizease.api.app.model.sales_orders.enums.SalesOrderStatus;
 
 public class SalesOrderSpecification {
 
@@ -20,6 +21,14 @@ public class SalesOrderSpecification {
     }
 
     return (root, query, cb) -> cb.equal(root.get("commerce").get("uuid"), uuid);
+  }
+
+  public static Specification<SalesOrders> statusEquals(String status) {
+    if (status == null) {
+      return null;
+    }
+
+    return (root, query, cb) -> cb.equal(root.get("status"), status);
   }
 
 }

@@ -34,7 +34,8 @@ public class GetAllSalesOrderUseCase {
   public PageReturn<List<SalesOrders>> execute(SalesOrderFilter filter) {
 
     Specification<SalesOrders> specification = where(
-        commerceUuidEquals(filter.getCommerceUuid()).and(idEquals(filter.getId())));
+        commerceUuidEquals(filter.getCommerceUuid()).and(idEquals(filter.getId()))
+            .and(statusEquals(filter.getStatus())));
 
     Direction direction = Direction.valueOf(filter.getDirection().toUpperCase());
 
@@ -50,7 +51,7 @@ public class GetAllSalesOrderUseCase {
       salesOrderItems.stream().forEach((salesItems) -> {
         salesItems.setSalesOrders(null);
       });
-      
+
       response.setSalesOrderItems(salesOrderItems);
     });
 
