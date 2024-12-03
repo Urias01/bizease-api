@@ -1,7 +1,9 @@
 package com.bizease.api.app.model.sales_orders.controllers;
 
 import com.bizease.api.app.model.commerce.useCases.FindCommerceIdByUuidUseCase;
+import com.bizease.api.app.model.commons.PageReturn;
 import com.bizease.api.app.model.sales_orders.enums.SalesOrderStatus;
+import com.bizease.api.app.model.sales_orders.filter.SalesOrderFilter;
 import com.bizease.api.app.model.sales_orders.useCases.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import com.bizease.api.app.model.sales_orders.dto.SalesOrdersDTO;
 import com.bizease.api.app.model.sales_orders.entities.SalesOrders;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -34,6 +37,14 @@ public class SalesOrdersControllers {
     private GetAnnualBuyingAndSellingUseCase getAnnualBuyingAndSellingUseCase;
     @Autowired
     private FindCommerceIdByUuidUseCase findCommerceIdByUuidUseCase;
+    @Autowired
+    private GetAllSalesOrderUseCase getAllSalesOrderUseCase;
+
+    @GetMapping
+    public PageReturn<List<SalesOrders>> getAllSalesOrders(SalesOrderFilter filter, HttpServletRequest request) {
+        filter.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
+        return this.getAllSalesOrderUseCase.execute(filter);
+    }
 
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody SalesOrdersDTO salesOrdersDTO, HttpServletRequest request) {

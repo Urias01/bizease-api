@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.bizease.api.app.model.sales_order_items.entities.SalesOrderItems;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import com.bizease.api.app.model.sales_orders.entities.SalesOrders;
+
 
 public interface SalesOrderItemsRepository extends JpaRepository<SalesOrderItems, Long> {
 
@@ -34,4 +36,6 @@ public interface SalesOrderItemsRepository extends JpaRepository<SalesOrderItems
                 quantity DESC            
             """, nativeQuery = true)
     List<Map<String, Object>> findLostProducts(@Param("comId") Long comId);
+
+    List<SalesOrderItems> findBySalesOrdersId(Long salesOrdersId);
 }
