@@ -39,11 +39,20 @@ public class SalesOrdersControllers {
     private FindCommerceIdByUuidUseCase findCommerceIdByUuidUseCase;
     @Autowired
     private GetAllSalesOrderUseCase getAllSalesOrderUseCase;
+    @Autowired
+    private GetSalesOrderByUuid getSalesOrderByUuid;
 
     @GetMapping
     public PageReturn<List<SalesOrders>> getAllSalesOrders(SalesOrderFilter filter, HttpServletRequest request) {
         filter.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
         return this.getAllSalesOrderUseCase.execute(filter);
+    }
+
+    @GetMapping("/{uuid}")
+    public ResponseEntity<SalesOrders> getSalesOrderByUuid(@PathVariable String uuid) {
+        SalesOrders salesOrder = this.getSalesOrderByUuid.execute(uuid);
+
+        return ResponseEntity.ok(salesOrder);
     }
 
     @PostMapping
