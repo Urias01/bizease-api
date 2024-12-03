@@ -4,6 +4,9 @@ import com.bizease.api.app.model.purchase_orders.dto.PurchaseOrdersRequestDTO;
 import com.bizease.api.app.model.purchase_orders.entities.PurchaseOrders;
 import com.bizease.api.app.model.purchase_orders.enums.StatusEnum;
 import com.bizease.api.app.model.purchase_orders.useCases.*;
+
+import jakarta.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -51,8 +54,9 @@ public class PurchaseOrdersController {
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<Object> createPurchaseOrder(@RequestBody PurchaseOrdersRequestDTO purchaseOrdersRequestDTO) {
+    public ResponseEntity<Object> createPurchaseOrder(@RequestBody PurchaseOrdersRequestDTO purchaseOrdersRequestDTO, HttpServletRequest request) {
         try {
+            purchaseOrdersRequestDTO.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
             var result = this.createPurchaseOrderUseCase.execute(purchaseOrdersRequestDTO);
             return ResponseEntity.status(201).body(result);
         } catch (Exception exception) {

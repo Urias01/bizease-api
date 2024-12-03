@@ -15,8 +15,9 @@ import java.time.LocalDate;
 public class PurchaseOrderItemDTO {
 
     private Integer quantity;
-    private BigDecimal unit_price;
+    private BigDecimal unitPrice;
     private LocalDate expirationDate;
     private Long productId;
+    private String productUuid;
     private Long purchaseOrderId;
 }

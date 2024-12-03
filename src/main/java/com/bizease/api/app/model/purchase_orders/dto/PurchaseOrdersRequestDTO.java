@@ -5,6 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
+
+import com.bizease.api.app.model.purchase_order_items.dto.PurchaseOrderItemDTO;
 
 @Data
 @AllArgsConstructor
@@ -15,6 +18,7 @@ public class PurchaseOrdersRequestDTO {
     private LocalDate orderDate;
     private LocalDate expectedDeliveryDate;
     private LocalDate deliveryDate;
-    private Long supplierId;
-    private Long commerceId;
+    private String supplierUuid;
+    private String commerceUuid;
+    private List<PurchaseOrderItemDTO> purcharseOrderItems;
 }

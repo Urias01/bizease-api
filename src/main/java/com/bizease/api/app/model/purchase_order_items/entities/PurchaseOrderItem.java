@@ -1,6 +1,7 @@
 package com.bizease.api.app.model.purchase_order_items.entities;
 
 import com.bizease.api.app.model.products.entities.Products;
+import com.bizease.api.app.model.purchase_order_items.dto.PurchaseOrderItemDTO;
 import com.bizease.api.app.model.purchase_orders.entities.PurchaseOrders;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -56,4 +57,13 @@ public class PurchaseOrderItem {
     @OneToOne
     @JoinColumn(name = "por_id")
     private PurchaseOrders purchaseOrders;
+
+    public PurchaseOrderItem(PurchaseOrderItemDTO purchaseOrderItemDTO, Products products,
+            PurchaseOrders purchaseOrders) {
+        this.quantity = purchaseOrderItemDTO.getQuantity();
+        this.unitPrice = purchaseOrderItemDTO.getUnitPrice();
+        this.expirationDate = purchaseOrderItemDTO.getExpirationDate();
+        this.products = products;
+        this.purchaseOrders = purchaseOrders;
+    }
 }
