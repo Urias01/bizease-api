@@ -93,7 +93,25 @@ public interface ProductsRepository extends JpaRepository<Products, Long>, JpaSp
             GROUP BY
                 p.id, p.name, c.name
             ORDER BY
-                returned_quantity DESC;
+                returned_quantity DESC
+            """, countQuery = """
+            SELECT COUNT(*) FROM (
+                SELECT
+                    p.id
+                FROM
+                    products p
+                JOIN
+                    categories c ON p.cat_id = c.id
+                JOIN
+                    sales_order_items soi ON soi.prod_id = p.id
+                JOIN
+                    sales_orders so ON soi.sor_id = so.id
+                WHERE
+                    so.status = 'DEVOLVIDO'
+                    AND p.com_id = :comId
+                GROUP BY
+                    p.id, p.name, c.name
+            ) AS subquery
             """, nativeQuery = true)
-    List<Map<String, Object>> findReturnedProducts(@Param("comId") Long comId);
+    Page<Map<String, Object>> findReturnedProducts(@Param("comId") Long comId, Pageable pageable);
 }

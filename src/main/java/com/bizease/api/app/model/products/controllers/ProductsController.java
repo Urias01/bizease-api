@@ -15,6 +15,7 @@ import com.bizease.api.app.model.products.dto.ProductsDTO;
 import com.bizease.api.app.model.products.entities.Products;
 import com.bizease.api.app.model.products.filter.ProductExpiredFilter;
 import com.bizease.api.app.model.products.filter.ProductFilter;
+import com.bizease.api.app.model.products.filter.ReturnedProductFilter;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -93,12 +94,11 @@ public class ProductsController {
     }
 
     @GetMapping("/returned")
-    public ResponseEntity<?> getReturnedProducts(HttpServletRequest request) {
+    public ResponseEntity<?> getReturnedProducts(ReturnedProductFilter filter, HttpServletRequest request) {
         try {
-            String commerceUuid = (String) request.getAttribute("commerce_uuid");
-            Long comId = findCommerceIdByUuidUseCase.findIdByUuid(commerceUuid);
+            filter.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
 
-            return ResponseEntity.ok(returnedProductsUseCase.execute(comId));
+            return ResponseEntity.ok(returnedProductsUseCase.execute(filter));
         } catch (Exception error) {
             return ResponseEntity.internalServerError().body(error.getMessage());
         }

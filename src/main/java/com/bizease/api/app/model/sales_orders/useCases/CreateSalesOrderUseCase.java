@@ -43,7 +43,7 @@ public class CreateSalesOrderUseCase {
         SalesOrders salesOrders = new SalesOrders(salesOrdersDTO, commerceExists.get());
         this.salesOrdersRepository.save(salesOrders);
 
-        if (!salesOrdersDTO.getSalesOrdersItems().isEmpty()) {
+        if (salesOrdersDTO.getSalesOrdersItems() != null && !salesOrdersDTO.getSalesOrdersItems().isEmpty()) {
             List<SalesOrderItemsDTO> salesOrdersItems = salesOrdersDTO.getSalesOrdersItems();
 
             salesOrdersItems.parallelStream().forEach((salesOrderItem) -> {
