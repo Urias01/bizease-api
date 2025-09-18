@@ -5,7 +5,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bizease.api.app.exceptions.AlreadyExistsException;
-import com.bizease.api.app.exceptions.CommerceFoundException;
 import com.bizease.api.app.model.commerce.entities.Commerce;
 import com.bizease.api.app.model.commerce.repository.CommerceRepository;
 import com.bizease.api.app.model.commons.enums.IsActiveEnum;
@@ -31,9 +30,8 @@ public class CreateFirstUserAccessUseCase {
       throw new AlreadyExistsException("Usuário");
     });
     
-    System.out.println(firstUserAccessDTO.getCnpj());
     this.commerceRepository.findByCnpj(firstUserAccessDTO.getCnpj()).ifPresent((commerce) -> {
-      throw new CommerceFoundException("CNPJ já cadastrado");
+      throw new AlreadyExistsException("CNPJ");
     });
 
     Commerce commerce = new Commerce();

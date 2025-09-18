@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -60,54 +62,27 @@ public class CategoriesController {
   }
 
   @PostMapping
-  public ResponseEntity<Object> create(@RequestBody CategoriesDTO categoriesDTO, HttpServletRequest request) {
-    try {
-      String commerceUuid = (String) request.getAttribute("commerce_uuid");
-      Categories response = this.createCategoriesUseCase.execute(categoriesDTO, commerceUuid);
-      ApiResponse<Categories> apiResponse = new ApiResponse<>(true, 1, response);
-      return ResponseEntity.status(201).body(apiResponse);
-    } catch (AlreadyExistsException e) {
-      ApiResponse<String> apiResponse = new ApiResponse<>(false, 0, e.getMessage());
-      return ResponseEntity.status(422).body(apiResponse);
-    } catch (Exception e) {
-      ApiResponse<String> apiResponse = new ApiResponse<>(false, 0, e.getMessage());
-      return ResponseEntity.status(500).body(apiResponse);
-    }
+  public ResponseEntity<ApiResponse<Long>> create(@RequestBody CategoriesDTO categoriesDTO,
+      HttpServletRequest request) {
+    String commerceUuid = (String) request.getAttribute("commerce_uuid");
+    Long categoryId = this.createCategoriesUseCase.execute(categoriesDTO, commerceUuid);
+    return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(categoryId, 201));
   }
 
   @PutMapping("/{uuid}")
-  public ResponseEntity<Object> update(@RequestBody CategoriesDTO categoriesDTO, @PathVariable String uuid,
+  public ResponseEntity<ApiResponse<Long>> update(
+      @RequestBody CategoriesDTO categoriesDTO,
+      @PathVariable String uuid,
       HttpServletRequest request) {
-    try {
-      String commerceUuid = (String) request.getAttribute("commerce_uuid");
-      categoriesDTO.setCommerceUuid(commerceUuid);
-      Categories response = this.updateCategoriesUseCase.execute(categoriesDTO, uuid);
-      ApiResponse<Categories> apiResponse = new ApiResponse<>(true, 1, response);
-      return ResponseEntity.status(200).body(apiResponse);
-    } catch (AlreadyExistsException e) {
-      ApiResponse<String> apiResponse = new ApiResponse<>(false, 0, e.getMessage());
-      return ResponseEntity.status(422).body(apiResponse);
-    } catch (NotFoundException e) {
-      ApiResponse<String> apiResponse = new ApiResponse<>(false, 0, e.getMessage());
-      return ResponseEntity.status(422).body(apiResponse);
-    } catch (Exception e) {
-      ApiResponse<String> apiResponse = new ApiResponse<>(false, 0, e.getMessage());
-      return ResponseEntity.status(500).body(apiResponse);
-    }
+    String commerceUuid = (String) request.getAttribute("commerce_uuid");
+    categoriesDTO.setCommerceUuid(commerceUuid);
+    Long categoryId = this.updateCategoriesUseCase.execute(categoriesDTO, uuid);
+    return ResponseEntity.status(200).body(ApiResponse.success(categoryId, 200));
   }
 
   @DeleteMapping("/{uuid}")
-  public ResponseEntity<Object> delete(@PathVariable String uuid) {
-    try {
-      this.deleteCategoriesUseCase.execute(uuid);
-      ApiResponse<String> apiResponse = new ApiResponse<>(true, 1, "Categoria deletada com sucesso");
-      return ResponseEntity.status(200).body(apiResponse);
-    } catch (NotFoundException e) {
-      ApiResponse<String> apiResponse = new ApiResponse<>(false, 0, e.getMessage());
-      return ResponseEntity.status(422).body(apiResponse);
-    } catch (Exception e) {
-      ApiResponse<String> apiResponse = new ApiResponse<>(false, 0, e.getMessage());
-      return ResponseEntity.status(500).body(apiResponse);
-    }
+  public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String uuid) {
+    this.deleteCategoriesUseCase.execute(uuid);
+    return ResponseEntity.status(200).body(ApiResponse.success(null, 204));
   }
 }

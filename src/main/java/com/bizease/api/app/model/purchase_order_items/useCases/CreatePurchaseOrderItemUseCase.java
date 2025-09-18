@@ -23,7 +23,7 @@ public class CreatePurchaseOrderItemUseCase {
     @Autowired
     private PurchaseOrdersRepository purchaseOrdersRepository;
 
-    public PurchaseOrderItem execute(PurchaseOrderItemDTO purchaseOrdemItemDTO) {
+    public Long execute(PurchaseOrderItemDTO purchaseOrdemItemDTO) {
         var product = findProduct(purchaseOrdemItemDTO.getProductId());
         var purchaseOrder = findPurchaseOrder(purchaseOrdemItemDTO.getPurchaseOrderId());
 
@@ -34,7 +34,9 @@ public class CreatePurchaseOrderItemUseCase {
         purchaseOrderItem.setProducts(product);
         purchaseOrderItem.setPurchaseOrders(purchaseOrder);
 
-        return purchaseOrdemItemRepository.save(purchaseOrderItem);
+        purchaseOrderItem =  purchaseOrdemItemRepository.save(purchaseOrderItem);
+
+        return purchaseOrderItem.getId();
     }
 
     private Products findProduct(Long id) {

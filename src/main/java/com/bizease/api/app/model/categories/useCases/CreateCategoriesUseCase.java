@@ -21,7 +21,7 @@ public class CreateCategoriesUseCase {
   @Autowired
   private CommerceRepository commerceRepository;
 
-  public Categories execute(CategoriesDTO categoriesDTO, String uuid) {
+  public Long execute(CategoriesDTO categoriesDTO, String uuid) {
 
     Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(uuid);
 
@@ -41,7 +41,7 @@ public class CreateCategoriesUseCase {
 
     model = this.categoriesRepository.save(model);
 
-    return model;
+    return model.getId();
   }
 
 }

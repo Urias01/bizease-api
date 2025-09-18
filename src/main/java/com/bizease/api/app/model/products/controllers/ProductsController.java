@@ -5,6 +5,8 @@ import java.util.Map;
 
 import com.bizease.api.app.model.commerce.useCases.FindCommerceIdByUuidUseCase;
 import com.bizease.api.app.model.products.useCases.*;
+import com.bizease.api.app.responses.ApiResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,88 +46,65 @@ public class ProductsController {
     private GetReturnedProductsUseCase returnedProductsUseCase;
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody ProductsDTO productsDto, HttpServletRequest request) {
-        try {
-            productsDto.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
-            Products products = this.createProductUseCase.execute(productsDto);
-            return ResponseEntity.status(201).body(products);
-        } catch (NotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(e.getMessage());
-        }
+    public ResponseEntity<ApiResponse<Long>> create(
+            @RequestBody ProductsDTO productsDto,
+            HttpServletRequest request) {
+        productsDto.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
+        Long productId = this.createProductUseCase.execute(productsDto);
+        return ResponseEntity.status(201).body(ApiResponse.success(productId, 201));
     }
 
     @GetMapping
-    public PageReturn<List<Products>> list(ProductFilter filter, HttpServletRequest request) {
+    public ApiResponse<PageReturn<List<Products>>> list(ProductFilter filter, HttpServletRequest request) {
         filter.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
-        return this.getAllProducts.execute(filter);
+        PageReturn<List<Products>> productsList = this.getAllProducts.execute(filter);
+        return ApiResponse.success(productsList, 200);
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<Products> getByUuid(@PathVariable String uuid) {
+    public ResponseEntity<ApiResponse<Products>> getByUuid(@PathVariable String uuid) {
         Products product = this.getProductByUuidUseCase.execute(uuid);
 
-        return ResponseEntity.ok(product);
+        return ResponseEntity.ok().body(ApiResponse.success(product, 200));
     }
 
     @GetMapping("/popular")
-    public ResponseEntity<?> getPopularProducts(HttpServletRequest request) {
-        try {
-            String commerceUuid = (String) request.getAttribute("commerce_uuid");
-            Long comId = findCommerceIdByUuidUseCase.findIdByUuid(commerceUuid);
-
-            return ResponseEntity.ok(getPopularProductsUseCase.execute(comId));
-        } catch (Exception error) {
-            return ResponseEntity.internalServerError().body(error.getMessage());
-        }
+    public ResponseEntity<ApiResponse<?>> getPopularProducts(HttpServletRequest request) {
+        String commerceUuid = (String) request.getAttribute("commerce_uuid");
+        Long comId = findCommerceIdByUuidUseCase.findIdByUuid(commerceUuid);
+        var result = getPopularProductsUseCase.execute(comId);
+        return ResponseEntity.ok().body(ApiResponse.success(result, 200));
     }
 
     @GetMapping("/expired")
-    public ResponseEntity<?> getExpiredProducts(ProductExpiredFilter filter, HttpServletRequest request) {
-        try {
-            filter.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
-
-            return ResponseEntity.ok(expiredProductsUseCase.execute(filter));
-
-        } catch (Exception error) {
-            return ResponseEntity.internalServerError().body(error.getMessage());
-        }
+    public ResponseEntity<ApiResponse<?>> getExpiredProducts(ProductExpiredFilter filter, HttpServletRequest request) {
+        filter.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
+        var result = expiredProductsUseCase.execute(filter);
+        return ResponseEntity.ok().body(ApiResponse.success(result, 200));
     }
 
     @GetMapping("/returned")
-    public ResponseEntity<?> getReturnedProducts(ReturnedProductFilter filter, HttpServletRequest request) {
-        try {
-            filter.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
-
-            return ResponseEntity.ok(returnedProductsUseCase.execute(filter));
-        } catch (Exception error) {
-            return ResponseEntity.internalServerError().body(error.getMessage());
-        }
+    public ResponseEntity<ApiResponse<?>> getReturnedProducts(ReturnedProductFilter filter,
+            HttpServletRequest request) {
+        filter.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
+        var result = returnedProductsUseCase.execute(filter);
+        return ResponseEntity.ok().body(ApiResponse.success(result, 200));
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<Object> update(@PathVariable String uuid, @RequestBody ProductsDTO productsDto,
+    public ResponseEntity<ApiResponse<Long>> update(
+            @PathVariable String uuid,
+            @RequestBody ProductsDTO productsDto,
             HttpServletRequest request) {
-        try {
-            productsDto.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
-            Products products = this.updateProductUseCase.execute(uuid, productsDto);
-            return ResponseEntity.status(201).body(products);
-        } catch (NotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(e.getMessage());
-        }
+        productsDto.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
+        Long productId = this.updateProductUseCase.execute(uuid, productsDto);
+        return ResponseEntity.ok().body(ApiResponse.success(productId, 200));
     }
 
     @DeleteMapping("/{uuid}")
-    public ResponseEntity<Object> delete(@PathVariable String uuid) {
-        try {
-            this.deleteProductUseCase.execute(uuid);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(e.getMessage());
-        }
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String uuid) {
+        this.deleteProductUseCase.execute(uuid);
+        return ResponseEntity.ok().body(ApiResponse.success(null, 200));
     }
 
 }

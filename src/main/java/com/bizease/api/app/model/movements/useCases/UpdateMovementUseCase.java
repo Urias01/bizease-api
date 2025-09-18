@@ -31,7 +31,7 @@ public class UpdateMovementUseCase {
     @Autowired
     private CommerceRepository commerceRepository;
 
-    public Movement execute(UUID uuid, MovementDTO movementDTO) {
+    public Long execute(UUID uuid, MovementDTO movementDTO) {
         Movement updatedMovement = this.movementRepository.findByUuid(uuid).orElseThrow(() -> {
             throw new NotFoundException("Movimentação");
         });
@@ -52,7 +52,8 @@ public class UpdateMovementUseCase {
         updatedMovement.setProduct(product);
         updatedMovement.setCommerce(commerce);
 
-        return this.movementRepository.save(updatedMovement);
+        updatedMovement = this.movementRepository.save(updatedMovement);
+        return updatedMovement.getId();
     }
 
     private User findUser(String uuid) {

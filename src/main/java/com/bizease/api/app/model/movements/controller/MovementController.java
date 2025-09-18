@@ -8,12 +8,12 @@ import com.bizease.api.app.model.movements.useCases.CreateMovementUseCase;
 import com.bizease.api.app.model.movements.useCases.GetAllMovementsUseCase;
 import com.bizease.api.app.model.movements.useCases.GetMovementsByUuidUseCase;
 import com.bizease.api.app.model.movements.useCases.UpdateMovementUseCase;
+import com.bizease.api.app.responses.ApiResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,38 +42,30 @@ public class MovementController {
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<Object> getMovementByUuid(@PathVariable String uuid) {
-        try {
-            var result = this.getMovementsByUuidUseCase.execute(uuid);
-            return ResponseEntity.ok(result);
-        } catch (Exception exception) {
-            return ResponseEntity.badRequest().body(exception.getMessage());
-        }
+    public ResponseEntity<ApiResponse<Object>> getMovementByUuid(@PathVariable String uuid) {
+        var result = this.getMovementsByUuidUseCase.execute(uuid);
+        return ResponseEntity.ok().body(ApiResponse.success(result, 200));
     }
 
     @PostMapping
-    public ResponseEntity<Object> createMovement(@RequestBody MovementDTO movementDTO, HttpServletRequest request) {
-        try {
-            movementDTO.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
-            movementDTO.setUserUuid((String) request.getAttribute("user_uuid"));
-            var result = this.createMovementUseCase.execute(movementDTO);
-            return ResponseEntity.status(201).body(result);
-        } catch (Exception exception) {
-            return ResponseEntity.badRequest().body(exception.getMessage());
-        }
+    public ResponseEntity<ApiResponse<Long>> createMovement(
+            @RequestBody MovementDTO movementDTO,
+            HttpServletRequest request) {
+        movementDTO.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
+        movementDTO.setUserUuid((String) request.getAttribute("user_uuid"));
+        Long movementId = this.createMovementUseCase.execute(movementDTO);
+        return ResponseEntity.status(201).body(ApiResponse.success(movementId, 201));
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<Object> updateMovement(@PathVariable UUID uuid, @RequestBody MovementDTO movementDTO,
+    public ResponseEntity<ApiResponse<Long>> updateMovement(
+            @PathVariable UUID uuid,
+            @RequestBody MovementDTO movementDTO,
             HttpServletRequest request) {
-        try {
-            movementDTO.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
-            movementDTO.setUserUuid((String) request.getAttribute("user_uuid"));
-            var result = this.updateMovementUseCase.execute(uuid, movementDTO);
-            return ResponseEntity.ok(result);
-        } catch (Exception exception) {
-            return ResponseEntity.badRequest().body(exception.getMessage());
-        }
+        movementDTO.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
+        movementDTO.setUserUuid((String) request.getAttribute("user_uuid"));
+        Long movementId = this.updateMovementUseCase.execute(uuid, movementDTO);
+        return ResponseEntity.status(201).body(ApiResponse.success(movementId, 200));
     }
 
 }

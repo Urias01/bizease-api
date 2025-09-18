@@ -3,6 +3,7 @@ package com.bizease.api.app.model.commerce.controller;
 import com.bizease.api.app.model.commerce.dto.UpdateCommerceDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,10 +15,10 @@ import com.bizease.api.app.model.commerce.useCases.CreateCommerceUseCase;
 import com.bizease.api.app.model.commerce.useCases.FindMyCommerceUseCase;
 import com.bizease.api.app.model.commerce.useCases.ActiveDeactiveCommerceUseCase;
 import com.bizease.api.app.model.commerce.useCases.UpdateCommerceUseCase;
+import com.bizease.api.app.responses.ApiResponse;
 
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
@@ -36,45 +37,29 @@ public class CommerceController {
   private FindMyCommerceUseCase findMyCommerceUseCase;
 
   @GetMapping("/details")
-  public  ResponseEntity<Object> getMyCommerce(HttpServletRequest request) {
-    try {
+  public  ResponseEntity<ApiResponse<Object>> getMyCommerce(HttpServletRequest request) {
       String commerceUuid = (String) request.getAttribute("commerce_uuid");
       var result = this.findMyCommerceUseCase.execute(commerceUuid);
-      return ResponseEntity.ok().body(result);
-    } catch (Exception e) {
-      return ResponseEntity.badRequest().body(e.getMessage());
-    }
+      return ResponseEntity.ok().body(ApiResponse.success(result, 200));
   }
   
   @PostMapping("/")
-  public ResponseEntity<Object> create(@RequestBody Commerce commerceRequest) {
-    try {
-      var result = this.createCommerceUseCase.execute(commerceRequest);
-      return ResponseEntity.status(201).body(result);
-    } catch (Exception e) {
-      return ResponseEntity.badRequest().body(e.getMessage());
-    }
+  public ResponseEntity<ApiResponse<Long>> create(@RequestBody Commerce commerceRequest) {
+      Long commerceId = this.createCommerceUseCase.execute(commerceRequest);
+      return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(commerceId, 201));
   }
 
   @PutMapping("/update")
-  public ResponseEntity<Object> update(@RequestBody UpdateCommerceDTO updateCommerceDTO, HttpServletRequest request) {
-    try {
+  public ResponseEntity<ApiResponse<Long>> update(@RequestBody UpdateCommerceDTO updateCommerceDTO, HttpServletRequest request) {
       String commerceUuid = (String) request.getAttribute("commerce_uuid");
-      var result = this.updateCommerceUseCase.execute(commerceUuid, updateCommerceDTO);
-      return ResponseEntity.ok().body(result);
-    } catch (Exception e) {
-      return ResponseEntity.badRequest().body(e.getMessage());
-    }
+      Long commerceId = this.updateCommerceUseCase.execute(commerceUuid, updateCommerceDTO);
+      return ResponseEntity.ok().body(ApiResponse.success(commerceId,200));
   }
 
   @PatchMapping("/active-deactive")
-  public ResponseEntity<Object> activeDeactive(HttpServletRequest request) {
-    try {
+  public ResponseEntity<ApiResponse<String>> activeDeactive(HttpServletRequest request) {
       String commerceUuid = (String) request.getAttribute("commerce_uuid");
       String response = this.activeDeactiveCommerceUseCase.execute(commerceUuid);
-      return ResponseEntity.ok().body(response);
-    } catch (Exception e) {
-      return ResponseEntity.badRequest().body(e.getMessage());
-    }
+      return ResponseEntity.ok().body(ApiResponse.success(response,200));
   }
 }

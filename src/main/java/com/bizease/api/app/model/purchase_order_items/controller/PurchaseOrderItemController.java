@@ -7,6 +7,7 @@ import com.bizease.api.app.model.purchase_order_items.useCases.CreatePurchaseOrd
 import com.bizease.api.app.model.purchase_order_items.useCases.GetAllPurchaseOrderItemsUseCase;
 import com.bizease.api.app.model.purchase_order_items.useCases.GetPurchaseOrderItemUseCase;
 import com.bizease.api.app.model.purchase_order_items.useCases.UpdatePurchaseOrderItemsUseCase;
+import com.bizease.api.app.responses.ApiResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,42 +35,33 @@ public class PurchaseOrderItemController {
 
     @GetMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<List<PurchaseOrderItem>> getAllPurchaseOrderItems() {
+    public ResponseEntity<ApiResponse<List<PurchaseOrderItem>>> getAllPurchaseOrderItems() {
         var result = this.getAllPurchaseOrderItemsUseCase.execute();
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok().body(ApiResponse.success(result, 200));
     }
 
     @GetMapping("/{uuid}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<Object> getPurchaseOrderItem(@PathVariable UUID uuid) {
-        try {
-            var result = this.getPurchaseOrderItemUseCase.execute(uuid);
-            return ResponseEntity.ok(result);
-        } catch (Exception exception) {
-            return ResponseEntity.badRequest().body(exception.getMessage());
-        }
+    public ResponseEntity<ApiResponse<Object>> getPurchaseOrderItem(@PathVariable UUID uuid) {
+        var result = this.getPurchaseOrderItemUseCase.execute(uuid);
+        return ResponseEntity.ok().body(ApiResponse.success(result, 200));
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<Object> createPurchaseOrderItem(@RequestBody PurchaseOrderItemDTO purchaseOrderItemDTO) {
-        try {
-            var result = this.createPurchaseOrderItemUseCase.execute(purchaseOrderItemDTO);
-            return ResponseEntity.status(201).body(result);
-        } catch (Exception exception) {
-            return ResponseEntity.badRequest().body(exception.getMessage());
-        }
+    public ResponseEntity<ApiResponse<Long>> createPurchaseOrderItem(
+            @RequestBody PurchaseOrderItemDTO purchaseOrderItemDTO) {
+        Long purchaseOrderItemsId = this.createPurchaseOrderItemUseCase.execute(purchaseOrderItemDTO);
+        return ResponseEntity.status(201).body(ApiResponse.success(purchaseOrderItemsId, 201));
+
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<Object> update(@PathVariable String uuid, @RequestBody PurchaseOrderItemDTO purchaseOrderItemDTO) {
-        try {
-            PurchaseOrderItem purchaseOrderItem = this.updatePurchaseOrderItemsUseCase.execute(uuid, purchaseOrderItemDTO);
-            return ResponseEntity.status(200).body(purchaseOrderItem);
-        } catch (NotFoundException exception) {
-            return ResponseEntity.badRequest().body(exception.getMessage());
-        } catch (Exception exception) {
-            return ResponseEntity.internalServerError().body(exception.getMessage());
-        }
+    public ResponseEntity<ApiResponse<Long>> update(
+            @PathVariable String uuid,
+            @RequestBody PurchaseOrderItemDTO purchaseOrderItemDTO) {
+        Long purchaseOrderItemsId = this.updatePurchaseOrderItemsUseCase.execute(uuid,
+                purchaseOrderItemDTO);
+        return ResponseEntity.ok().body(ApiResponse.success(purchaseOrderItemsId, 200));
     }
 }

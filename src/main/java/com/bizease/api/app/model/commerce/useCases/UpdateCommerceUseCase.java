@@ -17,7 +17,7 @@ public class UpdateCommerceUseCase {
   @Autowired
   private CommerceRepository commerceRepository;
 
-  public Commerce execute(String uuid, UpdateCommerceDTO updateCommerceDTO) {
+  public Long execute(String uuid, UpdateCommerceDTO updateCommerceDTO) {
     Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(uuid);
 
     if (commerceExists.isPresent()) {
@@ -32,7 +32,7 @@ public class UpdateCommerceUseCase {
       updatedCommerce.setNeighborhood(updateCommerceDTO.getNeighborhood());
 
       this.commerceRepository.save(updatedCommerce);
-      return updatedCommerce;
+      return updatedCommerce.getId();
     } else {
       throw new NotFoundException("Comércio");
     }

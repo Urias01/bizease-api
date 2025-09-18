@@ -27,7 +27,7 @@ public class UpdateProductUseCase {
   @Autowired
   CategoriesRepository categoriesRepository;
 
-  public Products execute(String uuid, ProductsDTO productsDTO) {
+  public Long execute(String uuid, ProductsDTO productsDTO) {
 
     Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(productsDTO.getCommerceUuid());
 
@@ -60,7 +60,7 @@ public class UpdateProductUseCase {
 
     product = this.productsRepository.save(product);
 
-    return product;
+    return product.getId();
 
   }
 

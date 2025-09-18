@@ -27,19 +27,21 @@ public class UpdatePurchaseOrderItemsUseCase {
     @Autowired
     private PurchaseOrdersRepository purchaseOrdersRepository;
 
-    public PurchaseOrderItem execute(String uuid, PurchaseOrderItemDTO purchaseOrderItemDTO) {
+    public Long execute(String uuid, PurchaseOrderItemDTO purchaseOrderItemDTO) {
 
         Optional<Products> productExists = this.productsRepository.findById(purchaseOrderItemDTO.getProductId());
         if (!productExists.isPresent()) {
             throw new NotFoundException("Produto");
         }
 
-        Optional<PurchaseOrders> purchaseOrderExists = this.purchaseOrdersRepository.findById(purchaseOrderItemDTO.getPurchaseOrderId());
+        Optional<PurchaseOrders> purchaseOrderExists = this.purchaseOrdersRepository
+                .findById(purchaseOrderItemDTO.getPurchaseOrderId());
         if (!purchaseOrderExists.isPresent()) {
             throw new NotFoundException("Pedido de compra");
         }
 
-        Optional<PurchaseOrderItem> purchaseOrderItemExists = this.purchaseOrdemItemRepository.findByUuid(UUID.fromString(uuid));
+        Optional<PurchaseOrderItem> purchaseOrderItemExists = this.purchaseOrdemItemRepository
+                .findByUuid(UUID.fromString(uuid));
         if (!purchaseOrderItemExists.isPresent()) {
             throw new NotFoundException("Item do pedido de compra");
         }
@@ -54,7 +56,8 @@ public class UpdatePurchaseOrderItemsUseCase {
         purchaseOrderItem.setProducts(product);
         purchaseOrderItem.setPurchaseOrders(purchaseOrders);
 
-        return this.purchaseOrdemItemRepository.save(purchaseOrderItem);
+        purchaseOrderItem = this.purchaseOrdemItemRepository.save(purchaseOrderItem);
+        return purchaseOrderItem.getId();
     }
 
 }

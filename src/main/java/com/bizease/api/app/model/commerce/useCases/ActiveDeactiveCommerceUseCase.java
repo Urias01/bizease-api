@@ -27,7 +27,6 @@ public class ActiveDeactiveCommerceUseCase {
 
     commerce.setIsActive(IsActiveEnum.ACTIVE);
 
-    
     this.commerceRepository.save(commerce);
 
     if (commerce.getIsActive() == IsActiveEnum.ACTIVE) {

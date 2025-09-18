@@ -28,7 +28,7 @@ public class CreateProductUseCase {
     @Autowired
     private CategoriesRepository categoriesRepository;
 
-    public Products execute(ProductsDTO productsDTO) {
+    public Long execute(ProductsDTO productsDTO) {
 
         this.productsRepository.findByNameAndCommerceUuid(productsDTO.getName(), productsDTO.getCommerceUuid())
                 .ifPresent((products) -> {
@@ -50,7 +50,7 @@ public class CreateProductUseCase {
 
         this.productsRepository.save(products);
 
-        return products;
+        return products.getId();
     }
 
 }

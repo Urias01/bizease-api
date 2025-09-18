@@ -32,7 +32,7 @@ public class CreateMovementUseCase {
     @Autowired
     private CommerceRepository commerceRepository;
 
-    public Movement execute(MovementDTO movementDTO) {
+    public Long execute(MovementDTO movementDTO) {
         var user = findUser(movementDTO.getUserUuid());
         var product = findProduct(movementDTO.getProductUuid());
         var commerce = findCommerce(movementDTO.getCommerceUuid());
@@ -50,7 +50,9 @@ public class CreateMovementUseCase {
         movement.setProduct(product);
         movement.setCommerce(commerce);
 
-        return this.movementRepository.save(movement);
+        movement = this.movementRepository.save(movement);
+
+        return movement.getId();
     }
 
     private User findUser(String uuid) {

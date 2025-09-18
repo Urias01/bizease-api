@@ -4,7 +4,7 @@ import com.bizease.api.app.model.commons.enums.IsActiveEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bizease.api.app.exceptions.CommerceFoundException;
+import com.bizease.api.app.exceptions.AlreadyExistsException;
 import com.bizease.api.app.model.commerce.entities.Commerce;
 import com.bizease.api.app.model.commerce.repository.CommerceRepository;
 
@@ -14,15 +14,17 @@ public class CreateCommerceUseCase {
   @Autowired
   private CommerceRepository commerceRepository;
 
-  public Commerce execute(Commerce commerceEntity) {
+  public Long execute(Commerce commerceEntity) {
     this.commerceRepository.findByCnpj(commerceEntity.getCnpj())
       .ifPresent((commerce) -> {
-        throw new CommerceFoundException("CNPJ já cadastrado");
+        throw new AlreadyExistsException("CNPJ");
       });
 
       commerceEntity.setIsActive(IsActiveEnum.ACTIVE);
       
-      return this.commerceRepository.save(commerceEntity);
+      Commerce commerce = this.commerceRepository.save(commerceEntity);
+      
+      return commerce.getId();
   }
   
 }
