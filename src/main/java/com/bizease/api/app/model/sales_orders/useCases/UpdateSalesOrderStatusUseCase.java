@@ -15,7 +15,7 @@ public class UpdateSalesOrderStatusUseCase {
     @Autowired
     private SalesOrdersRepository salesOrdersRepository;
 
-    public SalesOrders execute(UUID uuid, SalesOrderStatus newStatus) {
+    public Long execute(UUID uuid, SalesOrderStatus newStatus) {
         SalesOrders salesOrders = salesOrdersRepository.findByUuid(String.valueOf(uuid)).orElseThrow(() -> {
             throw new NotFoundException("Pedido de venda");
         });
@@ -24,6 +24,8 @@ public class UpdateSalesOrderStatusUseCase {
         SalesOrderStatus updatedStatus = currentStatus.transitionTo(newStatus);
 
         salesOrders.setStatus(updatedStatus);
-        return salesOrdersRepository.save(salesOrders);
+
+        salesOrders = salesOrdersRepository.save(salesOrders);
+        return salesOrders.getId();
     }
 }

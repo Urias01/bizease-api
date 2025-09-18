@@ -22,7 +22,7 @@ public class UpdateSuppliersUseCase {
     @Autowired
     private CommerceRepository commerceRepository;
 
-    public Suppliers execute(SuppliersDTO suppliersDTO, String uuid) {
+    public Long execute(SuppliersDTO suppliersDTO, String uuid) {
         Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(suppliersDTO.getCommerceUuid());
 
         if (!commerceExists.isPresent()) {
@@ -51,8 +51,7 @@ public class UpdateSuppliersUseCase {
 
         suppliers = this.suppliersRepository.save(suppliers);
 
-        return suppliers;
-      
+        return suppliers.getId();
     }
     
 }

@@ -33,7 +33,7 @@ public class CreateSalesOrderUseCase {
     @Autowired
     private SalesOrderItemsRepository salesOrderItemsRepository;
 
-    public SalesOrders execute(SalesOrdersDTO salesOrdersDTO) {
+    public Long execute(SalesOrdersDTO salesOrdersDTO) {
         Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(salesOrdersDTO.getCommerceUuid());
 
         if (!commerceExists.isPresent()) {
@@ -68,7 +68,7 @@ public class CreateSalesOrderUseCase {
             });
         }
 
-        return salesOrders;
+        return salesOrders.getId();
     }
 
 }

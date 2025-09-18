@@ -6,6 +6,7 @@ import com.bizease.api.app.model.purchase_orders.entities.PurchaseOrders;
 import com.bizease.api.app.model.purchase_orders.enums.StatusEnum;
 import com.bizease.api.app.model.purchase_orders.filter.PurchaseOrderFilter;
 import com.bizease.api.app.model.purchase_orders.useCases.*;
+import com.bizease.api.app.responses.ApiResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -38,58 +39,47 @@ public class PurchaseOrdersController {
 
     @GetMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public PageReturn<List<PurchaseOrders>> getAllPurchaseOrders(PurchaseOrderFilter filter,
+    public ResponseEntity<ApiResponse<PageReturn<List<PurchaseOrders>>>> getAllPurchaseOrders(
+            PurchaseOrderFilter filter,
             HttpServletRequest request) {
         filter.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
-        return this.getAllPurchaseOrdersUseCase.execute(filter);
+        PageReturn<List<PurchaseOrders>> resultList = this.getAllPurchaseOrdersUseCase.execute(filter);
+        return ResponseEntity.ok().body(ApiResponse.success(resultList, 200));
     }
 
     @GetMapping("/{uuid}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<Object> getPurchaseOrder(@PathVariable String uuid) {
-        try {
-            var result = this.getPurchaseOrderByUuid.execute(uuid);
-            return ResponseEntity.ok(result);
-        } catch (Exception exception) {
-            return ResponseEntity.badRequest().body(exception.getMessage());
-        }
+    public ResponseEntity<ApiResponse<Object>> getPurchaseOrder(@PathVariable String uuid) {
+        var result = this.getPurchaseOrderByUuid.execute(uuid);
+        return ResponseEntity.ok().body(ApiResponse.success(result, 200));
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<Object> createPurchaseOrder(@RequestBody PurchaseOrdersRequestDTO purchaseOrdersRequestDTO,
+    public ResponseEntity<ApiResponse<Long>> createPurchaseOrder(
+            @RequestBody PurchaseOrdersRequestDTO purchaseOrdersRequestDTO,
             HttpServletRequest request) {
-        try {
-            purchaseOrdersRequestDTO.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
-            var result = this.createPurchaseOrderUseCase.execute(purchaseOrdersRequestDTO);
-            return ResponseEntity.status(201).body(result);
-        } catch (Exception exception) {
-            return ResponseEntity.badRequest().body(exception.getMessage());
-        }
+        purchaseOrdersRequestDTO.setCommerceUuid((String) request.getAttribute("commerce_uuid"));
+        Long purchaseOrdedrId = this.createPurchaseOrderUseCase.execute(purchaseOrdersRequestDTO);
+        return ResponseEntity.status(201).body(ApiResponse.success(purchaseOrdedrId, 201));
     }
 
     @PutMapping("/{uuid}")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<Object> updatePurchaseOrder(@PathVariable UUID uuid,
+    public ResponseEntity<ApiResponse<Long>> updatePurchaseOrder(
+            @PathVariable UUID uuid,
             @RequestBody PurchaseOrdersRequestDTO purchaseOrdersRequestDTO) {
-        try {
-            var result = this.updatePurchaseOrderUseCase.execute(uuid, purchaseOrdersRequestDTO);
-            return ResponseEntity.ok(result);
-        } catch (Exception exception) {
-            return ResponseEntity.badRequest().body(exception.getMessage());
-        }
+        Long purchaseOrdedrId = this.updatePurchaseOrderUseCase.execute(uuid, purchaseOrdersRequestDTO);
+        return ResponseEntity.ok().body(ApiResponse.success(purchaseOrdedrId, 200));
     }
 
     @PutMapping("/{uuid}/status")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<Object> updatePurchaseOrderStatus(@PathVariable UUID uuid,
+    public ResponseEntity<ApiResponse<Long>> updatePurchaseOrderStatus(
+            @PathVariable UUID uuid,
             @RequestParam("status") String status) {
-        try {
-            StatusEnum newStatus = StatusEnum.fromString(status);
-            var result = this.updatePurchaseOrderStatusUseCase.execute(uuid, newStatus);
-            return ResponseEntity.ok(result);
-        } catch (Exception error) {
-            return ResponseEntity.badRequest().body(error.getMessage());
-        }
+        StatusEnum newStatus = StatusEnum.fromString(status);
+        Long purcharseOrderId = this.updatePurchaseOrderStatusUseCase.execute(uuid, newStatus);
+        return ResponseEntity.ok().body(ApiResponse.success(purcharseOrderId,200));
     }
 }

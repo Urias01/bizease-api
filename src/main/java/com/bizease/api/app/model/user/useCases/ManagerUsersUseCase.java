@@ -23,7 +23,7 @@ public class ManagerUsersUseCase {
   @Autowired
   private PasswordEncoder passwordEncoder;
 
-  public void execute(String uuid, String role, UpdateUserRequestDTO userToUpdate) {
+  public Long execute(String uuid, String role, UpdateUserRequestDTO userToUpdate) {
 
     if (!RoleEnum.fromString(role).equals(RoleEnum.OWNER) && !RoleEnum.fromString(role).equals(RoleEnum.ADMIN)) {
       throw new UnauthorizedAccessException();
@@ -41,9 +41,10 @@ public class ManagerUsersUseCase {
     model.setName(userToUpdate.getName());
     model.setRole(RoleEnum.fromString(userToUpdate.getRole()));
 
-  //  TODO: add reset password
+    // TODO: add reset password
 
-    this.userRepository.save(model);
-
+    model = this.userRepository.save(model);
+    
+    return model.getId();
   }
 }

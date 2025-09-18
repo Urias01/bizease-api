@@ -27,7 +27,7 @@ public class CreateUserUseCase {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    public User createUser(CreateUserRequestDTO createUserRequestDTO, String uuid, String requestRole) {
+    public Long createUser(CreateUserRequestDTO createUserRequestDTO, String uuid, String requestRole) {
         Optional<User> verifyUser = this.userRepository.findByEmail(createUserRequestDTO.getEmail());
 
         if (verifyUser.isPresent()) {
@@ -53,7 +53,8 @@ public class CreateUserUseCase {
             newUser.setCommerce(commerce);
             newUser.setRole(role);
 
-            return userRepository.save(newUser);
+            newUser = userRepository.save(newUser);
+            return newUser.getId();
         }
     }
 }

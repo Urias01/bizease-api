@@ -3,6 +3,7 @@ package com.bizease.api.app.model.suppliers.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,12 +24,12 @@ import com.bizease.api.app.model.suppliers.useCases.DeleteSuppliersUseCase;
 import com.bizease.api.app.model.suppliers.useCases.GetSupplierByUuidUseCase;
 import com.bizease.api.app.model.suppliers.useCases.ListSuppliersUseCase;
 import com.bizease.api.app.model.suppliers.useCases.UpdateSuppliersUseCase;
+import com.bizease.api.app.responses.ApiResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/suppliers")
@@ -48,17 +49,13 @@ public class SuppliersController {
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
-    public ResponseEntity<Object> create(@RequestBody SuppliersDTO suppliersDTO, HttpServletRequest request) {
-        try {
-            String commerceUuid = (String) request.getAttribute("commerce_uuid");
-            suppliersDTO.setCommerceUuid(commerceUuid);
-            Suppliers suppliers = this.createSuppliersUseCase.execute(suppliersDTO);
-            return ResponseEntity.status(201).body(suppliers);
-        } catch (NotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(e.getMessage());
-        }
+    public ResponseEntity<ApiResponse<Long>> create(
+            @RequestBody SuppliersDTO suppliersDTO,
+            HttpServletRequest request) {
+        String commerceUuid = (String) request.getAttribute("commerce_uuid");
+        suppliersDTO.setCommerceUuid(commerceUuid);
+        Long suppliersId = this.createSuppliersUseCase.execute(suppliersDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(suppliersId, 201));
     }
 
     @GetMapping()
@@ -70,35 +67,25 @@ public class SuppliersController {
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<Suppliers> getByUuid(@PathVariable String uuid) {
-
+    public ResponseEntity<ApiResponse<Suppliers>> getByUuid(@PathVariable String uuid) {
         Suppliers suppliers = this.getSupplierByUuidUseCase.execute(uuid);
-
-        return ResponseEntity.ok(suppliers);
+        return ResponseEntity.ok().body(ApiResponse.success(suppliers, 200));
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<Object> update(@RequestBody SuppliersDTO suppliersDTO, @PathVariable String uuid,
+    public ResponseEntity<ApiResponse<Long>> update(
+            @RequestBody SuppliersDTO suppliersDTO,
+            @PathVariable String uuid,
             HttpServletRequest request) {
-        try {
-            String commerceUuid = (String) request.getAttribute("commerce_uuid");
-            suppliersDTO.setCommerceUuid(commerceUuid);
-            Suppliers suppliers = this.updateSuppliersUseCase.execute(suppliersDTO, uuid);
-            return ResponseEntity.status(200).body(suppliers);
-        } catch (NotFoundException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(e.getMessage());
-        }
+        String commerceUuid = (String) request.getAttribute("commerce_uuid");
+        suppliersDTO.setCommerceUuid(commerceUuid);
+        Long suppliersId = this.updateSuppliersUseCase.execute(suppliersDTO, uuid);
+        return ResponseEntity.ok().body(ApiResponse.success(suppliersId, 200));
     }
 
     @DeleteMapping("/{uuid}")
-    public ResponseEntity<Object> delete(@PathVariable String uuid) {
-        try {
-            this.deleteSuppliersUseCase.execute(uuid);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(e.getMessage());
-        }
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String uuid) {
+        this.deleteSuppliersUseCase.execute(uuid);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success(null, 204));
     }
 }

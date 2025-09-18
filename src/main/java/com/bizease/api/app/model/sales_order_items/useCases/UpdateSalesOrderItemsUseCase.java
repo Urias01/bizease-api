@@ -24,7 +24,7 @@ public class UpdateSalesOrderItemsUseCase {
     @Autowired
     private SalesOrdersRepository salesOrdersRepository;
 
-    public SalesOrderItems execute(String uuid, SalesOrderItemsDTO salesOrderItemsDTO) {
+    public Long execute(String uuid, SalesOrderItemsDTO salesOrderItemsDTO) {
        SalesOrderItems updatedSalesOrderItem = this.salesOrderItemsRepository.findByUuid(uuid).orElseThrow(() -> {
            throw new NotFoundException("Item de pedido de venda");
        });
@@ -38,7 +38,9 @@ public class UpdateSalesOrderItemsUseCase {
         updatedSalesOrderItem.setProducts(product);
         updatedSalesOrderItem.setSalesOrders(salesOrder);
 
-        return this.salesOrderItemsRepository.save(updatedSalesOrderItem);
+        updatedSalesOrderItem = this.salesOrderItemsRepository.save(updatedSalesOrderItem);
+
+        return updatedSalesOrderItem.getId();
     }
 
     private Products findProduct(String uuid) {

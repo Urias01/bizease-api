@@ -2,11 +2,15 @@ package com.bizease.api.app.model.user.controller;
 
 import com.bizease.api.app.email.service.EmailService;
 import com.bizease.api.app.model.user.dto.AuthUserRequestDTO;
+import com.bizease.api.app.model.user.dto.AuthUserResponseDTO;
 import com.bizease.api.app.model.user.dto.EmailRequestDTO;
 import com.bizease.api.app.model.user.useCases.AuthUserUseCase;
 import com.bizease.api.app.model.user.useCases.ResetUserPasswordUseCase;
+import com.bizease.api.app.responses.ApiResponse;
+
+import javax.naming.AuthenticationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,23 +31,16 @@ public class AuthUserController {
     private ResetUserPasswordUseCase resetUserPasswordUseCase;
 
     @PostMapping("/users")
-    public ResponseEntity<Object> authUser(@RequestBody AuthUserRequestDTO authUserRequestDTO) {
-        try {
-            var result = this.authUserUseCase.authenticate(authUserRequestDTO);
-            return ResponseEntity.ok(result);
-        } catch (Exception error) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error.getMessage());
-        }
+    public ResponseEntity<ApiResponse<AuthUserResponseDTO>> authUser(@RequestBody AuthUserRequestDTO authUserRequestDTO)
+            throws AuthenticationException {
+        AuthUserResponseDTO result = this.authUserUseCase.authenticate(authUserRequestDTO);
+        return ResponseEntity.ok().body(ApiResponse.success(result, 200));
     }
 
     @PostMapping("/password-reset")
-    public ResponseEntity<String> resetPassword(@RequestBody EmailRequestDTO emailRequest) {
-        try {
-            String newPassword = resetUserPasswordUseCase.resetUserPassword(emailRequest.getEmail());
-            emailService.sendPasswordResetEmail(emailRequest.getEmail(), newPassword);
-            return ResponseEntity.ok("Uma nova senha foi enviada para o seu email!");
-        } catch (Exception error) {
-            return ResponseEntity.badRequest().body(error.getMessage());
-        }
+    public ResponseEntity<ApiResponse<String>> resetPassword(@RequestBody EmailRequestDTO emailRequest) {
+        String newPassword = resetUserPasswordUseCase.resetUserPassword(emailRequest.getEmail());
+        emailService.sendPasswordResetEmail(emailRequest.getEmail(), newPassword);
+        return ResponseEntity.ok().body(ApiResponse.success("Uma nova senha foi enviada para o seu email!", 200));
     }
 }

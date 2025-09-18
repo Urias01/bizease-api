@@ -20,7 +20,7 @@ public class UpdateUserUseCase {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public Optional<User> updateUser(String uuid, UpdateUserRequestDTO updateUserRequestDTO) {
+    public Long updateUser(String uuid, UpdateUserRequestDTO updateUserRequestDTO) {
         Optional<User> verifyUser = this.userRepository.findByUuid(UUID.fromString(uuid));
 
         if(verifyUser.isPresent()) {
@@ -29,8 +29,8 @@ public class UpdateUserUseCase {
             user.setEmail(updateUserRequestDTO.getEmail());
             user.setPassword(passwordEncoder.encode(updateUserRequestDTO.getPassword()));
 
-            this.userRepository.save(user);
-            return Optional.of(user);
+            user = this.userRepository.save(user);
+            return user.getId();
         } else {
             throw new NotFoundException("Usuário");
         }

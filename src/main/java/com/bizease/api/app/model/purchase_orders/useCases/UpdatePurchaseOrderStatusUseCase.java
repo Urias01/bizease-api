@@ -15,7 +15,7 @@ public class UpdatePurchaseOrderStatusUseCase {
     @Autowired
     private PurchaseOrdersRepository purchaseOrdersRepository;
 
-    public PurchaseOrders execute(UUID uuid, StatusEnum newStatus) {
+    public Long execute(UUID uuid, StatusEnum newStatus) {
         PurchaseOrders purchaseOrders = this.purchaseOrdersRepository.findByUuid(uuid).orElseThrow(() -> {
             throw new NotFoundException("Pedido de compra");
         });
@@ -24,6 +24,8 @@ public class UpdatePurchaseOrderStatusUseCase {
         StatusEnum updatedStatus = currentStatus.transitionTo(newStatus);
 
         purchaseOrders.setStatus(updatedStatus);
-        return this.purchaseOrdersRepository.save(purchaseOrders);
+
+        purchaseOrders = this.purchaseOrdersRepository.save(purchaseOrders);
+        return purchaseOrders.getId();
     }
 }

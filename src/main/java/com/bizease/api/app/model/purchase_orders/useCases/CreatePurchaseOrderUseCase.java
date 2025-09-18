@@ -40,7 +40,7 @@ public class CreatePurchaseOrderUseCase {
     @Autowired
     private PurchaseOrdemItemRepository purcharseOrdemItemRepositoy;
 
-    public PurchaseOrders execute(PurchaseOrdersRequestDTO purchaseOrdersRequestDTO) {
+    public Long execute(PurchaseOrdersRequestDTO purchaseOrdersRequestDTO) {
         System.out.println(purchaseOrdersRequestDTO.getSupplierUuid());
         var suppliers = findSupplier(purchaseOrdersRequestDTO.getSupplierUuid());
         var commerce = findCommerce(purchaseOrdersRequestDTO.getCommerceUuid());
@@ -79,7 +79,7 @@ public class CreatePurchaseOrderUseCase {
             });
         }
 
-        return purchaseOrderFinal;
+        return purchaseOrderFinal.getId();
     }
 
     private void validateDates(LocalDate orderDate, LocalDate expectedDeliveryDate) {

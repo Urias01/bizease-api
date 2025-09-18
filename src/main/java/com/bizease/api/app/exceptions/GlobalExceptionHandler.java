@@ -3,6 +3,8 @@ package com.bizease.api.app.exceptions;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import javax.naming.AuthenticationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -58,8 +60,14 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(UnauthorizedAccessException.class)
   public ResponseEntity<ApiResponse<Void>> UnauthorizedAccess(UnauthorizedAccessException ex) {
-    return ResponseEntity.status(HttpStatus.CONFLICT)
+    return ResponseEntity.status(HttpStatus.FORBIDDEN)
         .body(ApiResponse.error(ex.getMessage(), getStackTrace(ex), 403));
+  }
+
+  @ExceptionHandler(AuthenticationException.class)
+  public ResponseEntity<ApiResponse<Void>> Authentication(AuthenticationException ex) {
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        .body(ApiResponse.error(ex.getMessage(), getStackTrace(ex), 401));
   }
 
   private String getStackTrace(Exception ex) {

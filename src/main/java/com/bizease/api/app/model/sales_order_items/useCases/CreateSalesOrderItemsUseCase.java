@@ -26,7 +26,7 @@ public class CreateSalesOrderItemsUseCase {
     @Autowired
     private SalesOrdersRepository salesOrdersRepository;
 
-    public SalesOrderItems execute(SalesOrderItemsDTO salesOrderItemsDTO) {
+    public Long execute(SalesOrderItemsDTO salesOrderItemsDTO) {
         
         Optional<Products> productExists = this.productsRepository.findByUuid(salesOrderItemsDTO.getProductUuid());
         if (!productExists.isPresent()) {
@@ -41,7 +41,7 @@ public class CreateSalesOrderItemsUseCase {
         SalesOrderItems salesOrderItems = new SalesOrderItems(salesOrderItemsDTO, productExists.get(), salesOrderExists.get());
         this.salesOrderItemsRepository.save(salesOrderItems);
 
-        return salesOrderItems;
+        return salesOrderItems.getId();
     }
     
 }

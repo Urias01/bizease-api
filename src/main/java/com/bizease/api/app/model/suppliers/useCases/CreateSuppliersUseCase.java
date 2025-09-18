@@ -21,7 +21,7 @@ public class CreateSuppliersUseCase {
     @Autowired
     private CommerceRepository commerceRepository;
 
-    public Suppliers execute(SuppliersDTO suppliersDTO) {
+    public Long execute(SuppliersDTO suppliersDTO) {
         Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(suppliersDTO.getCommerceUuid());
 
         if (!commerceExists.isPresent()) {
@@ -31,7 +31,7 @@ public class CreateSuppliersUseCase {
         Suppliers suppliers = new Suppliers(suppliersDTO, commerceExists.get());
         this.suppliersRepository.save(suppliers);
 
-        return suppliers;
+        return suppliers.getId();
     }
 
 }

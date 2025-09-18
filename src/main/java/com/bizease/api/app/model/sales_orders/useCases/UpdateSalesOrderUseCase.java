@@ -22,7 +22,7 @@ public class UpdateSalesOrderUseCase {
     @Autowired
     private CommerceRepository commerceRepository;
 
-    public SalesOrders execute(SalesOrdersDTO salesOrdersDTO, String uuid) {
+    public Long execute(SalesOrdersDTO salesOrdersDTO, String uuid) {
         
         Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(salesOrdersDTO.getCommerceUuid());
 
@@ -44,7 +44,7 @@ public class UpdateSalesOrderUseCase {
 
         salesOrders = this.salesOrdersRepository.save(salesOrders);
 
-        return salesOrders;
+        return salesOrders.getId();
     }
     
 }

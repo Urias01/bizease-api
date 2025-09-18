@@ -55,7 +55,7 @@ public class AuthUserUseCase {
                 .withExpiresAt(expiresIn)
                 .sign(algorithm);
 
-        var authUserResponse = AuthUserResponseDTO.builder()
+        AuthUserResponseDTO authUserResponse = AuthUserResponseDTO.builder()
                 .accessToken(token)
                 .expiresIn(expiresIn.toEpochMilli())
                 .build();

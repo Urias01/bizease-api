@@ -27,7 +27,7 @@ public class UpdatePurchaseOrderUseCase {
     @Autowired
     private CommerceRepository commerceRepository;
 
-    public PurchaseOrders execute(UUID uuid, PurchaseOrdersRequestDTO purchaseOrdersRequestDTO) {
+    public Long execute(UUID uuid, PurchaseOrdersRequestDTO purchaseOrdersRequestDTO) {
         PurchaseOrders updatedPurchaseOrder = this.purchaseOrdersRepository.findByUuid(uuid).orElseThrow(() -> {
            throw new NotFoundException("Pedido de compra");
         });
@@ -44,7 +44,8 @@ public class UpdatePurchaseOrderUseCase {
         updatedPurchaseOrder.setSuppliers(suppliers);
         updatedPurchaseOrder.setCommerce(commerce);
 
-        return this.purchaseOrdersRepository.save(updatedPurchaseOrder);
+        updatedPurchaseOrder = this.purchaseOrdersRepository.save(updatedPurchaseOrder);
+        return updatedPurchaseOrder.getId();
     }
 
     private void validateDates(LocalDate orderDate, LocalDate expectedDeliveryDate) {
