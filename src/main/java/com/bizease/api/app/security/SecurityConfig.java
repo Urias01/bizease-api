@@ -1,61 +1,43 @@
 package com.bizease.api.app.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.access.AccessDeniedHandlerImpl;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import jakarta.servlet.http.HttpServletResponse;
+import com.bizease.api.app.security.jwt.JwtAuthenticationEntryPoint;
+import com.bizease.api.app.security.jwt.JwtAuthenticationFilter;
+
+import lombok.AllArgsConstructor;
 
 @Configuration
-@EnableMethodSecurity
+@EnableWebSecurity
+@AllArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
-    private SecurityFilter securityFilter;
+    private final JwtAuthenticationFilter jwtAuthFilter;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/users").permitAll()
-                            .requestMatchers("/users/first-access").permitAll()
-                            .requestMatchers("/auth/users").permitAll()
-                            .requestMatchers("/auth/password-reset").permitAll();
-                    auth.anyRequest().authenticated();
-                })
-                .exceptionHandling(exception -> {
-                    exception.authenticationEntryPoint(authenticationEntryPoint());
-                    exception.accessDeniedHandler(accessDeniedHandler());
-                })
-                .addFilterBefore(securityFilter, BasicAuthenticationFilter.class);
-
-        return http.build();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public AuthenticationEntryPoint authenticationEntryPoint() {
-        return (request, response, authException) -> {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Usuário não está autenticado no sistema ou o token expirou.");
-        };
-    }
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(csrfCustomizer -> csrfCustomizer.disable())
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers("/auth/sign-in").permitAll()
+                        .anyRequest().authenticated())
+                .sessionManagement(session -> session.sessionCreationPolicy((SessionCreationPolicy.STATELESS)))
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint));
 
-    @Bean
-    public AccessDeniedHandler accessDeniedHandler() {
-        return new AccessDeniedHandlerImpl(); // Isso retorna 403 quando o usuário não tem permissão
+        return http.build();
     }
 }
