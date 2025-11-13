@@ -1,6 +1,6 @@
 package com.bizease.api.app.model.user.useCases;
 
-import com.bizease.api.app.exceptions.AlreadyExistsException;
+import com.bizease.api.app.exceptions.AlreadyExistException;
 import com.bizease.api.app.exceptions.NotFoundException;
 import com.bizease.api.app.model.commerce.entities.Commerce;
 import com.bizease.api.app.model.commerce.repository.CommerceRepository;
@@ -31,7 +31,7 @@ public class CreateUserUseCase {
         Optional<User> verifyUser = this.userRepository.findByEmail(createUserRequestDTO.getEmail());
 
         if (verifyUser.isPresent()) {
-            throw new AlreadyExistsException("E-mail");
+            throw new AlreadyExistException("E-mail");
         } else {
             Commerce commerce = new Commerce();
 

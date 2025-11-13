@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.bizease.api.app.exceptions.AlreadyExistsException;
+import com.bizease.api.app.exceptions.AlreadyExistException;
 import com.bizease.api.app.model.commerce.entities.Commerce;
 import com.bizease.api.app.model.commerce.repository.CommerceRepository;
 import com.bizease.api.app.model.commons.enums.IsActiveEnum;
@@ -27,11 +27,11 @@ public class CreateFirstUserAccessUseCase {
 
   public UserResponseDTO execute(FirstUserAccessDTO firstUserAccessDTO) {
     this.userRepository.findByEmail(firstUserAccessDTO.getEmail()).ifPresent((user) -> {
-      throw new AlreadyExistsException("Usuário");
+      throw new AlreadyExistException("Usuário");
     });
     
     this.commerceRepository.findByCnpj(firstUserAccessDTO.getCnpj()).ifPresent((commerce) -> {
-      throw new AlreadyExistsException("CNPJ");
+      throw new AlreadyExistException("CNPJ");
     });
 
     Commerce commerce = new Commerce();

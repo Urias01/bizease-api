@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bizease.api.app.exceptions.AlreadyExistsException;
+import com.bizease.api.app.exceptions.AlreadyExistException;
 import com.bizease.api.app.exceptions.NotFoundException;
 import com.bizease.api.app.model.categories.dto.CategoriesDTO;
 import com.bizease.api.app.model.categories.entities.Categories;
@@ -36,7 +36,7 @@ public class CreateCategoriesUseCase {
     this.categoriesRepository.findByNameAndCommerceId(
         model.getName(),
         model.getCommerce().getId()).ifPresent((category) -> {
-          throw new AlreadyExistsException("Categoria");
+          throw new AlreadyExistException("Categoria");
         });
 
     model = this.categoriesRepository.save(model);

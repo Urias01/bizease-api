@@ -5,13 +5,10 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bizease.api.app.exceptions.AlreadyExistsException;
-import com.bizease.api.app.exceptions.NotFoundException;
 import com.bizease.api.app.model.categories.dto.CategoriesDTO;
 import com.bizease.api.app.model.categories.entities.Categories;
 import com.bizease.api.app.model.categories.filter.CategoriesFilter;

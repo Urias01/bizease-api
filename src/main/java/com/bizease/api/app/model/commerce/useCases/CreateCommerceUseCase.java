@@ -4,7 +4,7 @@ import com.bizease.api.app.model.commons.enums.IsActiveEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bizease.api.app.exceptions.AlreadyExistsException;
+import com.bizease.api.app.exceptions.AlreadyExistException;
 import com.bizease.api.app.model.commerce.entities.Commerce;
 import com.bizease.api.app.model.commerce.repository.CommerceRepository;
 
@@ -17,7 +17,7 @@ public class CreateCommerceUseCase {
   public Long execute(Commerce commerceEntity) {
     this.commerceRepository.findByCnpj(commerceEntity.getCnpj())
       .ifPresent((commerce) -> {
-        throw new AlreadyExistsException("CNPJ");
+        throw new AlreadyExistException("CNPJ");
       });
 
       commerceEntity.setIsActive(IsActiveEnum.ACTIVE);

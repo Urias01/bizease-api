@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bizease.api.app.exceptions.AlreadyExistsException;
+import com.bizease.api.app.exceptions.AlreadyExistException;
 import com.bizease.api.app.exceptions.NotFoundException;
 import com.bizease.api.app.model.categories.entities.Categories;
 import com.bizease.api.app.model.categories.repository.CategoriesRepository;
@@ -32,7 +32,7 @@ public class CreateProductUseCase {
 
         this.productsRepository.findByNameAndCommerceUuid(productsDTO.getName(), productsDTO.getCommerceUuid())
                 .ifPresent((products) -> {
-                    throw new AlreadyExistsException("Produto");
+                    throw new AlreadyExistException("Produto");
                 });
 
         Optional<Commerce> commerceExists = this.commerceRepository.findByUuid(productsDTO.getCommerceUuid());

@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bizease.api.app.exceptions.AlreadyExistsException;
 import com.bizease.api.app.exceptions.NotFoundException;
 import com.bizease.api.app.model.categories.dto.CategoriesDTO;
 import com.bizease.api.app.model.categories.entities.Categories;
