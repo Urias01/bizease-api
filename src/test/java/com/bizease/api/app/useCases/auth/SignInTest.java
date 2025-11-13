@@ -18,6 +18,7 @@ import com.bizease.api.app.repositories.UserRepository;
 import com.bizease.api.app.exceptions.AuthenticationException;
 import com.bizease.api.app.models.Tenant;
 import com.bizease.api.app.models.User;
+import com.bizease.api.app.models.enums.AccessStatus;
 import com.bizease.api.app.models.request.AuthRequest;
 import com.bizease.api.app.models.response.AuthResponse;
 import com.bizease.api.app.repositories.TenantRepository;
@@ -37,7 +38,6 @@ public class SignInTest {
 
   @InjectMocks
   private SignIn signIn;
-
 
   @Test
   @DisplayName("Should sign in successfully with valid credentials")
@@ -85,5 +85,28 @@ public class SignInTest {
 
     AuthenticationException exception = assertThrows(AuthenticationException.class, () -> signIn.execute(request));
     assertEquals("Invalid email or password", exception.getMessage());
+  }
+
+  @Test
+  @DisplayName("Should throw AuthenticationException for inactive user")
+  void shouldThrowAuthenticationExceptionForInactiveUser() {
+    String email = "john@doe.com";
+    String password = "password123";
+    Tenant tenant = new Tenant();
+    tenant.setId("tenant-123");
+
+    User user = new User();
+    user.setId("user-123");
+    user.setPassword("hashedPassword");
+    user.setStatus(AccessStatus.INACTIVE);
+
+    when(tenantRepository.findBySlug("tenant_slug")).thenReturn(Optional.of(tenant));
+    when(userRepository.findByEmailAndTenantId(email, tenant.getId())).thenReturn(Optional.of(user));
+    when(passwordEncoder.matches(password, "hashedPassword")).thenReturn(true);
+
+    AuthRequest request = new AuthRequest(email, password, "tenant_slug");
+
+    AuthenticationException exception = assertThrows(AuthenticationException.class, () -> signIn.execute(request));
+    assertEquals("User is inactive", exception.getMessage());
   }
 }

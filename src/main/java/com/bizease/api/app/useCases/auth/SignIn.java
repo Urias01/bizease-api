@@ -7,6 +7,7 @@ import com.bizease.api.app.exceptions.AuthenticationException;
 import com.bizease.api.app.exceptions.NotFoundException;
 import com.bizease.api.app.models.Tenant;
 import com.bizease.api.app.models.User;
+import com.bizease.api.app.models.enums.AccessStatus;
 import com.bizease.api.app.models.request.AuthRequest;
 import com.bizease.api.app.models.response.AuthResponse;
 import com.bizease.api.app.repositories.TenantRepository;
@@ -34,6 +35,10 @@ public class SignIn {
 
     if (!passwordEncoder.matches(request.password(), user.getPassword())) {
       throw new AuthenticationException("Invalid email or password");
+    }
+
+    if (user.getStatus().equals(AccessStatus.INACTIVE)) {
+      throw new AuthenticationException("User is inactive");
     }
 
     String token = jwtService.generateToken(user.getId().toString(), tenant.getId());
