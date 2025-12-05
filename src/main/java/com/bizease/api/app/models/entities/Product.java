@@ -1,7 +1,8 @@
-package com.bizease.api.app.models;
+package com.bizease.api.app.models.entities;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+
+import com.bizease.api.app.models.commons.Auditable;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,11 +18,11 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "products")
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product {
+@Getter
+@Setter
+public class Product extends Auditable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -30,10 +31,10 @@ public class Product {
   private String description;
   private String barcode;
   private BigDecimal price;
-  private LocalDateTime createdAt;
-  private LocalDateTime updatedAt;
   @ManyToOne(targetEntity = Tenant.class)
   @JoinColumn(name = "tenant_id", referencedColumnName = "id")
   private Tenant tenant;
-
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "category_id", referencedColumnName = "id")
+  private Category category;
 }

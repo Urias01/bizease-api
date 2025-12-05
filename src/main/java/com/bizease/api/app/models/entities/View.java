@@ -1,8 +1,12 @@
-package com.bizease.api.app.models;
+package com.bizease.api.app.models.entities;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import com.bizease.api.app.models.commons.Auditable;
+import com.bizease.api.app.models.enums.ActivationsState;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,25 +19,25 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "tenants")
+@Table(name = "views")
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class Tenant {
+public class View extends Auditable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   private String id;
   private String name;
-  private String slug;
-  private String email;
-  private String domain;
+  private String route;
+  private String icon;
+  @Column(name = "sort_order")
+  private Integer order;
+  private ActivationsState status;
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
-  @OneToMany(mappedBy = "tenant")
-  private Set<Product> products;
-  @OneToMany(mappedBy = "tenant")
-  private Set<User> users;
+  @OneToMany(mappedBy = "view")
+  private Set<Permission> permissions;
 
 }
