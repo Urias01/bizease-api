@@ -1,5 +1,0 @@
-DROP TABLE IF EXISTS inventories CASCADE;
-
-ALTER TABLE movements
-    DROP COLUMN IF EXISTS inv_id,
-    ADD COLUMN com_id BIGINT REFERENCES commerces(id);

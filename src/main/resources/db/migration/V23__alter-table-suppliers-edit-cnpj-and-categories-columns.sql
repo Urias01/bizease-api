@@ -1,2 +1,0 @@
-ALTER TABLE suppliers
-ALTER COLUMN category SET NOT NULL;

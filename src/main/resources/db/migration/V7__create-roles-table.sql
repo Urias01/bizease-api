@@ -1,5 +1,0 @@
-CREATE TABLE roles (
-    id INTEGER PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE,
-    description VARCHAR(255)
-);
