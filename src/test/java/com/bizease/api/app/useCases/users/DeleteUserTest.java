@@ -14,11 +14,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.bizease.api.app.exceptions.NotFoundException;
-import com.bizease.api.app.models.User;
+import com.bizease.api.app.infrastructure.persistence.jpa.user.UserRepository;
+import com.bizease.api.app.infrastructure.security.jwt.IJwtAuthContext;
+import com.bizease.api.app.models.entities.User;
 import com.bizease.api.app.models.enums.AccessStatus;
-import com.bizease.api.app.models.request.UpdateUserRequest;
-import com.bizease.api.app.repositories.UserRepository;
-import com.bizease.api.app.security.jwt.IJwtAuthContext;
+import com.bizease.api.app.services.users.DeleteUser;
 
 @ExtendWith(MockitoExtension.class)
 public class DeleteUserTest {

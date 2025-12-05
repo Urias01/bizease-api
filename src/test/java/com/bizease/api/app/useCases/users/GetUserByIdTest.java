@@ -14,11 +14,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.bizease.api.app.exceptions.NotFoundException;
+import com.bizease.api.app.infrastructure.persistence.jpa.user.UserRepository;
+import com.bizease.api.app.infrastructure.security.jwt.IJwtAuthContext;
 import com.bizease.api.app.mappers.UserMapper;
-import com.bizease.api.app.models.User;
+import com.bizease.api.app.models.entities.User;
 import com.bizease.api.app.models.response.UserResponse;
-import com.bizease.api.app.repositories.UserRepository;
-import com.bizease.api.app.security.jwt.IJwtAuthContext;
+import com.bizease.api.app.services.users.GetUserById;
 
 @ExtendWith(MockitoExtension.class)
 public class GetUserByIdTest {

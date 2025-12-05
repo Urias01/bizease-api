@@ -15,12 +15,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.bizease.api.app.exceptions.AlreadyExistException;
-import com.bizease.api.app.models.Tenant;
+import com.bizease.api.app.infrastructure.persistence.jpa.tenant.TenantRepository;
+import com.bizease.api.app.models.entities.Tenant;
 import com.bizease.api.app.models.request.TenantRequest;
 import com.bizease.api.app.models.request.UserRequest;
 import com.bizease.api.app.models.response.CreateResponse;
-import com.bizease.api.app.repositories.TenantRepository;
-import com.bizease.api.app.useCases.users.CreateUser;
+import com.bizease.api.app.services.tenants.CreateTenant;
+
+import com.bizease.api.app.services.users.CreateUser;
 
 @ExtendWith(MockitoExtension.class)
 public class CreateTenantTest {

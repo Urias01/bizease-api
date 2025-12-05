@@ -17,12 +17,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.bizease.api.app.exceptions.AlreadyExistException;
 import com.bizease.api.app.exceptions.BadRequestException;
-import com.bizease.api.app.models.Tenant;
-import com.bizease.api.app.models.User;
+import com.bizease.api.app.infrastructure.persistence.jpa.tenant.TenantRepository;
+import com.bizease.api.app.infrastructure.persistence.jpa.user.UserRepository;
+import com.bizease.api.app.infrastructure.security.jwt.IJwtAuthContext;
+import com.bizease.api.app.models.entities.Tenant;
+import com.bizease.api.app.models.entities.User;
 import com.bizease.api.app.models.request.UserRequest;
-import com.bizease.api.app.repositories.TenantRepository;
-import com.bizease.api.app.repositories.UserRepository;
-import com.bizease.api.app.security.jwt.IJwtAuthContext;
+import com.bizease.api.app.services.users.CreateUser;
 
 @ExtendWith(MockitoExtension.class)
 public class CreateUserTest {

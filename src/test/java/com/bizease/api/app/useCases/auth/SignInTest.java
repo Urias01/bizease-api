@@ -14,15 +14,16 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.bizease.api.app.repositories.UserRepository;
 import com.bizease.api.app.exceptions.AuthenticationException;
-import com.bizease.api.app.models.Tenant;
-import com.bizease.api.app.models.User;
+import com.bizease.api.app.infrastructure.persistence.jpa.tenant.TenantRepository;
+import com.bizease.api.app.infrastructure.persistence.jpa.user.UserRepository;
+import com.bizease.api.app.infrastructure.security.jwt.JwtService;
+import com.bizease.api.app.models.entities.Tenant;
+import com.bizease.api.app.models.entities.User;
 import com.bizease.api.app.models.enums.AccessStatus;
 import com.bizease.api.app.models.request.AuthRequest;
 import com.bizease.api.app.models.response.AuthResponse;
-import com.bizease.api.app.repositories.TenantRepository;
-import com.bizease.api.app.security.jwt.JwtService;
+import com.bizease.api.app.services.auth.SignIn;
 
 @ExtendWith(MockitoExtension.class)
 public class SignInTest {
@@ -50,6 +51,7 @@ public class SignInTest {
     User user = new User();
     user.setId("user-123");
     user.setPassword("hashedPassword");
+    user.setStatus(AccessStatus.ACTIVE);
 
     when(tenantRepository.findBySlug("tenant_slug")).thenReturn(Optional.of(tenant));
     when(userRepository.findByEmailAndTenantId(email, tenant.getId())).thenReturn(Optional.of(user));
@@ -76,6 +78,7 @@ public class SignInTest {
     User user = new User();
     user.setId("user-123");
     user.setPassword("hashedPassword");
+    user.setStatus(AccessStatus.ACTIVE);
 
     when(tenantRepository.findBySlug("tenant_slug")).thenReturn(Optional.of(tenant));
     when(userRepository.findByEmailAndTenantId(email, tenant.getId())).thenReturn(Optional.of(user));

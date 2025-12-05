@@ -15,12 +15,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.bizease.api.app.exceptions.NotFoundException;
-import com.bizease.api.app.models.User;
+import com.bizease.api.app.infrastructure.persistence.jpa.user.UserRepository;
+import com.bizease.api.app.infrastructure.security.jwt.IJwtAuthContext;
+import com.bizease.api.app.models.entities.User;
 import com.bizease.api.app.models.enums.AccessProfile;
 import com.bizease.api.app.models.enums.AccessStatus;
 import com.bizease.api.app.models.response.UserResponse;
-import com.bizease.api.app.repositories.UserRepository;
-import com.bizease.api.app.security.jwt.IJwtAuthContext;
+import com.bizease.api.app.services.users.GetMe;
 
 @ExtendWith(MockitoExtension.class)
 public class GetMeTest {
@@ -39,15 +40,14 @@ public class GetMeTest {
     when(jwtAuthContext.getUserId()).thenReturn("user-1");
     when(jwtAuthContext.getTenantId()).thenReturn("tenant-123");
 
-    User user = new User(
-        "1",
-        "John Doe",
-        "john@example.com",
-        null,
-        AccessProfile.MANAGER,
-        AccessStatus.ACTIVE,
-        null);
-
+    User user = new User();
+    user.setId("user-1");
+    user.setName("John Doe");
+    user.setEmail("john@example.com");
+    user.setPassword("password");
+    user.setType(AccessProfile.MANAGER);
+    user.setStatus(AccessStatus.ACTIVE);
+    
     when(userRepository.findByIdAndTenantId("user-1", "tenant-123"))
         .thenReturn(Optional.of(user));
 
