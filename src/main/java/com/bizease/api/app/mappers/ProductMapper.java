@@ -2,7 +2,7 @@ package com.bizease.api.app.mappers;
 
 import java.math.BigDecimal;
 
-import com.bizease.api.app.models.Product;
+import com.bizease.api.app.models.entities.Product;
 import com.bizease.api.app.models.request.ProductRequest;
 import com.bizease.api.app.models.response.ProductResponse;
 

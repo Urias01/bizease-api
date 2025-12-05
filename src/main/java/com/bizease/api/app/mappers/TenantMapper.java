@@ -2,8 +2,8 @@ package com.bizease.api.app.mappers;
 
 import java.time.LocalDateTime;
 
-import com.bizease.api.app.models.Tenant;
-import com.bizease.api.app.models.User;
+import com.bizease.api.app.models.entities.Tenant;
+import com.bizease.api.app.models.entities.User;
 import com.bizease.api.app.models.request.TenantRequest;
 import com.bizease.api.app.models.request.UserRequest;
 

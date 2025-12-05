@@ -1,6 +1,6 @@
 package com.bizease.api.app.mappers;
 
-import com.bizease.api.app.models.User;
+import com.bizease.api.app.models.entities.User;
 import com.bizease.api.app.models.enums.AccessStatus;
 import com.bizease.api.app.models.request.UserRequest;
 import com.bizease.api.app.models.response.UserResponse;
