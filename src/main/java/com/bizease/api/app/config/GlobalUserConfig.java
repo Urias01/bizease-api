@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.bizease.api.app.infrastructure.persistence.jpa.user.UserRepository;
 import com.bizease.api.app.models.entities.User;
 import com.bizease.api.app.models.enums.AccessProfile;
+import com.bizease.api.app.models.enums.AccessStatus;
 
 import org.springframework.util.StringUtils;
 
@@ -39,6 +40,7 @@ public class GlobalUserConfig {
       globalUser.setName("Admin Global");
       globalUser.setPassword(passwordEncoder.encode(password));
       globalUser.setType(AccessProfile.ADMIN);
+      globalUser.setStatus(AccessStatus.ACTIVE);
       userRepository.save(globalUser);
 
       System.out.println("Usuário global criado!");

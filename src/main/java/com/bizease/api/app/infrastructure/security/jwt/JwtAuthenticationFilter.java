@@ -26,7 +26,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   private final UserRepository userRepository;
 
   private final List<String> PUBLIC_PATHS = List.of(
-      "/auth/sign-in");
+      "/auth/sign-in", "/auth/sign-in/admin");
 
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
