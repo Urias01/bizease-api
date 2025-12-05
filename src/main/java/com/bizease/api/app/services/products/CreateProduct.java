@@ -1,14 +1,14 @@
-package com.bizease.api.app.useCases.products;
+package com.bizease.api.app.services.products;
 
 import org.springframework.stereotype.Service;
 
 import com.bizease.api.app.exceptions.AlreadyExistException;
+import com.bizease.api.app.infrastructure.persistence.jpa.product.ProductRepository;
+import com.bizease.api.app.infrastructure.security.jwt.IJwtAuthContext;
 import com.bizease.api.app.mappers.ProductMapper;
-import com.bizease.api.app.models.Product;
+import com.bizease.api.app.models.entities.Product;
 import com.bizease.api.app.models.request.ProductRequest;
 import com.bizease.api.app.models.response.CreateResponse;
-import com.bizease.api.app.repositories.ProductRepository;
-import com.bizease.api.app.security.jwt.IJwtAuthContext;
 
 @Service
 public class CreateProduct {

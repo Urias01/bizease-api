@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bizease.api.app.models.request.TenantRequest;
 import com.bizease.api.app.models.response.ApiResponse;
 import com.bizease.api.app.models.response.CreateResponse;
-import com.bizease.api.app.useCases.tenants.CreateTenant;
+import com.bizease.api.app.services.tenants.CreateTenant;
 
 import jakarta.validation.Valid;
 

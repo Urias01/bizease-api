@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bizease.api.app.models.request.AuthRequest;
 import com.bizease.api.app.models.response.ApiResponse;
 import com.bizease.api.app.models.response.AuthResponse;
-import com.bizease.api.app.useCases.auth.SignIn;
+import com.bizease.api.app.services.auth.SignIn;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

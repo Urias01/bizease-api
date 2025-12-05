@@ -1,18 +1,18 @@
-package com.bizease.api.app.useCases.auth;
+package com.bizease.api.app.services.auth;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bizease.api.app.exceptions.AuthenticationException;
 import com.bizease.api.app.exceptions.NotFoundException;
-import com.bizease.api.app.models.Tenant;
-import com.bizease.api.app.models.User;
+import com.bizease.api.app.infrastructure.persistence.jpa.tenant.TenantRepository;
+import com.bizease.api.app.infrastructure.persistence.jpa.user.UserRepository;
+import com.bizease.api.app.infrastructure.security.jwt.JwtService;
+import com.bizease.api.app.models.entities.Tenant;
+import com.bizease.api.app.models.entities.User;
 import com.bizease.api.app.models.enums.AccessStatus;
 import com.bizease.api.app.models.request.AuthRequest;
 import com.bizease.api.app.models.response.AuthResponse;
-import com.bizease.api.app.repositories.TenantRepository;
-import com.bizease.api.app.repositories.UserRepository;
-import com.bizease.api.app.security.jwt.JwtService;
 
 import lombok.AllArgsConstructor;
 

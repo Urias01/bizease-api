@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bizease.api.app.models.request.ProductRequest;
 import com.bizease.api.app.models.response.ApiResponse;
 import com.bizease.api.app.models.response.CreateResponse;
-import com.bizease.api.app.useCases.products.CreateProduct;
+import com.bizease.api.app.services.products.CreateProduct;
 
 import jakarta.validation.Valid;
 

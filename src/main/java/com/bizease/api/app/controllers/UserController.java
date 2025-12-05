@@ -13,11 +13,11 @@ import com.bizease.api.app.models.request.UpdateUserRequest;
 import com.bizease.api.app.models.request.UserRequest;
 import com.bizease.api.app.models.response.ApiResponse;
 import com.bizease.api.app.models.response.UserResponse;
-import com.bizease.api.app.useCases.users.CreateUser;
-import com.bizease.api.app.useCases.users.DeleteUser;
-import com.bizease.api.app.useCases.users.GetMe;
-import com.bizease.api.app.useCases.users.GetUserById;
-import com.bizease.api.app.useCases.users.UpdateUser;
+import com.bizease.api.app.services.users.CreateUser;
+import com.bizease.api.app.services.users.DeleteUser;
+import com.bizease.api.app.services.users.GetMe;
+import com.bizease.api.app.services.users.GetUserById;
+import com.bizease.api.app.services.users.UpdateUser;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PutMapping;

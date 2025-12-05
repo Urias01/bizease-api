@@ -1,12 +1,12 @@
-package com.bizease.api.app.useCases.users;
+package com.bizease.api.app.services.users;
 
 import org.springframework.stereotype.Service;
 
-import com.bizease.api.app.repositories.UserRepository;
 import com.bizease.api.app.exceptions.NotFoundException;
-import com.bizease.api.app.models.User;
+import com.bizease.api.app.infrastructure.persistence.jpa.user.UserRepository;
+import com.bizease.api.app.infrastructure.security.jwt.IJwtAuthContext;
+import com.bizease.api.app.models.entities.User;
 import com.bizease.api.app.models.request.UpdateUserRequest;
-import com.bizease.api.app.security.jwt.IJwtAuthContext;
 
 @Service
 public class UpdateUser {
